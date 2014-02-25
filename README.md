@@ -1,8 +1,11 @@
 # dotfiles
 
-## setup linux
+## Setup for Linux
 
-> ref. https://code.google.com/p/git-core/downloads/list
+
+### Install Git
+
+[https://code.google.com/p/git-core/downloads/list](https://code.google.com/p/git-core/downloads/list)
 
 ```console
 $ sudo yum install gcc make zlib-devel perl-devel gettext curl-devel
@@ -17,12 +20,14 @@ $ sudo make install
 $ git --version
 ```
 
+### Checkout and run setup
+
 ```console
 $ cd
 $ git clone git@bitbucket.org:ngyuki/dotfiles.git
 $ dotfiles/setup.sh
 ```
 
-## setup windows
+## Setup for Windows
 
-*DoubleClick* dotfiles/setup.wsf
+DoubleClick dotfiles/setup.wsf
