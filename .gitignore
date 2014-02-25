@@ -1,0 +1,31 @@
+
+# git-svn
+sys$command
+
+# eclipse
+.settings
+.buildpath
+.project
+.externalToolBuilders
+
+# phpstorm
+.idea
+
+# sublime text
+*.sublime-project
+
+# windows shortcut
+*.lnk
+
+# Visual Studio
+*.suo
+*.user
+~obj/
+~out/
+
+# Excel
+~$*.xlsx
+~$*.xlsm
+
+# misc
+/reports

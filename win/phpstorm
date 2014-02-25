@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ ! -x "$PHPSTORM_BIN" ]; then
+    echo "You should be set \$PHPSTORM_BIN Environment variable." 1>&2
+    exit 1
+fi
+
+args=()
+
+for dir in "$@"; do
+    dir=$(cd "$dir" 2>/dev/null && pwd)
+    if [ -z "$dir" ]; then
+        echo "$dir: No such file or directory" 1>&2
+        exit 1
+    fi
+    args+=("$dir")
+done
+
+if [ "${#args[@]}" -eq 0 ]; then
+    if [ ! -d ".idea" ]; then
+        echo "CWD is not workspace for PHPStorm." 1>&2
+        exit 1
+    fi
+    args+=(".")
+fi
+
+cmd //c start "$PHPSTORM_BIN" "${args[@]}"

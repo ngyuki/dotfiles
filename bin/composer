@@ -1,0 +1,13 @@
+#!/bin/bash
+
+dir="$HOME/.composer"
+
+if [ ! -f "$dir/composer.phar" ]; then
+    if [ ! -d "$dir" ]; then
+        mkdir "$dir"
+    fi
+    echo "download composer.phar ..."
+    curl -sS https://getcomposer.org/installer | php -- --install-dir="$dir"
+fi
+
+"$dir/composer.phar" "$@"

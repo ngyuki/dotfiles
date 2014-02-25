@@ -1,0 +1,23 @@
+[core]
+	quotepath = false
+	autocrlf = false
+	excludesfile = ~/.gitignore
+
+[color]
+	ui = auto
+
+[alias]
+	co = checkout
+	br = branch
+	b  = branch
+	st = status
+	s  = status
+	g  = log --oneline --decorate --graph
+	chmod = update-index --chmod
+
+[push]
+	default = upstream
+
+[user]
+	name = ngyuki
+	email = ngyuki.ts@gmail.com

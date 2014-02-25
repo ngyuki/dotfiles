@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ -z "$NODE_HOME" ]; then
+    echo "You should be set \$NODE_HOME Environment variable." 1>&2
+    exit 1
+fi
+
+if [ ! -e "$NODE_HOME/node.exe" ]; then
+    echo "You should be install node.js" 1>&2
+    exit 1
+fi
+
+if [ ! -r "$NODE_HOME/node_modules/npm/bin/npm-cli.js" ]; then
+    echo "You should be install npm" 1>&2
+    exit 1
+fi
+
+"$NODE_HOME/node.exe" "$NODE_HOME/node_modules/npm/bin/npm-cli.js" "$@"
