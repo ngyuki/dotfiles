@@ -12,6 +12,8 @@ if [ -z "$WINDIR" ]; then
     # grep options for colors
     export GREP_OPTIONS="--color=auto"
 
+    # autocd
+    shopt -s autocd
 else
 
     # Windows
@@ -41,6 +43,9 @@ export PATH="$dotfiles/bin:$PATH"
 
 # man enable prompt, raw
 export MANPAGER='less -MR'
+
+# automatically correct mistyped directory names on cd
+shopt -s cdspell
 
 # history append for multi terminal
 shopt -s histappend
