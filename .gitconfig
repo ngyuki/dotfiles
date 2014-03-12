@@ -16,7 +16,7 @@
 	chmod = update-index --chmod
 
 [push]
-	default = upstream
+	default = tracking
 
 [user]
 	name = ngyuki
