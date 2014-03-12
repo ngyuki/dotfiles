@@ -2,8 +2,16 @@
 
 ## Setup for Linux
 
+### Download public keys
 
-### Install Git
+```console
+mkdir -p ~/.ssh/
+wget https://github.com/ngyuki.keys -O ~/.ssh/authorized_keys
+chmod 700 ~/.ssh/
+chmod 600 ~/.ssh/authorized_keys
+```
+
+### Install Git (optional)
 
 [https://code.google.com/p/git-core/downloads/list](https://code.google.com/p/git-core/downloads/list)
 
@@ -24,8 +32,9 @@ $ git --version
 
 ```console
 $ cd
-$ git clone git@bitbucket.org:ngyuki/dotfiles.git
+$ git clone git@github.com:ngyuki/dotfiles.git
 $ dotfiles/setup.sh
+$ exec bash --login
 ```
 
 ## Setup for Windows
