@@ -41,3 +41,5 @@ for fn in .bashrc .bash_profile; do
 	pcat "$dst"
 
 done
+
+touch "$HOME/.gitconfig.local"
