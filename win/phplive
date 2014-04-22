@@ -4,7 +4,7 @@
 #
 # Options:
 #   -o         Open WebBrowser
-#   -x         Enable LiveReload
+#   -x         Disable LiveReload
 #   -p port    Listening PortNumber on WebServer
 #
 # Arguments:
@@ -26,15 +26,16 @@ function usage()
 }
 
 open=0
-live=0
-port=80
+live=35729
+port=9876
 root=.
+file=
 
 while getopts oxp: OPT; do
     case $OPT in
         o)  open=1
             ;;
-        x)  live=1
+        x)  live=0
             ;;
         p)  port=$OPTARG
             ;;
@@ -46,19 +47,21 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -gt 0 ]; then
-    root=${1%/}
-fi
-
-if [ "$live" -ne 0 ]; then
-    livereloadx &
+    root=${1%/*}
+    file=${1##*/}
 fi
 
 if [ "$open" -ne 0 ]; then
     if [ -n "$WINDIR" ]; then
-        ( sleep 1 && start "http://127.0.0.1:$port/" )&
+        ( sleep 1 && start "http://127.0.0.1:$port/$file" )&
     else
-        ( sleep 1 && open "http://127.0.0.1:$port/" )&
+        ( sleep 1 && open "http://127.0.0.1:$port/$file" )&
     fi
 fi
 
-php -S "0.0.0.0:$port" -t "$root"
+if [ "$live" -ne 0 ]; then
+    livereloadx -p $port -y http://localhost:$live &
+    php -S "0.0.0.0:$live" -t "$root"
+else
+    php -S "0.0.0.0:$port" -t "$root"
+fi
