@@ -12,11 +12,16 @@
 	b  = branch
 	st = status
 	s  = status
-	g  = log --oneline --decorate --graph
+	g  = log --graph --date=short --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\"
 	chmod = update-index --chmod
 
+[rebase]
+	autosquash = true
+
 [push]
-	default = tracking
+	# for 1.8 nothing matching upstream current simple
+	# for 1.7 nothing matching tracking current
+	default = upstream
 
 [user]
 	name = ngyuki

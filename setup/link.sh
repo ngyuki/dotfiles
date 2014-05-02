@@ -24,15 +24,26 @@ function pcat
 pp "create symbolic links"
 
 files=(
-	.gitignore
-	.gitconfig
-	.inputrc
+	".inputrc .inputrc"
+	".gitignore .gitignore"
 )
 
+gitcheck=$(
+	{
+		git version | cut -f3 -d" "
+		echo 1.8.0
+	} | sort -t . -n -k 1,1 -k 2,2 -k 3,3 | head -1
+)
+
+if [ "$gitcheck" == "1.8.0" ]; then
+	files+=(".gitconfig .gitconfig")
+else
+	files+=(".gitconfig .gitconfig-17")
+fi
+
 for fn in "${files[@]}"; do
-
-	src="$PWD/$fn"
-	dst="$HOME/$fn"
+	fn=($fn)
+	src="$PWD/${fn[1]}"
+	dst="$HOME/${fn[0]}"
 	ln -vsf "$src" "$dst"
-
 done | pcat

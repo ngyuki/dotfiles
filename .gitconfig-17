@@ -1,0 +1,31 @@
+[core]
+    quotepath = false
+    autocrlf = false
+    excludesfile = ~/.gitignore
+
+[color]
+    ui = auto
+
+[alias]
+    co = checkout
+    br = branch
+    b  = branch
+    st = status
+    s  = status
+    g  = log --graph --decorate --oneline
+    chmod = update-index --chmod
+
+[rebase]
+    autosquash = true
+
+[push]
+    # for 1.8 nothing matching upstream current simple
+    # for 1.7 nothing matching tracking current
+    default = tracking
+
+[user]
+    name = ngyuki
+    email = ngyuki.ts@gmail.com
+
+[include]
+    path = ~/.gitconfig.local
