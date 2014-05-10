@@ -26,6 +26,3 @@ sys$command
 # Excel
 ~$*.xlsx
 ~$*.xlsm
-
-# misc
-/reports
