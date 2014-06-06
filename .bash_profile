@@ -23,10 +23,12 @@ else
 
     if [ -n "$PhpStorm" ]; then
         export ConEmuANSI=ON
+        export ANSICON=1
     fi
 
     if [ -n "$CONEMUANSI" ]; then
         export ConEmuANSI=$CONEMUANSI
+        export ANSICON=1
     fi
 
     alias vi='start sakura'
