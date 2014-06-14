@@ -89,10 +89,12 @@ if [ -d "$HOME/.phpenv/bin" ]; then
     eval "$(phpenv init -)"
 fi
 
-# functions
-for fn in "$dotfiles"/function/*.sh; do
-    source "$fn"
-done
+# function
+eval "$(
+    for fn in "$dotfiles"/function/*.sh; do
+        echo source \"$fn\"
+    done
+)"
 
 # cleanup
 unset dotfiles
