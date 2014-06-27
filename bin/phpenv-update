@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cd "$(phpenv root)/plugins"
+
+for i in */.git; do
+
+    name=$(dirname "$i")
+
+    echo -en "\e[43;30m"
+    echo -n  "Update $name"
+    echo -e  "\e[m"
+
+    cd "$name"
+    git pull --ff-only
+    cd ..
+    echo
+done

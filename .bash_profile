@@ -71,6 +71,10 @@ export HISTTIMEFORMAT='[%y/%m/%d %H:%M:%S] '
 export HISTCONTROL=ignoredups
 export HISTIGNORE='ls:cd:cd -:pwd:history*:exit:date'
 
+# golang
+export GOPATH=$HOME/.golang
+export PATH=$GOPATH/bin:$PATH
+
 # rbenv
 if [ -d "$HOME/.rbenv/bin" ]; then
     export PATH="$HOME/.rbenv/bin:$PATH"
