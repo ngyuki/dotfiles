@@ -4,7 +4,8 @@
 #
 # Options:
 #   -o         Open WebBrowser
-#   -x         Disable LiveReload
+#   -w         Enable LiveReload
+#   -x         Enable LiveReload on proxy mode
 #   -p port    Listening PortNumber on WebServer
 #
 # Arguments:
@@ -26,16 +27,19 @@ function usage()
 }
 
 open=0
-live=35729
+live=0
+proxy=0
 port=9876
 root=.
 file=
 
-while getopts oxp: OPT; do
+while getopts owxp: OPT; do
     case $OPT in
         o)  open=1
             ;;
-        x)  live=0
+        w)  live=1
+            ;;
+        x)  proxy=35729
             ;;
         p)  port=$OPTARG
             ;;
@@ -47,8 +51,13 @@ done
 shift $((OPTIND - 1))
 
 if [ $# -gt 0 ]; then
-    root=${1%/*}
-    file=${1##*/}
+    if [ -d "$1" ]; then
+        root=${1%/}
+        file=
+    else
+        root=$(dirname "$1")
+        file=$(basename "$1")
+    fi
 fi
 
 if [ "$open" -ne 0 ]; then
@@ -59,9 +68,12 @@ if [ "$open" -ne 0 ]; then
     fi
 fi
 
-if [ "$live" -ne 0 ]; then
-    livereloadx -p $port -y http://localhost:$live &
-    php -S "0.0.0.0:$live" -t "$root"
+if [ "$proxy" -ne 0 ]; then
+    livereloadx -p $port -y http://localhost:$proxy &
+    php -S "0.0.0.0:$proxy" -t "$root"
+elif [ "$live" -ne 0 ]; then
+    livereloadx &
+    php -S "0.0.0.0:$port" -t "$root"
 else
     php -S "0.0.0.0:$port" -t "$root"
 fi
