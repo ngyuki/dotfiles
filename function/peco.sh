@@ -43,3 +43,29 @@ function peco-ssh()
 
     ssh "$host" "$@"
 }
+
+if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then
+
+    function peco-history()
+    {
+        local line
+
+        line=$(
+            HISTTIMEFORMAT= \
+            command history |
+            sed 's/ *[0-9][0-9]* *//' |
+            #tac |
+            sort -u |
+            peco --query "$READLINE_LINE"
+        )
+
+        if [ -z "$line" ]; then
+            return 1
+        fi
+
+        READLINE_LINE="$line"
+        READLINE_POINT=${#READLINE_LINE}
+    }
+
+    bind -x '"\C-x\C-x":peco-history'
+fi
