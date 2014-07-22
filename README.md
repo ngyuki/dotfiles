@@ -11,7 +11,7 @@ chmod 700 ~/.ssh/
 chmod 600 ~/.ssh/authorized_keys
 ```
 
-### Install Git (optional)
+### Install Git
 
 [https://code.google.com/p/git-core/downloads/list](https://code.google.com/p/git-core/downloads/list)
 
@@ -33,6 +33,18 @@ $ git --version
 ```console
 $ cd
 $ git clone git@github.com:ngyuki/dotfiles.git
+$ dotfiles/setup.sh
+$ exec bash --login
+```
+
+## Setup for Linux (without git)
+
+### Download and setup dotfiles
+
+```console
+$ cd
+$ wget --no-check-certificate https://github.com/ngyuki/dotfiles/archive/master.tar.gz -O - | tar xvzf -
+$ mv dotfiles-master dotfiles
 $ dotfiles/setup.sh
 $ exec bash --login
 ```
