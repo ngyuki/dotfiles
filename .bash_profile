@@ -49,9 +49,6 @@ export MANPAGER='less -MR'
 # automatically correct mistyped directory names on cd
 shopt -s cdspell
 
-# history append for multi terminal
-shopt -s histappend
-
 # less enable line number, prompt, raw
 alias less='less -NMR'
 
@@ -65,11 +62,23 @@ export LESS_TERMCAP_ue=$(printf "\e[0m")
 export LESS_TERMCAP_us=$(printf "\e[1;32m")
 
 # history
-export HISTSIZE=32768
+export HISTSIZE=9999
 export HISTFILESIZE=$HISTSIZE
 export HISTTIMEFORMAT='[%y/%m/%d %H:%M:%S] '
 export HISTCONTROL=ignoredups
 export HISTIGNORE='ls:cd:cd -:pwd:history*:exit:date'
+
+shopt -u histappend
+
+function _share_history {
+  history -a
+  history -c
+  history -r
+}
+
+if ! [[ ";$PROMPT_COMMAND;" =~ ";_share_history;" ]]; then
+  PROMPT_COMMAND="_share_history;$PROMPT_COMMAND";
+fi
 
 # golang
 export GOPATH=$HOME/.golang
