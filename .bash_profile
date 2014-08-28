@@ -76,7 +76,7 @@ function _share_history {
   history -r
 }
 
-if ! [[ ";$PROMPT_COMMAND;" =~ ";_share_history;" ]]; then
+if [[ ";$PROMPT_COMMAND;" != *";_share_history;"* ]]; then
   PROMPT_COMMAND="_share_history;$PROMPT_COMMAND";
 fi
 
