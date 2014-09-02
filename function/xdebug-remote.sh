@@ -10,12 +10,17 @@ function xdebug-remote
             else
                 XDEBUG_CONFIG="idekey=default"
             fi
+            PHP_IDE_CONFIG="serverName=$(hostname -s)"
             export XDEBUG_CONFIG
+            export PHP_IDE_CONFIG
             ;;
         off)
             XDEBUG_CONFIG=
+            PHP_IDE_CONFIG=
             unset XDEBUG_CONFIG
+            unset PHP_IDE_CONFIG
             export XDEBUG_CONFIG
+            export PHP_IDE_CONFIG
             ;;
         *)
             echo "Usage xdebug-remote <on or off>" 1>&2
@@ -24,4 +29,5 @@ function xdebug-remote
     esac
 
     echo "XDEBUG_CONFIG=$XDEBUG_CONFIG"
+    echo "PHP_IDE_CONFIG=$PHP_IDE_CONFIG"
 }
