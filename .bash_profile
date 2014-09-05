@@ -12,8 +12,10 @@ if [ -z "$WINDIR" ]; then
     # grep options for colors
     export GREP_OPTIONS="--color=auto"
 
-    # autocd
-    shopt -s autocd
+    if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then
+        # autocd
+        shopt -s autocd
+    fi
 else
 
     # Windows
