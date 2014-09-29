@@ -70,6 +70,16 @@ export HISTTIMEFORMAT='[%y/%m/%d %H:%M:%S] '
 export HISTCONTROL=ignoredups
 export HISTIGNORE='ls:cd:cd -:pwd:history*:exit:date'
 
+shopt -s histappend
+
+function _share_history {
+  history -a
+}
+
+if [[ ";$PROMPT_COMMAND;" != *";_share_history;"* ]]; then
+  PROMPT_COMMAND="_share_history;$PROMPT_COMMAND";
+fi
+
 # golang
 export GOPATH=$HOME/.golang
 export PATH=$GOPATH/bin:$PATH
