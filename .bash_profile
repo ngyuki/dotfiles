@@ -109,5 +109,11 @@ eval "$(
     done
 )"
 
+# check last update
+if [ "$(find "$dotfiles/.git/FETCH_HEAD" -mtime +1 | wc -l)" -ne 0 ]; then
+    printf "\e[0;33m%s\e[m\n" "Warning: dotfiles is over 1 days old." 1>&2
+    printf "\e[0;33m%s\e[m\n" "Warning: Please try \"cd $dotfiles; git pull --rebase\"" 1>&2
+fi
+
 # cleanup
 unset dotfiles
