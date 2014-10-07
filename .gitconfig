@@ -27,6 +27,3 @@
 [user]
 	name = ngyuki
 	email = ngyuki.ts@gmail.com
-
-[include]
-	path = ~/.gitconfig.local

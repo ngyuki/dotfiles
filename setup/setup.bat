@@ -1,8 +1,8 @@
 @echo off
 
-call %~dp0\link.bat
-
 cd /d "%~dp0"
-bash --norc --noprofile fix.sh
+bash --norc --noprofile 01-bash.sh
+bash --norc --noprofile 02-git.sh
+call %~dp0\link.bat
 
 pause

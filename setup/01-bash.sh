@@ -1,25 +1,6 @@
 #!/bin/bash
 
-set -e
-cd "$(dirname "$0")/.."
-
-###
-
-function pp
-{
-	echo -ne "\e[1;31m"
-	echo -n "${*}"
-	echo -e "\e[m"
-}
-
-function pcat
-{
-	echo -ne "\e[0;36m"
-	cat "$@" | sed -e 's/^/  /'
-	echo -e "\e[m"
-}
-
-###
+source "$(dirname "$0")/functions.sh"
 
 for fn in .bashrc .bash_profile; do
 
@@ -41,5 +22,3 @@ for fn in .bashrc .bash_profile; do
 	pcat "$dst"
 
 done
-
-touch "$HOME/.gitconfig.local"

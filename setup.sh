@@ -1,7 +1,8 @@
 #!/bin/bash
 
-set -e
-cd "$(dirname "$0")/setup"
+set -eu
+cd "$(dirname "$0")"
 
-bash --norc --noprofile link.sh
-bash --norc --noprofile fix.sh
+for fn in $(ls setup/[0-9]*.sh); do
+    "$fn"
+done
