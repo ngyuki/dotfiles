@@ -41,6 +41,7 @@ function peco-ssh()
         return 1
     fi
 
+    history -s ssh "$host" "$@"
     ssh "$host" "$@"
 }
 
