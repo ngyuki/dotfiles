@@ -84,6 +84,12 @@ fi
 export GOPATH=$HOME/.golang
 export PATH=$GOPATH/bin:$PATH
 
+# phpenv
+if [ -d "$HOME/.phpenv/bin" ]; then
+    export PATH="$HOME/.phpenv/bin:$PATH"
+    eval "$(phpenv init -)"
+fi
+
 # rbenv
 if [ -d "$HOME/.rbenv/bin" ]; then
     export PATH="$HOME/.rbenv/bin:$PATH"
@@ -94,12 +100,6 @@ fi
 if [ -d "$HOME/.pyenv/bin" ]; then
     export PATH="$HOME/.pyenv/bin:$PATH"
     eval "$(pyenv init -)"
-fi
-
-# phpenv
-if [ -d "$HOME/.phpenv/bin" ]; then
-    export PATH="$HOME/.phpenv/bin:$PATH"
-    eval "$(phpenv init -)"
 fi
 
 # function
