@@ -1,0 +1,2 @@
+#!/bin/bash
+"$VBOX_MSI_INSTALL_PATH/VBoxManage" "$@"
