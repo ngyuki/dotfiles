@@ -2,7 +2,7 @@
 
 source "$(dirname "$0")/functions.sh"
 
-for fn in .bashrc .bash_profile; do
+for fn in .bashrc .bash_profile .bash_logout; do
 
 	src="$PWD/$fn"
 	dst="$HOME/$fn"
