@@ -9,8 +9,6 @@ if ! hash peco 1> /dev/null 2>&1; then
             {
                 echo "You should be install peco"
                 echo "  see https://github.com/peco/peco/releases"
-                echo "  Or..."
-                echo "  go get github.com/peco/peco/cmd/peco"
             } 1>&2
         else
             command peco "$@"
