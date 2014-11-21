@@ -4,7 +4,7 @@
 [ -n "$WINDIR" ] && {
 
     # follow windows shortcut
-    function cd
+    function cd()
     {
         local link=
         local arg
@@ -45,64 +45,65 @@
             local dir=$(cscript //nologo "$base/lib/getlink.js" "$link")
 
             if [ -n "$dir" ]; then
-                builtin cd "$@"
+                __ng_cd_save "$@"
                 return "$?"
             fi
         fi
 
-        builtin cd "$@"
-        return "$?"
+        __ng_cd_save "$@"
     }
 
 } || {
 
     function cd()
     {
-        __ng_cd_and_save "$@"
+        __ng_cd_save "$@"
     }
+}
 
-    function __ng_cd_and_save()
-    {
-        builtin cd "$@"
-        local rc=$?
+function __ng_cd_save()
+{
+    local oldoldpwd=$OLDPWD
 
-        [ $rc -ne 0 ] && return $rc
+    builtin cd "$@"
+    local rc=$?
 
-        case "$PWD" in
-            "$OLDPWD"|"$HOME"|"/")
-                return $rc
-        esac
+    [ $rc -ne 0 ] && return $rc
 
-        echo "$PWD" >> "$HOME/.bash_dirs"
+    case "$PWD" in
+        "$oldoldpwd"|"$OLDPWD"|"$HOME"|"/")
+            return $rc
+    esac
 
-        return $rc
-    }
+    echo "$PWD" >> "$HOME/.bash_dirs"
 
-    function __ng_cd_dirs_fix()
-    {
-        cat "$HOME/.bash_dirs" | uniq | tail -100 > "/tmp/dirs.$LOGNAME"
-        mv -f "/tmp/dirs.$LOGNAME" "$HOME/.bash_dirs"
-    }
+    return $rc
+}
 
-    function pecd()
-    {
-        local input
-        local dir
+function __ng_cd_fix()
+{
+    cat "$HOME/.bash_dirs" | uniq | tail -100 > "$HOME/.bash_dirs~"
+    mv -f "$HOME/.bash_dirs~" "$HOME/.bash_dirs"
+}
 
-        if [ -t 0 ]; then
-            input="$HOME/.bash_dirs"
-            __ng_cd_dirs_fix
-        else
-            input=-
-        fi
+function pecd()
+{
+    local input
+    local dir
 
-        dir=$(cat "$input" | sort -u | peco)
+    if [ -t 0 ]; then
+        input="$HOME/.bash_dirs"
+        __ng_cd_fix
+    else
+        input=-
+    fi
 
-        if [ -z "$dir" ]; then
-            return 1
-        fi
+    dir=$(cat "$input" | sort -u | peco)
 
-        history -s cd "$dir"
-        builtin cd "$dir"
-    }
+    if [ -z "$dir" ]; then
+        return 1
+    fi
+
+    history -s cd "$dir"
+    builtin cd "$dir"
 }
