@@ -45,7 +45,7 @@
             local dir=$(cscript //nologo "$base/lib/getlink.js" "$link")
 
             if [ -n "$dir" ]; then
-                __ng_cd_save "$@"
+                __ng_cd_save "$dir"
                 return "$?"
             fi
         fi
