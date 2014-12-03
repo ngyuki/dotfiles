@@ -17,7 +17,7 @@ if ! hash peco 1> /dev/null 2>&1; then
 
 fi
 
-function peco-ssh()
+function pessh()
 {
     local input
     local host
