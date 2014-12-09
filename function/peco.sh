@@ -7,8 +7,14 @@ if ! hash peco 1> /dev/null 2>&1; then
     {
         if ! type -f peco 1> /dev/null 2>&1 ; then
             {
-                echo "You should be install peco"
-                echo "  see https://github.com/peco/peco/releases"
+                echo 'You should be install peco'
+                echo '  see https://github.com/peco/peco/releases'
+                echo
+                echo 'Example'
+                echo '  curl -L https://github.com/peco/peco/releases/download/v0.1.12/peco_linux_amd64.tar.gz \'
+                echo '    | tar xzf - --directory /tmp/'
+                echo '  sudo mv /tmp/peco_linux_amd64/peco /usr/local/bin'
+                echo '  rm -fr /tmp/peco_linux_amd64'
             } 1>&2
         else
             command peco "$@"
