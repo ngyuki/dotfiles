@@ -61,7 +61,7 @@ if [ $# -gt 0 ]; then
 fi
 
 if [ "$open" -ne 0 ]; then
-    if [ -n "$WINDIR" ]; then
+    if [ -n "${WINDIR-}" ]; then
         ( sleep 1 && start "http://127.0.0.1:$port/$file" )&
     else
         ( sleep 1 && open "http://127.0.0.1:$port/$file" )&

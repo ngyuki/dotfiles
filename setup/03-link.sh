@@ -4,7 +4,7 @@ source "$(dirname "$0")/functions.sh"
 
 pp "create symbolic links"
 
-if [ -n "$WINDIR" ]; then
+if [ -n "${WINDIR-}" ]; then
     {
         echo "skipped, because windows"
         echo "please use ... wscript setup.wsf"

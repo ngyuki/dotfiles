@@ -3,7 +3,7 @@
 
 dotfiles=${BASH_SOURCE[0]%/*}
 
-if [ -z "$WINDIR" ]; then
+if [ -z "${WINDIR-}" ]; then
 
     # POSIX
     export PS1='\n\e[0;31m\u@\h \e[0;33m\w\e[0m\n\$ '
