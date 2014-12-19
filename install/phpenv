@@ -1,13 +1,8 @@
 #!/bin/bash
 
-set -ue
+source "$(dirname "$0")/functions.sh"
 
-function pp()
-{
-    echo -en "\e[43;30m"
-    echo -n "$1"
-    echo -e "\e[m"
-}
+###
 
 if [ ! -d "$HOME/.phpenv" ]; then
     pp "Install phpenv"
