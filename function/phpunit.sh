@@ -30,6 +30,6 @@ function phpunit
 		root="${root%/*}"
 	done
 
-	"${phpunit[@]}" "${configuration[@]}" --colors "$@" | cat
+	"${phpunit[@]}" "${configuration[@]}" --colors "$@"
 	return ${PIPESTATUS[0]}
 }
