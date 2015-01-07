@@ -6,7 +6,8 @@ dotfiles=${BASH_SOURCE[0]%/*}
 if [ -z "${WINDIR-}" ]; then
 
     # POSIX
-    export PS1='\n\e[0;31m\u@\h \e[0;33m\w\e[0m\n\$ '
+    #export PS1='\n\e[0;31m\u@\h \e[0;33m\w\e[0m\n\$ '
+    export PS1=$"\n\e[48;5;$(( $(uname -n | sum | cut -f1 -d' ') % 256 ))m \e[m \e[0;36m\u@\h \e[0;33m\w\e[0m\n\$ "
     export EDITOR=vim
 
     # grep options for colors
@@ -16,6 +17,12 @@ if [ -z "${WINDIR-}" ]; then
         # autocd
         shopt -s autocd
     fi
+
+    # packer
+    export PACKER_CACHE_DIR=~/.packer/
+
+    # fix path
+    export PATH=$HOME/bin:$PATH
 else
 
     # Windows
