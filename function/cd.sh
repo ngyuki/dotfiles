@@ -1,7 +1,7 @@
 ################################################################################
 ### cd
 
-[ -n "${WINDIR-}" ] && {
+if [ -n "${WINDIR-}" ]; then
 
     # follow windows shortcut
     function cd()
@@ -45,23 +45,24 @@
             local dir=$(cscript //nologo "$base/lib/getlink.js" "$link")
 
             if [ -n "$dir" ]; then
-                __ng_cd_save "$dir"
+                __ng_pecd_add "$dir"
                 return "$?"
             fi
         fi
 
-        __ng_cd_save "$@"
+        __ng_pecd_add "$@"
     }
 
-} || {
+else
 
     function cd()
     {
-        __ng_cd_save "$@"
+        __ng_pecd_add "$@"
     }
-}
 
-function __ng_cd_save()
+fi
+
+function __ng_pecd_add()
 {
     local oldoldpwd=$OLDPWD
 
@@ -80,10 +81,12 @@ function __ng_cd_save()
     return $rc
 }
 
-function __ng_cd_fix()
+function __ng_pecd_fix()
 {
-    cat "$HOME/.bash_dirs" | uniq | tail -100 > "$HOME/.bash_dirs~"
-    mv -f "$HOME/.bash_dirs~" "$HOME/.bash_dirs"
+    if [ -f "$HOME/.bash_dirs" ]; then
+        cat "$HOME/.bash_dirs" | tac | awk '!a[$0]++' | tac | tail -100 > "$HOME/.bash_dirs~"
+        mv -f "$HOME/.bash_dirs~" "$HOME/.bash_dirs"
+    fi
 }
 
 function pecd()
@@ -93,12 +96,12 @@ function pecd()
 
     if [ -t 0 ]; then
         input="$HOME/.bash_dirs"
-        __ng_cd_fix
+        __ng_pecd_fix
     else
         input=-
     fi
 
-    dir=$(cat "$input" | sort -u | peco)
+    dir=$(cat "$input" | tac | awk '!a[$0]++' | peco)
 
     if [ -z "$dir" ]; then
         return 1
