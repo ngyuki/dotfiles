@@ -59,8 +59,8 @@ if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then
             HISTTIMEFORMAT= \
             command history |
             sed 's/ *[0-9][0-9]* *//' |
-            #tac |
-            sort -u |
+            tac |
+            awk '!a[$0]++' |
             peco --query "$READLINE_LINE"
         )
 
