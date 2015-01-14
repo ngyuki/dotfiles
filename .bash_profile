@@ -7,7 +7,7 @@ if [ -z "${WINDIR-}" ]; then
 
     # POSIX
     #export PS1='\n\e[0;31m\u@\h \e[0;33m\w\e[0m\n\$ '
-    export PS1=$"\n\e[48;5;$(( $(uname -n | sum | cut -f1 -d' ') % 256 ))m \e[m \e[0;36m\u@\h \e[0;33m\w\e[0m\n\\$ "
+    export PS1=$"\n\e[4$(( $(uname -n | sum | cut -f1 -d' ') % 7 + 1 ));30m \e[m \e[0;36m\u@\h \e[0;33m\w\e[0m\n\\$ "
     export EDITOR=vim
 
     # grep options for colors
