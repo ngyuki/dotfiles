@@ -14,7 +14,7 @@ del /a "%HOME%\.inputrc"
 
 echo.
 echo *create symlink ...
-mklink "%HOME%\.gitignore" %cd%\.gitignore
-mklink "%HOME%\.inputrc"   %cd%\.inputrc
+mklink "%HOME%\.gitignore" %cd%\gitignore
+mklink "%HOME%\.inputrc"   %cd%\inputrc
 
 :END

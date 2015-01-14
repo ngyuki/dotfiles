@@ -12,9 +12,9 @@ gitcheck=$(
 )
 
 if [ "$gitcheck" == "1.8.0" ]; then
-    cmd=(git config --global include.path "$PWD/.gitconfig")
+    cmd=(git config --global include.path "$PWD/gitconfig")
 else
-    cmd=(git config --global include.path "$PWD/.gitconfig-17")
+    cmd=(git config --global include.path "$PWD/gitconfig-17")
 fi
 
 echo "${cmd[@]}" | pcat

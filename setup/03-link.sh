@@ -13,12 +13,12 @@ if [ -n "${WINDIR-}" ]; then
 fi
 
 files=(
-	.gitignore
-	.inputrc
+	gitignore
+	inputrc
 )
 
 for fn in "${files[@]}"; do
     src="$PWD/${fn}"
-    dst="$HOME/${fn}"
+    dst="$HOME/.${fn}"
     ln -vsf "$src" "$dst"
 done | pcat
