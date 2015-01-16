@@ -5,7 +5,9 @@ function xdebug-remote
 {
     case $1 in
         on)
-            if [ -n "$SSH_CLIENT" ]; then
+            if [ -n "$2" ]; then
+                XDEBUG_CONFIG="idekey=default remote_host=$2"
+            elif [ -n "$SSH_CLIENT" ]; then
                 XDEBUG_CONFIG="idekey=default remote_host=$(echo $SSH_CLIENT | awk '{print $1}')"
             else
                 XDEBUG_CONFIG="idekey=default"
