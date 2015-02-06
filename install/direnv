@@ -1,0 +1,27 @@
+#!/bin/bash
+
+source "$(dirname "$0")/functions.sh"
+
+###
+
+if hash direnv 2>/dev/null; then
+  pp "direnv is already installed"
+  direnv version
+  exit 0
+fi
+
+latest=$(
+  curl -fsSI https://github.com/zimbatm/direnv/releases/latest |
+    tr -d '\r' |
+    awk -F'/' '/^Location:/{print $NF}'
+)
+
+: ${latest:?}
+
+curl -fsSL "https://github.com/zimbatm/direnv/releases/download/${latest}/direnv.linux-amd64" \
+  > $HOME/bin/direnv
+
+chmod +x $HOME/bin/direnv
+
+pp "direnv has been installed on $HOME/bin/direnv"
+direnv version

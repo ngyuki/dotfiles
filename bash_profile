@@ -109,6 +109,11 @@ if [ -d "$HOME/.pyenv/bin" ]; then
     eval "$(pyenv init -)"
 fi
 
+# direnv
+if hash direnv 2>/dev/null; then
+    eval "$(direnv hook bash)"
+fi
+
 # function
 eval "$(
     for fn in "$dotfiles"/function/*.sh; do
