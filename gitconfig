@@ -2,6 +2,8 @@
 	quotepath = false
 	autocrlf = false
 	excludesfile = ~/.gitignore
+	preloadindex = true
+	fscache = true
 
 [color]
 	ui = auto
