@@ -1,0 +1,38 @@
+#!/bin/bash
+
+source "$(dirname "$0")/functions.sh"
+
+###
+
+if type peco 1>/dev/null 2>&1; then
+  pp "peco is already installed"
+  peco --version 2>&1 | sed 's/^/  /'
+  exit 0
+fi
+
+url=https://github.com/peco/peco/releases/latest
+
+pp "peco detect latest ... ${url}"
+
+latest=$(
+  curl -fsSI https://github.com/peco/peco/releases/latest |
+    tr -d '\r' |
+    awk -F'/' '/^Location:/{print $NF}'
+)
+
+: ${latest:?}
+
+pp "peco latest version ... ${latest}"
+
+url=https://github.com/peco/peco/releases/download/${latest}/peco_linux_amd64.tar.gz
+
+pp "peco download ... $url"
+
+curl -fsSL "https://github.com/peco/peco/releases/download/${latest}/peco_linux_amd64.tar.gz" |
+  tar -xzf - --to-stdout peco_linux_amd64/peco > $HOME/bin/peco~
+
+mv $HOME/bin/peco~ $HOME/bin/peco
+chmod +x $HOME/bin/peco
+
+pp "peco has been installed ... $HOME/bin/peco"
+peco --version 2>&1 | sed 's/^/  /'
