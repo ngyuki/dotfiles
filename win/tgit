@@ -9,7 +9,7 @@ function usage()
 }
 
 if [ ! -x "$TGIT_BIN_DIR" ]; then
-    echo "You should be set \$TGIT_BIN Environment variable." 1>&2
+    echo "You should be set \$TGIT_BIN_DIR Environment variable." 1>&2
     exit 1
 fi
 
