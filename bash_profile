@@ -3,10 +3,9 @@
 
 dotfiles=${BASH_SOURCE[0]%/*}
 
-if [ -z "${WINDIR-}" ]; then
-
+case ${OSTYPE} in
+  linux*)
     # POSIX
-    #export PS1='\n\e[0;31m\u@\h \e[0;33m\w\e[0m\n\$ '
     export PS1=$"\n\e[4$(( $(uname -n | sum | cut -f1 -d' ' | sed 's/^0*//') % 7 + 1 ));30m \e[m \e[0;36m\u@\h \e[0;33m\w\e[0m\n\\$ "
     export EDITOR=vim
 
@@ -23,8 +22,30 @@ if [ -z "${WINDIR-}" ]; then
 
     # fix path
     export PATH=$HOME/bin:$PATH
-else
+    ;;
 
+  darwin*)
+    # MAC
+    export PS1='\n\e[0;32m\u@\h \e[0;33m\w\e[0m\n\$ '
+    export EDITOR=vim
+
+    # grep options for colors
+    export GREP_OPTIONS="--color=auto"
+
+    # packer
+    export PACKER_CACHE_DIR=~/.packer/
+
+    # fix path
+    export PATH=$HOME/bin:$PATH
+
+    # alias
+    alias l.='ls -d .*'
+    alias ll='ls -l -G'
+    alias ls='ls -G'
+    alias vi='vim'
+    ;;
+
+  msys)
     # Windows
     export PS1='\n\e[0;32m\u@\h \e[0;33m\w\e[0m\n\$ '
     export TERM=msys
@@ -47,7 +68,8 @@ else
 
     # dotfiles/win
     export PATH="$dotfiles/win:$PATH"
-fi
+    ;;
+esac
 
 # dotfiles/bin
 export PATH="$dotfiles/bin:$PATH"

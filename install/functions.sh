@@ -6,16 +6,14 @@ if [ -t 1 ]; then
 
     function pp
     {
-        echo -ne "\e[1;32m"
-        echo -n "${*}"
-        echo -e "\e[m"
+        printf "\e[1;32m%s\e[m\n" "${*}"
     }
 
     function pcat
     {
-        echo -ne "\e[0;36m"
+        printf "\e[0;36m"
         cat "$@" | sed -e 's/^/  /'
-        echo -e "\e[m"
+        printf "\e[m\n"
     }
 
 else
