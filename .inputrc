@@ -1,0 +1,11 @@
+$include /etc/inputrc
+
+# do not bell on tab-completion (none, visible or audible)
+set bell-style visible
+
+# PageUp/PageDown
+"\e[5~": history-search-backward
+"\e[6~": history-search-forward
+
+# Show all instead of beeping first (disable)
+set show-all-if-ambiguous off

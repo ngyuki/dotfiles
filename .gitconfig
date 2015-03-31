@@ -18,7 +18,6 @@
 	gg = log --graph --date=short --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\" --all
 	chmod = update-index --chmod
 	ore = !git config user.name ngyuki && git config user.email ngyuki.ts@gmail.com
-	hj = !git config user.name goto && git config user.email gotou@headjapan.com
 
 [rebase]
 	autosquash = true
