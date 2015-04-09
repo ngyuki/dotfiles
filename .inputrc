@@ -6,3 +6,6 @@ $include /etc/inputrc
 
 # Show all instead of beeping first (disable)
 set show-all-if-ambiguous off
+
+# Auto completion
+set completion-ignore-case on
