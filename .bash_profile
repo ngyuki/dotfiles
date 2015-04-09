@@ -20,8 +20,8 @@ case ${OSTYPE} in
     # packer
     export PACKER_CACHE_DIR=~/.packer/
 
-    # fix path
-    export PATH=$HOME/bin:$PATH
+    # $dotfiles/bin.linux and home/bin
+    export PATH=$HOME/bin:$dotfiles/bin.linux:$PATH
     ;;
 
   darwin*)
