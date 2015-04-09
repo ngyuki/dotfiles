@@ -4,10 +4,15 @@ set -eu
 
 : ${USER:?}
 
-trash=/var/tmp/.${USER}.trash/$(date +%Y%m%d)
+trash=/var/tmp/.${USER}.trash
+today=$trash/$(date +%Y%m%d)
 
-if [ ! -d "$trash" ]; then
-    mkdir -p "$trash"
+if [ ! -d "$today" ]; then
+    mkdir -p "$today"
 fi
 
-mv --backup=numbered -- "$@" "$trash"
+if [ $# -eq 0 ]; then
+  echo "$trash"
+else
+  mv --backup=numbered -- "$@" "$today"
+fi
