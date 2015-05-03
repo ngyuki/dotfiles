@@ -45,24 +45,24 @@ if [ -n "${WINDIR-}" ]; then
             local dir=$(cscript //nologo "$base/lib/getlink.js" "$link")
 
             if [ -n "$dir" ]; then
-                __ng_pecd_add "$dir"
+                __pecd_add "$dir"
                 return "$?"
             fi
         fi
 
-        __ng_pecd_add "$@"
+        __pecd_add "$@"
     }
 
 else
 
     function cd()
     {
-        __ng_pecd_add "$@"
+        __pecd_add "$@"
     }
 
 fi
 
-function __ng_pecd_add()
+function __pecd_add()
 {
     local oldoldpwd=$OLDPWD
 
@@ -81,7 +81,7 @@ function __ng_pecd_add()
     return $rc
 }
 
-function __ng_pecd_fix()
+function __pecd_fix()
 {
     if [ -f "$HOME/.bash_dirs" ]; then
         cat "$HOME/.bash_dirs" | tac | awk '!a[$0]++' | tac | tail -100 > "$HOME/.bash_dirs~"
@@ -96,7 +96,7 @@ function pecd()
 
     if [ -t 0 ]; then
         input="$HOME/.bash_dirs"
-        __ng_pecd_fix
+        __pecd_fix
     else
         input=-
     fi
@@ -107,6 +107,23 @@ function pecd()
         return 1
     fi
 
-    history -s cd "$dir"
+    history -s cd $(printf "%q" "$dir")
     builtin cd "$dir"
+}
+
+function pecd-clean()
+{
+    if [ ! -f "$HOME/.bash_dirs" ]; then
+        return
+    fi
+
+    cat "$HOME/.bash_dirs" | (
+        while read x; do
+            if [ -d "$x" ]; then
+                echo "$x"
+            fi
+        done
+    ) | tac | awk '!a[$0]++' | tac | tail -100 > "$HOME/.bash_dirs~"
+
+    mv -f "$HOME/.bash_dirs~" "$HOME/.bash_dirs"
 }
