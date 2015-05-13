@@ -18,7 +18,7 @@
 	g  = log --graph --date=short --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\"
 	gg = log --graph --date=short --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\" --all
 	chmod = update-index --chmod
-	ore = !git config user.name ngyuki && git config user.email ngyuki.ts@gmail.com
+	ore = !git config user.name ngyuki && git config user.email ngyuki.jp@gmail.com
 
 [diff]
 	algorithm = histogram
@@ -33,4 +33,4 @@
 
 [user]
 	name = ngyuki
-	email = ngyuki.ts@gmail.com
+	email = ngyuki.jp@gmail.com
