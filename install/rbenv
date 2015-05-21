@@ -1,0 +1,21 @@
+#!/bin/bash
+
+source "$(dirname "$0")/functions.sh"
+
+if [ ! -d "$HOME/.rbenv" ]; then
+    pp "Install rbenv"
+    git clone https://github.com/sstephenson/rbenv.git "$HOME/.rbenv"
+else
+    pp "Update rbenv"
+    cd "$HOME/.rbenv"
+    git pull --rebase
+fi
+
+if [ ! -d "$HOME/.rbenv/plugins/ruby-build" ]; then
+    pp "Install ruby-build"
+    git clone https://github.com/sstephenson/ruby-build.git "$HOME/.rbenv/plugins/ruby-build"
+else
+    pp "Update ruby-build"
+    cd "$HOME/.rbenv/plugins/ruby-build"
+    git pull --rebase
+fi
