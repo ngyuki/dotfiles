@@ -19,7 +19,6 @@ cd "$HOME/.phpenv/plugins"
 
 plugins=(
     "php-build             https://github.com/CHH/php-build.git"
-    "phpenv-composer       https://github.com/ngyuki/phpenv-composer.git"
     "phpenv-apache-version https://github.com/garamon/phpenv-apache-version.git"
 )
 
