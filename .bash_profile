@@ -147,8 +147,8 @@ eval "$(
 )"
 
 # check last update
-if [ "$(find "$dotfiles/.git/" -maxdepth 0 -mtime +30 | wc -l)" -ne 0 ]; then
-    printf "\e[0;33m%s\e[m\n" "Warning: dotfiles is over 30 days old." 1>&2
+if [ "$(find "$dotfiles/.git/" -maxdepth 0 -mtime +60 | wc -l)" -ne 0 ]; then
+    printf "\e[0;33m%s\e[m\n" "Warning: dotfiles is over 60 days old." 1>&2
     printf "\e[0;33m%s\e[m\n" "Warning: Please try \"cd $dotfiles; git pull --rebase\"" 1>&2
 fi
 
