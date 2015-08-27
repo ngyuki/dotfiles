@@ -48,7 +48,7 @@ case ${OSTYPE} in
   msys)
     # Windows
     export PS1='\n\e[0;32m\u@\h \e[0;33m\w\e[0m\n\$ '
-    export TERM=msys
+    #export TERM=msys
     export EDITOR='sakura.exe -CODE=4 -GROUP=9'
 
     if [ -n "$PhpStorm" ]; then
