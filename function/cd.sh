@@ -108,7 +108,7 @@ function pecd()
     fi
 
     history -s cd $(printf "%q" "$dir")
-    builtin cd "$dir"
+    __pecd_add "$dir"
 }
 
 function pecd-clean()
