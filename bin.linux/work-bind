@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -eu
+
+if [ -n "${1-}" ]; then
+  dir=$1
+else
+  dir=$PWD
+fi
+
+if [ ! -d "$dir" ]; then
+  echo "\"$dir\" is no directory" 1>&2
+  exit 1
+fi
+
+dir=$(cd "$dir";pwd)
+mnt="$HOME/work/${dir#/}"
+
+echo "mount --bind \"$mnt\" \"$dir\""
+
+mkdir -p "$mnt"
+sudo umount "$mnt" 2>/dev/null
+sudo mount --bind "$mnt" "$dir"
