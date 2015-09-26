@@ -19,5 +19,5 @@ mnt="$HOME/work/${dir#/}"
 echo "mount --bind \"$mnt\" \"$dir\""
 
 mkdir -p "$mnt"
-sudo umount "$mnt" 2>/dev/null
+sudo umount "$mnt" 2>/dev/null &&:
 sudo mount --bind "$mnt" "$dir"
