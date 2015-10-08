@@ -85,7 +85,8 @@ function __pecd_fix()
 {
     if [ -f "$HOME/.bash_dirs" ]; then
         cat "$HOME/.bash_dirs" | tac | awk '!a[$0]++' | tac | tail -100 > "$HOME/.bash_dirs~"
-        mv -f "$HOME/.bash_dirs~" "$HOME/.bash_dirs"
+        cp -f "$HOME/.bash_dirs~" "$HOME/.bash_dirs"
+        rm -f "$HOME/.bash_dirs~"
     fi
 }
 
@@ -125,5 +126,6 @@ function pecd-clean()
         done
     ) | tac | awk '!a[$0]++' | tac | tail -100 > "$HOME/.bash_dirs~"
 
-    mv -f "$HOME/.bash_dirs~" "$HOME/.bash_dirs"
+    cp -f "$HOME/.bash_dirs~" "$HOME/.bash_dirs"
+    rm -f "$HOME/.bash_dirs~"
 }
