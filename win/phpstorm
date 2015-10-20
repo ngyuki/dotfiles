@@ -21,7 +21,7 @@ if [ "${#args[@]}" -eq 0 ]; then
         echo "CWD is not workspace for PHPStorm." 1>&2
         exit 1
     fi
-    args+=(".")
+    args=( "$PWD" )
 fi
 
 cmd //c start "$PHPSTORM_BIN" "${args[@]}"
