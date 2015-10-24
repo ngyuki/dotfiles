@@ -1,0 +1,16 @@
+#!/bin/bash
+
+config=$HOME/.ssh/config
+dir=$HOME/.ssh/switch-config/
+
+fn=$({
+  if [ -d "$dir" ]; then
+      ls -- "$dir"
+  fi
+} | peco)
+
+if [ $? -ne 0 ]; then
+  exit
+fi
+
+ln -sf -- "$dir/$fn" "$config"

@@ -20,7 +20,7 @@ case ${OSTYPE} in
     # packer
     export PACKER_CACHE_DIR=~/.packer/
 
-    # $dotfiles/bin.linux and home/bin
+    # $dotfiles/bin.linux, $HOME/bin
     export PATH=$HOME/bin:$dotfiles/bin.linux:$PATH
     ;;
 
@@ -35,8 +35,8 @@ case ${OSTYPE} in
     # packer
     export PACKER_CACHE_DIR=~/.packer/
 
-    # fix path
-    export PATH=$HOME/bin:$PATH
+    # $dotfiles/bin.mac, $HOME/bin
+    export PATH=$HOME/bin:$dotfiles/bin.mac:$PATH
 
     # alias
     alias l.='ls -d .*'
