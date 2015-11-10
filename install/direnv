@@ -10,16 +10,22 @@ if hash direnv 2>/dev/null; then
   exit 0
 fi
 
-latest=$(
-  curl -fsSI https://github.com/zimbatm/direnv/releases/latest |
-    tr -d '\r' |
-    awk -F'/' '/^Location:/{print $NF}'
-)
+url="https://github.com/direnv/direnv/releases/latest"
+pp "direnv detect latest ... ${url}"
+latest=$(curl -fsSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
 
 : ${latest:?}
+pp "direnv latest version ... ${latest}"
 
-curl -fsSL "https://github.com/zimbatm/direnv/releases/download/${latest}/direnv.linux-amd64" \
-  > $HOME/bin/direnv
+url="https://github.com/direnv/direnv/releases/download/${latest}/direnv.linux-amd64"
+pp "direnv download ... $url"
+curl -fsSL "$url" > "$HOME/bin/direnv" &&:
+
+if [ $? -ne 0 ]; then
+  url="https://github.com/direnv/direnv/releases/download/v2.6.0/direnv.linux-amd64"
+  pp "direnv download ... $url"
+  curl -fsSL "$url" > "$HOME/bin/direnv"
+fi
 
 chmod +x $HOME/bin/direnv
 
