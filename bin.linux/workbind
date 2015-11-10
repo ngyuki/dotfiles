@@ -9,12 +9,17 @@ else
 fi
 
 if [ ! -d "$dir" ]; then
-  echo "\"$dir\" is no directory" 1>&2
+  echo "$dir is no directory" 1>&2
   exit 1
 fi
 
 dir=$(cd "$dir";pwd)
-mnt="$HOME/work/${dir#/}"
+mnt="$HOME/.bind/${dir#/}"
+
+if [ "$(cat /etc/mtab | cut -d' ' -f2 | grep -F "$dir")" == "$dir" ]; then
+  echo "$dir is mounted" 1>&2
+  exit 1
+fi
 
 echo "mount --bind \"$mnt\" \"$dir\""
 
