@@ -1,5 +1,3 @@
 #!/bin/bash
 
-dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/..";pwd)"
-echo "markdown-preview -m -h github -c $dir/lib/markdown.css $@"
-markdown-preview -m -h github -c "$dir/lib/markdown.css" "$@"
+markdown-bs-preview "$@"
