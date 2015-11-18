@@ -45,9 +45,6 @@ export PATH="$dotfiles/bin:$PATH"
 # editor
 export EDITOR=vim
 
-# grep options for colors
-export GREP_OPTIONS="--color=auto"
-
 # man enable prompt, raw
 export MANPAGER='less -MR'
 

@@ -48,6 +48,24 @@ if [[ ";$PROMPT_COMMAND;" != *";_share_history;"* ]]; then
     PROMPT_COMMAND="_share_history;$PROMPT_COMMAND";
 fi
 
+# grep options
+{
+    GREP_OPTIONS=()
+
+    if echo | grep "--color=auto" >/dev/null 2>&1; then
+        GREP_OPTIONS+=("--color=auto")
+    fi
+
+    if echo | grep "--exclude-dir=.svn,.git" >/dev/null 2>&1; then
+        GREP_OPTIONS+=("--exclude-dir=.svn,.git")
+    elif echo | grep "--exclude=.svn,.git" >/dev/null 2>&1; then
+        GREP_OPTIONS+=("--exclude=.svn,.git")
+    fi
+
+    alias grep="grep $GREP_OPTIONS"
+    unset GREP_OPTIONS
+}
+
 # phpenv
 if hash phpenv 2>/dev/null; then
     eval "$(phpenv init -)"
