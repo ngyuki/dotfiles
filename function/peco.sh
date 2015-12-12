@@ -72,7 +72,8 @@ if [ "${BASH_VERSINFO[0]}" -ge 4 ]; then
         READLINE_POINT=${#READLINE_LINE}
     }
 
-    if [ -n "$PS1" ]; then
+    #if [ -n "$PS1" ]; then
+    if [ -t 1 ]; then
         bind -x '"\C-x\C-x":peco-history'
     fi
 fi
