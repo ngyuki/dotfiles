@@ -97,6 +97,11 @@ if [ "$(find "$dotfiles/.git/" -maxdepth 0 -mtime +60 | wc -l)" -ne 0 ]; then
     printf "\e[0;33m%s\e[m\n" "Warning: Please try \"cd $dotfiles; git pull --rebase\"" 1>&2
 fi
 
+# awscli
+if type aws >/dev/null; then
+  complete -C aws_completer aws
+fi
+
 # .bashrc
 source "$dotfiles/.bashrc"
 
