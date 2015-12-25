@@ -34,3 +34,9 @@
 [user]
 	name = ngyuki
 	email = ngyuki.jp@gmail.com
+
+[difftool "WinMerge"]
+    cmd = git-difftool-winmerge \"$LOCAL\" \"$REMOTE\"
+
+[alias]
+    windiff = difftool -y -d -t WinMerge
