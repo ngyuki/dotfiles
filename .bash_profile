@@ -102,6 +102,12 @@ if type aws >/dev/null; then
   complete -C aws_completer aws
 fi
 
+# hman (man2html)
+if type temoto >/dev/null 2>&1 && type hman >/dev/null 2>&1; then
+  export MANHTMLHOST=$HOSTNAME
+  export MANHTMLPAGER='temoto open'
+fi
+
 # .bashrc
 source "$dotfiles/.bashrc"
 
