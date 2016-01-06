@@ -89,7 +89,9 @@ export GOPATH=$HOME/.golang
 export PATH=$GOPATH/bin:$PATH
 
 # vagrant
-export VAGRANT_DOTFILE_PATH=".vagrant-$(uname -n | tr '[A-Z]' '[a-z]')"
+if [ -z "$VAGRANT_DOTFILE_PATH" ]; then
+    export VAGRANT_DOTFILE_PATH=".vagrant-$(uname -n | tr '[A-Z]' '[a-z]')"
+fi
 
 # check last update
 if [ "$(find "$dotfiles/.git/" -maxdepth 0 -mtime +60 | wc -l)" -ne 0 ]; then
