@@ -100,7 +100,7 @@ if [ "$(find "$dotfiles/.git/" -maxdepth 0 -mtime +60 | wc -l)" -ne 0 ]; then
 fi
 
 # awscli
-if type aws >/dev/null; then
+if type aws >/dev/null 2>&1; then
   complete -C aws_completer aws
 fi
 
