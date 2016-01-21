@@ -1,0 +1,5 @@
+#!/bin/bash
+
+exec python -c 'import sys, urllib
+for line in sys.stdin:
+  sys.stdout.write(urllib.unquote_plus(line))'
