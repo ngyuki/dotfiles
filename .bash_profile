@@ -85,7 +85,9 @@ if [ -d "$HOME/.pyenv/bin" ]; then
 fi
 
 # golang
-export GOPATH=$HOME/.golang
+if [ -z "$GOPATH" ]; then
+  export GOPATH=$HOME/.golang
+fi
 export PATH=$GOPATH/bin:$PATH
 
 # vagrant
