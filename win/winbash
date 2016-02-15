@@ -1,3 +1,6 @@
 #!/bin/bash
 
-start "" ConEmu //cmd "bash --login"
+# @todo from env var
+CONEMU_BIN="D:\\app\\ConEmu\\ConEmu.exe"
+
+"$CONEMU_BIN" -NoSingle -cmd "bash --login"
