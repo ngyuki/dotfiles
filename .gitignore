@@ -31,3 +31,6 @@ sys$command
 
 # Mac
 .DS_Store
+
+# vagrant
+.vagrant-*/
