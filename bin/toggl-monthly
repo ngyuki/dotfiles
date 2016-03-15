@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -eu
+
+: ${TOGGL_USERAGENT:?}
+: ${TOGGL_WORKSPACE:?}
+: ${TOGGL_APIKEY:?}
+
+cur="$(date -d "-1 month" +%Y-%m-16)"
+end="$(date +%Y-%m-16)"
+
+while [[ $cur < $end ]]; do
+  echo -e "\n[$cur]"
+  curl -fsSL -X GET "https://toggl.com/reports/api/v2/summary" \
+    -d user_agent="$TOGGL_USERAGENT" \
+    -d workspace_id="$TOGGL_WORKSPACE" \
+    -d since="$cur" \
+    -d until="$cur" \
+    -d grouping=projects \
+    -d subgrouping=time_entries \
+    -d display_hours=decimal \
+    -d order_field=duration \
+    -d order_desc=on \
+    -u "$TOGGL_APIKEY":api_token |
+      jq -r '.data[].items[] | "  " + .title.time_entry + " (" + (.time/1000|strftime("%H:%M:%S")) + ")"'
+
+  # to next day
+  cur="$(date -d "$cur + 1 day" +%Y-%m-%d)"
+done
