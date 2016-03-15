@@ -22,7 +22,7 @@ while [[ $cur < $end ]]; do
     -d order_field=duration \
     -d order_desc=on \
     -u "$TOGGL_APIKEY":api_token |
-      jq -r '.data[].items[] | "  " + .title.time_entry + " (" + (.time/1000|strftime("%H:%M:%S")) + ")"'
+      jq -r '.data[].items[] | "  " + .title.time_entry + " (" + (.time/1000|strftime("%H:%M")) + ")"'
 
   # to next day
   cur="$(date -d "$cur + 1 day" +%Y-%m-%d)"
