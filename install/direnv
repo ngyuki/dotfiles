@@ -19,6 +19,7 @@ pp "direnv latest version ... ${latest}"
 
 url="https://github.com/direnv/direnv/releases/download/${latest}/direnv.linux-amd64"
 pp "direnv download ... $url"
+mkdir -p "$HOME/bin"
 curl -fsSL "$url" > "$HOME/bin/direnv" &&:
 
 if [ $? -ne 0 ]; then
