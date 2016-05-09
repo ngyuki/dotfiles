@@ -84,19 +84,13 @@ if [ -d "$HOME/.pyenv/bin" ]; then
     export PATH="$HOME/.pyenv/bin:$PATH"
 fi
 
-# golang
-if [ -z "$GOPATH" ]; then
-  export GOPATH=$HOME/.golang
-fi
-export PATH=$GOPATH/bin:$PATH
-
 # vagrant
 if [ -z "$VAGRANT_DOTFILE_PATH" ]; then
     export VAGRANT_DOTFILE_PATH=".vagrant-$(uname -n | tr '[A-Z]' '[a-z]')"
 fi
 
 # check last update
-if [ "$(find "$dotfiles/.git/" -maxdepth 0 -mtime +60 | wc -l)" -ne 0 ]; then
+if [ -n "$(find "$dotfiles/.git/" -maxdepth 0 -mtime +60 | head -1)" ]; then
     printf "\e[0;33m%s\e[m\n" "Warning: dotfiles is over 60 days old." 1>&2
     printf "\e[0;33m%s\e[m\n" "Warning: Please try \"cd $dotfiles; git pull --rebase\"" 1>&2
 fi
