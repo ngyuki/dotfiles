@@ -26,6 +26,13 @@
 [rebase]
 	autosquash = true
 
+[merge]
+	ff = false
+
+[pull]
+	ff = only
+	rebase = preserve
+
 [push]
 	# for 1.8 nothing matching upstream current simple
 	# for 1.7 nothing matching tracking current
