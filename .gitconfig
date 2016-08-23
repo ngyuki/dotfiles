@@ -23,6 +23,9 @@
 [diff]
 	algorithm = histogram
 
+[fetch]
+	prune = true
+
 [rebase]
 	autosquash = true
 
