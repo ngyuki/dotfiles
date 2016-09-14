@@ -1,8 +1,11 @@
 #!/bin/bash
 
 if [ ! -x "$SUBLIME_BIN" ]; then
+  SUBLIME_BIN="C:\\Program Files\\Sublime Text 3\\sublime_text.exe"
+  if [ ! -x "$SUBLIME_BIN" ]; then
     echo "You should be set \$SUBLIME_BIN Environment variable." 1>&2
     exit 1
+  fi
 fi
 
 cmd //c start "" "$SUBLIME_BIN" "$@"
