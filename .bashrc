@@ -68,7 +68,7 @@ fi
 
 # phpenv
 if hash phpenv 2>/dev/null; then
-    eval "$(phpenv init -)"
+    eval "$(phpenv init - --no-rehash)"
 fi
 
 # rbenv
