@@ -6,8 +6,11 @@ set -eu
 : ${TOGGL_WORKSPACE:?}
 : ${TOGGL_APIKEY:?}
 
-cur="$(date -d "-1 month" +%Y-%m-16)"
-end="$(date +%Y-%m-16)"
+cur="$(date -d "-1 month" +%Y-%m-01)"
+end="$(date +%Y-%m-01)"
+
+cur=${1-${cur}}
+end=${2-${end}}
 
 while [[ $cur < $end ]]; do
   echo -e "\n[$cur]"
