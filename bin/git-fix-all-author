@@ -1,0 +1,21 @@
+#!/bin/bash
+
+export git_name=$(git config --get user.name)
+export git_email=$(git config --get user.email)
+
+while :; do
+  printf "Fix all author and committer to \e[0;36m(%s)\e[m ... Really? (y/n):" "$git_name <$git_email>"
+  read -r yes || exit
+  case "$yes" in
+    y*) break ;;
+    n*) exit ;;
+  esac
+done
+
+git filter-branch --commit-filter '
+  GIT_AUTHOR_NAME="${git_name}";
+  GIT_AUTHOR_EMAIL="${git_email}";
+  GIT_COMMITTER_NAME="${git_name}";
+  GIT_COMMITTER_EMAIL="${git_email}";
+  git commit-tree "$@"
+' HEAD "$@"
