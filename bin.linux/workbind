@@ -2,27 +2,36 @@
 
 set -eu
 
-if [ -n "${1-}" ]; then
-  dir=$1
-else
-  dir=$PWD
+err (){
+  {
+    echo "$0: $*"
+    echo
+    echo "Usage: $0 <directory>"
+  }  1>&2
+  exit 1
+}
+
+if [ -z "${1-}" ]; then
+  err "must be specified directory"
 fi
+
+dir=$1
 
 if [ ! -d "$dir" ]; then
-  echo "$dir is no directory" 1>&2
-  exit 1
+  err "$dir is not directory"
 fi
 
-dir=$(cd "$dir";pwd)
+dir="$(realpath -- "$dir")"
 mnt="$HOME/.bind/${dir#/}"
 
 if [ "$(cat /etc/mtab | cut -d' ' -f2 | grep -F "$dir")" == "$dir" ]; then
-  echo "$dir is mounted" 1>&2
-  exit 1
+  err "$dir is mounted"
 fi
-
-echo "mount --bind \"$mnt\" \"$dir\""
 
 mkdir -p "$mnt"
 sudo umount "$mnt" 2>/dev/null &&:
 sudo mount --bind "$mnt" "$dir"
+
+ln -sfn /dev/null vendor/.workbind
+
+echo "ok ... $mnt"
