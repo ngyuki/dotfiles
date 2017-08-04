@@ -40,11 +40,7 @@
 [push]
 	# for 1.8 nothing matching upstream current simple
 	# for 1.7 nothing matching tracking current
-	default = upstream
-
-[user]
-	name = ngyuki
-	email = ngyuki.jp@gmail.com
+	default = simple
 
 [difftool "WinMerge"]
     cmd = git-difftool-winmerge \"$LOCAL\" \"$REMOTE\"
