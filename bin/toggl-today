@@ -6,7 +6,7 @@ set -eu
 : ${TOGGL_WORKSPACE:?}
 : ${TOGGL_APIKEY:?}
 
-today="$(date +%Y-%m-%d)"
+today="$(date +%Y-%m-%d -d "${1:-}")"
 
 echo -e "# $today reports by toggl.com\n"
 
