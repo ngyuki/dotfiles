@@ -4,9 +4,9 @@ set -eu
 
 err (){
   {
-    echo "$0: $*"
+    echo "${0##*/}: $*"
     echo
-    echo "Usage: $0 <directory>"
+    echo "Usage: ${0##*/} <directory>"
   }  1>&2
   exit 1
 }
