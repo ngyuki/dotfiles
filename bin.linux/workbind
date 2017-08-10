@@ -2,17 +2,34 @@
 
 set -eu
 
-err (){
+err_usage (){
   {
     echo "${0##*/}: $*"
     echo
-    echo "Usage: ${0##*/} <directory>"
+    echo "Usage: ${0##*/} [-u] <directory>"
   }  1>&2
   exit 1
 }
 
+err (){
+  {
+    echo "${0##*/}: $*"
+  }  1>&2
+  exit 1
+}
+
+opt_u=
+
+while getopts "u" opt; do
+  case "$opt" in
+    u) opt_u=1;;
+    \?) exit 1 ;;
+  esac
+  shift $((OPTIND - 1))
+done
+
 if [ -z "${1-}" ]; then
-  err "must be specified directory"
+  err_usage "must be specified directory"
 fi
 
 dir=$1
@@ -24,14 +41,29 @@ fi
 dir="$(realpath -- "$dir")"
 mnt="$HOME/.bind/${dir#/}"
 
-if [ "$(cat /etc/mtab | cut -d' ' -f2 | grep -F "$dir")" == "$dir" ]; then
-  err "$dir is mounted"
+is_mounted(){
+  [ "$(cat /etc/mtab | cut -d' ' -f2 | grep -F "$dir")" == "$dir" ]
+}
+
+if [[ -z $opt_u ]]; then
+  if is_mounted; then
+    err "$dir is mounted"
+  fi
+
+  mkdir -p "$mnt"
+  sudo umount "$mnt" 2>/dev/null &&:
+  sudo mount --bind -o user "$mnt" "$dir"
+
+  ln -sfn /dev/null "$dir/.workbind"
+
+  echo "ok ... bind $mnt"
+
+else
+  if ! is_mounted; then
+    err "$dir is not mounted"
+  fi
+
+  sudo umount "$dir"
+
+  echo "ok ... umount $mnt"
 fi
-
-mkdir -p "$mnt"
-sudo umount "$mnt" 2>/dev/null &&:
-sudo mount --bind "$mnt" "$dir"
-
-ln -sfn /dev/null vendor/.workbind
-
-echo "ok ... $mnt"
