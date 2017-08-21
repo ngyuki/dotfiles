@@ -33,9 +33,6 @@ case ${OSTYPE} in
         export ConEmuANSI=$CONEMUANSI
         export ANSICON=1
     fi
-
-    # dotfiles/win
-    export PATH="$dotfiles/win:$PATH"
     ;;
 esac
 
