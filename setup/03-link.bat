@@ -3,8 +3,7 @@
 cd /d %~dp0\..\
 
 if "%HOME%"=="" (
-  echo "require %%HOME%%"
-  goto END
+  set HOME=%USERPROFILE%
 )
 
 echo.
