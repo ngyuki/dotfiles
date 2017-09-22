@@ -24,4 +24,4 @@ if [ "${#args[@]}" -eq 0 ]; then
     args=( "$PWD" )
 fi
 
-cmd //c start "$PHPSTORM_BIN" "${args[@]}"
+cmd //c start "" "$PHPSTORM_BIN" "${args[@]}"
