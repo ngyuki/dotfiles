@@ -1,0 +1,24 @@
+#!/bin/bash
+
+source "$(dirname "$0")/functions.sh"
+
+###
+
+if hash ngrok 2>/dev/null; then
+  pp "ngrok is already installed"
+  ngrok version
+  exit 0
+fi
+
+url="https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.tgz"
+
+pp "ngrok download ... $url"
+
+cd /tmp
+curl -fSL "$url" | tar xzf -
+
+pp "ngrok install ... $HOME/bin/ngrok"
+mkdir -p "$HOME/bin"
+mv ngrok "$HOME/bin"
+
+ngrok version
