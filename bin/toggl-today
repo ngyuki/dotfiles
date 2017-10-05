@@ -21,4 +21,4 @@ curl -fsSL -G "https://toggl.com/reports/api/v2/summary" \
   -d order_field=duration \
   -d order_desc=on \
   -u "$TOGGL_APIKEY":api_token |
-  jq -r '.data[].items[] | "- " + .title.time_entry + " (" + (.time/1000|strftime("%H:%M")) + ")"'
+  jq -r '.data[] | .title + .items[] | "- [" + .project + "] " + .title.time_entry + " (" + (.time/1000|strftime("%H:%M")) + ")"'
