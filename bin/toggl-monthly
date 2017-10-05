@@ -14,7 +14,7 @@ end=${2-${end}}
 
 while [[ $cur < $end ]]; do
   echo -e "\n[$cur]"
-  curl -fsSL -X GET "https://toggl.com/reports/api/v2/summary" \
+  curl -fsSL -G "https://toggl.com/reports/api/v2/summary" \
     -d user_agent="$TOGGL_USERAGENT" \
     -d workspace_id="$TOGGL_WORKSPACE" \
     -d since="$cur" \
