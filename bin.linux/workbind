@@ -11,59 +11,65 @@ err_usage (){
   exit 1
 }
 
+err_exit (){
+  err "$@"
+  exit 1
+}
 err (){
   {
     echo "${0##*/}: $*"
   }  1>&2
-  exit 1
 }
 
 opt_u=
+dirs=()
 
-while getopts "u" opt; do
-  case "$opt" in
-    u) opt_u=1;;
-    \?) exit 1 ;;
-  esac
-  shift $((OPTIND - 1))
+while [ $# -ne 0 ]; do
+  if [ "$1" == "-u" ]; then
+    opt_u=1
+  elif [ "${1#-}" != "${1}" ]; then
+    err_exit "illegal option ${1}"
+  else
+    dirs+=( "$1" )
+  fi
+  shift
 done
 
-if [ -z "${1-}" ]; then
+if [ "${#dirs[@]}" -eq 0 ]; then
   err_usage "must be specified directory"
 fi
 
-dir=$1
-
-if [ ! -d "$dir" ]; then
-  err "$dir is not directory"
-fi
-
-dir="$(realpath -- "$dir")"
-mnt="$HOME/.bind/${dir#/}"
-
-is_mounted(){
-  [ "$(cat /etc/mtab | cut -d' ' -f2 | grep -F "$dir")" == "$dir" ]
-}
-
-if [[ -z $opt_u ]]; then
-  if is_mounted; then
-    err "$dir is mounted"
+for dir in "${dirs[@]}"; do
+  if [ ! -d "$dir" ]; then
+    err_exit "$dir is not directory"
   fi
+done
 
-  mkdir -p "$mnt"
-  sudo umount "$mnt" 2>/dev/null &&:
-  sudo mount --bind -o user "$mnt" "$dir"
+for dir in "${dirs[@]}"; do
 
-  ln -sfn /dev/null "$dir/.workbind"
+  realdir="$(realpath -- "$dir")"
+  mnt="$HOME/.bind/${realdir#/}"
 
-  echo "ok ... bind $mnt"
+  is_mounted(){
+    [ "$(cat /etc/mtab | cut -d' ' -f2 | grep -F "$realdir")" == "$realdir" ]
+  }
 
-else
-  if ! is_mounted; then
-    err "$dir is not mounted"
+  if [[ -z $opt_u ]]; then
+    if is_mounted; then
+      echo "$dir is mounted"
+    else
+      mkdir -p "$mnt"
+      sudo umount "$mnt" 2>/dev/null &&:
+      sudo mount --bind -o user "$mnt" "$realdir"
+      ln -sfn /dev/null "$realdir/.workbind"
+      echo "$dir ok ... bind $mnt"
+    fi
+  else
+    if ! is_mounted; then
+      echo "$dir is not mounted"
+    else
+      sudo umount "$realdir"
+      echo "$dir ok ... umount $mnt"
+    fi
   fi
-
-  sudo umount "$dir"
-
-  echo "ok ... umount $mnt"
-fi
+done
