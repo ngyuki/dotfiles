@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec docker run --rm -v "$PWD":/src/ -w /src/ ngyuki/php-phan phan "$@"
