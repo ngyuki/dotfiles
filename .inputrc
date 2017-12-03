@@ -9,3 +9,5 @@ set show-all-if-ambiguous off
 
 # Auto completion
 set completion-ignore-case on
+
+set bell-style none
