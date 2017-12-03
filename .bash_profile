@@ -5,11 +5,19 @@ dotfiles=${BASH_SOURCE[0]%/*}
 
 case ${OSTYPE} in
   linux*)
-    # POSIX
-    export PS1=$"\n\e[4$(( $(uname -n | sum | cut -f1 -d' ' | sed 's/^0*//') % 7 + 1 ));30m \e[m \e[0;36m\u@\h \e[0;33m\w\e[0m\n\\$ "
+    if [ -d /mnt/c/Windows/ ]; then
+        # windows subsystem for linux
+        export PS1='\n\e[0;32m\u@\h \e[0;33m\w\e[0m\n\$ '
 
-    # $dotfiles/bin.linux, $HOME/bin
-    export PATH=$HOME/bin:$dotfiles/bin.linux:$PATH
+        # $dotfiles/bin.win, $HOME/bin
+        export PATH=$HOME/bin:$dotfiles/bin.wsl:$PATH
+    else
+        # POSIX
+        export PS1=$"\n\e[4$(( $(uname -n | sum | cut -f1 -d' ' | sed 's/^0*//') % 7 + 1 ));30m \e[m \e[0;36m\u@\h \e[0;33m\w\e[0m\n\\$ "
+
+        # $dotfiles/bin.linux, $HOME/bin
+        export PATH=$HOME/bin:$dotfiles/bin.linux:$PATH
+    fi
     ;;
 
   darwin*)
