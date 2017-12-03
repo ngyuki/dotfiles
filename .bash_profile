@@ -11,6 +11,16 @@ case ${OSTYPE} in
 
         # $dotfiles/bin.win, $HOME/bin
         export PATH=$HOME/bin:$dotfiles/bin.wsl:$PATH
+
+        # ssh-agent
+        if [ -f ~/.ssh/ssh-agent ] ; then
+            source ~/.ssh/ssh-agent > /dev/null
+        fi
+        ssh-add -l > /dev/null
+        if [ $? -gt 1 ]; then
+            ssh-agent > ~/.ssh/ssh-agent
+            source ~/.ssh/ssh-agent > /dev/null
+        fi
     else
         # POSIX
         export PS1=$"\n\e[4$(( $(uname -n | sum | cut -f1 -d' ' | sed 's/^0*//') % 7 + 1 ));30m \e[m \e[0;36m\u@\h \e[0;33m\w\e[0m\n\\$ "
