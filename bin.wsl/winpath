@@ -1,0 +1,18 @@
+#!/bin/bash
+
+args=()
+prog=$1
+shift
+
+for x in "$@"; do
+    p=$(realpath -qeLP -- "$x")
+    if [ -e "$p" ]; then
+        p=${p//\//\\}
+        p=${p/#\\mnt\\c\\/c:\\}
+        args+=( "${p//\//\\}" )
+    else
+        args+=( "$x" )
+    fi
+done
+
+exec "$prog" "${args[@]}"

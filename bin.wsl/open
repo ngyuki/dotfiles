@@ -1,16 +1,3 @@
 #!/bin/bash
 
-args=()
-
-for x in "$@"; do
-    p=$(realpath -qeLP -- "$x")
-    if [ -e "$p" ]; then
-        p=${p//\//\\}
-        p=${p/#\\mnt\\c\\/c:\\}
-        args+=( "${p//\//\\}" )
-    else
-        args+=( "$x" )
-    fi
-done
-
-/mnt/c/Windows/explorer.exe "${args[@]}"
+winpath "/mnt/c/Windows/explorer.exe" "$@"
