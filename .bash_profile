@@ -76,8 +76,8 @@ export LESS_TERMCAP_us=$(printf "\e[1;32m")
 export HISTSIZE=9999
 export HISTFILESIZE=$HISTSIZE
 export HISTTIMEFORMAT='[%y/%m/%d %H:%M:%S] '
-export HISTCONTROL=ignoredups
-#export HISTIGNORE='ls:cd:cd -:pwd:history*:exit:date'
+export HISTCONTROL=ignoreboth
+export HISTIGNORE='halt *:shutdown *:reboot *:poweroff *'
 
 # packer
 if [ -z "$PACKER_CACHE_DIR" ]; then

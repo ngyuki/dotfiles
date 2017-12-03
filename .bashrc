@@ -1,10 +1,23 @@
 ################################################################################
 ### .bashrc
 
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+    *) return;;
+esac
+
 dotfiles=${BASH_SOURCE[0]%/*}
 
 case ${OSTYPE} in
   linux*)
+    # alias
+    alias ls='ls --color=auto'
+    alias ll='ls -alF'
+    alias la='ls -A'
+    alias l='ls -CF'
+    alias l.='ls -d .*'
+    alias vi='vim'
     ;;
 
   darwin*)
@@ -40,6 +53,14 @@ shopt -s cdspell
 # histappend
 shopt -s histappend
 
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+shopt -s globstar
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
 # share_history
 function _share_history {
     history -a
@@ -49,22 +70,19 @@ if [[ ";$PROMPT_COMMAND;" != *";_share_history;"* ]]; then
 fi
 
 # grep options
-{
-    GREP_OPTIONS=()
-
-    if echo | grep "--color=auto" >/dev/null 2>&1; then
-        GREP_OPTIONS+=("--color=auto")
+if hash grep 2>/dev/null; then
+    grep_options=()
+    if echo | grep '--color=auto' '' >/dev/null '' 2>&1; then
+        grep_options+=('--color=auto')
     fi
-
-    if echo | grep "--exclude-dir=.svn,.git" >/dev/null 2>&1; then
-        GREP_OPTIONS+=("--exclude-dir=.svn,.git")
-    elif echo | grep "--exclude=.svn,.git" >/dev/null 2>&1; then
-        GREP_OPTIONS+=("--exclude=.svn,.git")
+    if echo | grep '--exclude-dir=.svn,.git' '' >/dev/null 2>&1; then
+        grep_options+=('--exclude-dir=.svn,.git')
+    elif echo | grep '--exclude=.svn,.git' '' >/dev/null 2>&1; then
+        grep_options+=('--exclude=.svn,.git')
     fi
-
-    alias grep="grep $GREP_OPTIONS"
-    unset GREP_OPTIONS
-}
+    alias grep="grep ${grep_options[@]}"
+    unset grep_options
+fi
 
 # phpenv
 if hash phpenv 2>/dev/null; then
