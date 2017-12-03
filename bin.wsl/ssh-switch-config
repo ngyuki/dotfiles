@@ -1,0 +1,17 @@
+#!/bin/bash
+
+config=$HOME/.ssh/config
+dir=$HOME/.ssh/config.d
+
+if netsh.exe wlan show interfaces | grep SSID | grep home > /dev/null; then
+    fn=home
+elif netsh.exe wlan show interfaces | grep SSID | grep hj > /dev/null; then
+    fn=hj
+fi
+
+
+if [ -z "$fn" ]; then
+  exit
+fi
+
+ln -sfv -- "$dir/$fn" "$config"
