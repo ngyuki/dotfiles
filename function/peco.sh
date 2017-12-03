@@ -1,37 +1,24 @@
 ################################################################################
 ### peco
 
-if ! hash peco 1> /dev/null 2>&1; then
-
-    if ! hash fzf 1> /dev/null 2>&1; then
-
-        function peco()
-        {
-            if ! type -f peco 1> /dev/null 2>&1 ; then
-                {
-                    echo 'You should be install peco'
-                    echo '  see https://github.com/peco/peco/releases'
-                    echo
-                    echo 'Example'
-                    echo '  curl -L https://github.com/peco/peco/releases/download/v0.1.12/peco_linux_amd64.tar.gz \'
-                    echo '    | tar xzf - --directory /tmp/'
-                    echo '  sudo mv /tmp/peco_linux_amd64/peco /usr/local/bin'
-                    echo '  rm -fr /tmp/peco_linux_amd64'
-                } 1>&2
-            else
-                command peco "$@"
-            fi
+function peco()
+{
+    if type -f peco 1> /dev/null 2>&1; then
+        function peco() {
+            command peco "$@"
         }
-
-    else
-
-        function peco()
-        {
+    elif type -f fzf 1> /dev/null 2>&1; then
+        function peco() {
             command fzf --reverse "$@"
         }
-
+    else
+        function peco() {
+            echo 'You should be install peco or fzf' 1>&2
+            return 1
+        }
     fi
-fi
+    peco "$@"
+}
 
 function pessh()
 {
