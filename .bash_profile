@@ -16,7 +16,7 @@ case ${OSTYPE} in
         if [ -f ~/.ssh/ssh-agent ] ; then
             source ~/.ssh/ssh-agent > /dev/null
         fi
-        ssh-add -l > /dev/null
+        ssh-add -l > /dev/null 2>&1
         if [ $? -gt 1 ]; then
             ssh-agent > ~/.ssh/ssh-agent
             source ~/.ssh/ssh-agent > /dev/null
