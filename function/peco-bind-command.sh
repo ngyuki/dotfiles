@@ -34,6 +34,6 @@ if [ "${BASH_VERSINFO[0]}" -ge 4 -a -t 1 ]; then
     READLINE_POINT=$(($pos + ${#line}))
   }
 
-  bind -r '"\C-x\C-v"'
-  bind -x '"\C-x\C-v":__peco_bind_command_replace'
+  bind -r '"\C-x\C-f"'
+  bind -x '"\C-x\C-f":__peco_bind_command_replace'
 fi
