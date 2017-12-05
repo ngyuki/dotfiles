@@ -12,7 +12,7 @@ function xdebug-remote
             else
                 XDEBUG_CONFIG="idekey=default"
             fi
-            PHP_IDE_CONFIG="serverName=$(hostname -s)"
+            PHP_IDE_CONFIG="serverName=${HOSTNAME%%.*}"
             export XDEBUG_CONFIG
             export PHP_IDE_CONFIG
             ;;
