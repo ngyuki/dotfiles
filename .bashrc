@@ -108,11 +108,9 @@ if hash direnv 2>/dev/null; then
 fi
 
 # function
-eval "$(
-    for fn in "$dotfiles"/function/*.sh; do
-        echo source \"$fn\"
-    done
-)"
+for fn in "$dotfiles"/function/*.sh; do
+    source "$fn"
+done
 
 # cleanup
 unset dotfiles
