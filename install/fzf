@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -eux
+
+###
+
+if type fzf 1>/dev/null 2>&1; then
+  pp "fzf is already installed"
+  fzf --version 2>&1 | sed 's/^/  /'
+  exit 0
+fi
+
+latest=$(
+  curl -fsSI "https://github.com/junegunn/fzf-bin/releases/latest" |
+    tr -d '\r' |
+    awk -F'/' '/^Location:/{print $NF}'
+)
+
+url="https://github.com/junegunn/fzf-bin/releases/download/${latest}/fzf-${latest}-linux_amd64.tgz"
+
+mkdir -p $HOME/bin
+curl -fsSL "${url}" | tar -xzf - --to-stdout fzf > $HOME/bin/fzf~
+
+mv $HOME/bin/fzf~ $HOME/bin/fzf
+chmod +x $HOME/bin/fzf
+
+fzf --version 2>&1
