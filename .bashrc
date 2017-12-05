@@ -61,6 +61,9 @@ shopt -s globstar
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# @ から始まる単語の保管を無効にする
+shopt -u hostcomplete
+
 # share_history
 function _share_history {
     history -a
