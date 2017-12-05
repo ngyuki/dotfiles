@@ -115,7 +115,7 @@ function pecd() {
         input=-
     fi
 
-    dir=$(cat "$input" | tac | awk '!a[$0]++' | peco)
+    dir=$(cat "$input" | tac | awk '!a[$0]++' | __peco)
 
     if [ -z "$dir" ]; then
         return 1

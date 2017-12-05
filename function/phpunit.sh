@@ -32,4 +32,5 @@ function phpunit
 
 	"${phpunit[@]}" "${configuration[@]}" --colors "$@"
 	return ${PIPESTATUS[0]}
+
 }

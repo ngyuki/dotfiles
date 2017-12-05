@@ -1,6 +1,6 @@
 if [ "${BASH_VERSINFO[0]}" -ge 4 -a -t 1 ]; then
 
-  function peco-bind-command-replace()
+  function __peco_bind_command_replace()
   {
     local cmd
 
@@ -35,5 +35,5 @@ if [ "${BASH_VERSINFO[0]}" -ge 4 -a -t 1 ]; then
   }
 
   bind -r '"\C-x\C-v"'
-  bind -x '"\C-x\C-v":peco-bind-command-replace'
+  bind -x '"\C-x\C-v":__peco_bind_command_replace'
 fi
