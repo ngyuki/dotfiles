@@ -79,6 +79,11 @@ export HISTTIMEFORMAT='[%y/%m/%d %H:%M:%S] '
 export HISTCONTROL=ignoreboth
 export HISTIGNORE='halt *:shutdown *:reboot *:poweroff *'
 
+# fzf
+if type fzf >/dev/null 2>&1; then
+  export FZF_DEFAULT_OPTS='--reverse --ansi --color=16 --inline-info'
+fi
+
 # packer
 if [ -z "$PACKER_CACHE_DIR" ]; then
     export PACKER_CACHE_DIR=$HOME/.packer/

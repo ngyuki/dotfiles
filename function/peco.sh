@@ -5,7 +5,7 @@ function __peco()
 {
     if type -f fzf 1> /dev/null 2>&1; then
         function __peco() {
-            command fzf --reverse "$@"
+            command fzf "$@"
         }
     elif type -f peco 1> /dev/null 2>&1; then
         function __peco() {
