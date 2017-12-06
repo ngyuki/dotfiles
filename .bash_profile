@@ -7,7 +7,7 @@ case ${OSTYPE} in
   linux*)
     if [ -d /mnt/c/Windows/ ]; then
         # windows subsystem for linux
-        export PS1='\n\e[0;32m\u@\h \e[0;33m\w\e[0m\n\$ '
+        export PS1='\n\e[0;35m\u@\h \e[0;33m\w\e[0m\n\$ '
 
         # $dotfiles/bin.win, $HOME/bin
         export PATH=$HOME/bin:$dotfiles/bin.wsl:$PATH
@@ -18,6 +18,9 @@ case ${OSTYPE} in
         fi
         ssh-add -l > /dev/null 2>&1
         if [ $? -gt 1 ]; then
+            if [ ! -d ~/.ssh ]; then
+                install -d -m0700 ~/.ssh
+            fi
             ssh-agent > ~/.ssh/ssh-agent
             source ~/.ssh/ssh-agent > /dev/null
         fi
