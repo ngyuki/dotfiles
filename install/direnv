@@ -1,34 +1,31 @@
 #!/bin/bash
 
-source "$(dirname "$0")/functions.sh"
-
-###
-
 if hash direnv 2>/dev/null; then
-  pp "direnv is already installed"
+  echo "direnv is already installed"
   direnv version
   exit 0
 fi
 
-url="https://github.com/direnv/direnv/releases/latest"
-pp "direnv detect latest ... ${url}"
-latest=$(curl -fsSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
+(
+  set -eux
 
-: ${latest:?}
-pp "direnv latest version ... ${latest}"
+  url="https://github.com/direnv/direnv/releases/latest"
+  latest=$(curl -fsSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
 
-url="https://github.com/direnv/direnv/releases/download/${latest}/direnv.linux-amd64"
-pp "direnv download ... $url"
-mkdir -p "$HOME/bin"
-curl -fsSL "$url" > "$HOME/bin/direnv" &&:
+  url="https://github.com/direnv/direnv/releases/download/${latest}/direnv.linux-amd64"
 
-if [ $? -ne 0 ]; then
-  url="https://github.com/direnv/direnv/releases/download/v2.6.0/direnv.linux-amd64"
-  pp "direnv download ... $url"
-  curl -fsSL "$url" > "$HOME/bin/direnv"
-fi
+  mkdir -p "$HOME/bin"
+  curl -fsSL "$url" > "$HOME/bin/direnv" &&:
 
-chmod +x $HOME/bin/direnv
+  #if [ $? -ne 0 ]; then
+  #  url="https://github.com/direnv/direnv/releases/download/v2.6.0/direnv.linux-amd64"
+  #  pp "direnv download ... $url"
+  #  curl -fsSL "$url" > "$HOME/bin/direnv"
+  #fi
 
-pp "direnv has been installed on $HOME/bin/direnv"
+  chmod +x "$HOME/bin/direnv"
+)
+
+echo
+echo "direnv is installed"
 direnv version
