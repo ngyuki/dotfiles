@@ -18,9 +18,14 @@ curl -fsSL -G "https://toggl.com/reports/api/v2/summary" \
   -d since="$cur" \
   -d until="$end" \
   -d grouping=projects \
-  -d subgrouping=time_entries \
   -d display_hours=decimal \
   -d order_field=duration \
   -d order_desc=on \
-  -u "$TOGGL_APIKEY":api_token |
-      jq -r '.data[] | .title + .items[] | "- [" + .project + "] " + .title.time_entry + " (" + (.time/1000|strftime("%H:%M")) + ")"'
+  -u "$TOGGL_APIKEY":api_token \
+| jq '.data[] | [
+    .title.project,
+    (.time/1000/60/60|floor),
+    (.time/1000/60%60|floor),
+    (.time/1000/60/60%60|floor)
+  ] | map(tostring) | join(" ")' -r \
+| awk '{printf "%s (%02d:%02d:%02d)\n",$1,$2,$3,$4}'
