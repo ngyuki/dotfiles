@@ -14,3 +14,10 @@ fkill() {
     echo "$pid" | xargs kill -${1:-9}
   fi
 }
+
+o() {
+  local line
+  line=$(
+    find -L "${1:-.}" -path '*/\.*' -prune -o -type f -print 2> /dev/null | fzf --reverse +m
+  ) && open "$line"
+}
