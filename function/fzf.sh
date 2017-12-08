@@ -1,6 +1,13 @@
 #!/bin/bash
 
-fcd() {
+o() {
+  local line
+  line=$(
+    find -L "${1:-.}" -path '*/\.*' -prune -o -type f -print 2> /dev/null | fzf --reverse +m
+  ) && open "$line"
+}
+
+d() {
   local dir
   dir=$(
     find -L "${1:-.}" -path '*/\.*' -prune -o -type d -print 2> /dev/null | fzf --reverse +m
@@ -13,11 +20,4 @@ fkill() {
   if [ "x$pid" != "x" ]; then
     echo "$pid" | xargs kill -${1:-9}
   fi
-}
-
-o() {
-  local line
-  line=$(
-    find -L "${1:-.}" -path '*/\.*' -prune -o -type f -print 2> /dev/null | fzf --reverse +m
-  ) && open "$line"
 }
