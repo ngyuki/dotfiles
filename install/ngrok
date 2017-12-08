@@ -1,24 +1,27 @@
 #!/bin/bash
 
-source "$(dirname "$0")/functions.sh"
-
-###
-
-if hash ngrok 2>/dev/null; then
-  pp "ngrok is already installed"
+if type ngrok 1>/dev/null 2>&1; then
+  echo "ngrok is already installed"
   ngrok version
   exit 0
 fi
 
-url="https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.tgz"
+(
+  set -eux
+  url=$(
+    curl -fsSL "https://ngrok.com/download" |
+      xmllint --xpath 'string(//*[@id="dl-linux-amd64"]//a/@href)' --html - 2>/dev/null
+  )
+  if [ -z "$url" ]; then
+    exit 1
+  fi
 
-pp "ngrok download ... $url"
+  url="${url%.*}.tgz"
 
-cd /tmp
-curl -fSL "$url" | tar xzf -
+  mkdir -p "$HOME/bin"
+  curl -fsSL "$url" | tar xzf - --directory "$HOME/bin"
+)
 
-pp "ngrok install ... $HOME/bin/ngrok"
-mkdir -p "$HOME/bin"
-mv ngrok "$HOME/bin"
-
+echo
+echo "ngrok is installed"
 ngrok version
