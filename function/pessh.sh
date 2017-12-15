@@ -1,22 +1,21 @@
 ################################################################################
 ### pessh
 
-function pessh() {
-    local input
-    local host
+# ruptime が無いと _known_hosts_real が妙に遅いのでダミー
+if ! type -f ruptime 2>/dev/null; then
+    ruptime(){
+        if type -f ruptime 2>/dev/null; then
+            unset -f ruptime
+        fi
+    }
+fi
 
-    if [ -t 0 ]; then
-        input=/etc/hosts
-    else
-        input=-
-    fi
+pessh() {
+    # bash_completion の _known_hosts_real を呼ぶ
+    _known_hosts_real -a -- ""
 
-    host=$(
-        cat "$input" |
-        grep -v -e '^$' -e '^[ \t]*#' |
-        sed -e 's/[ \t][ \t]*/\n/g' |
-        sort | uniq | __peco
-    )
+    host=$(IFS=$'\n'; echo "${COMPREPLY[*]}" | sort | uniq | __peco)
+    COMPREPLY=()
 
     if [ -z "$host" ]; then
         return 1
