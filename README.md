@@ -1,5 +1,19 @@
 # dotfiles
 
+## Support
+
+- Windows subsystem for Linux
+    - Ubuntu 16.04.3 LTS (Xenial Xerus)
+    - bash 4.3.48
+    - git 2.7.4
+- Windows 10 (Git bash)
+    - bash 4.4.12
+    - git 2.15.1
+- CentOS 7
+    - CentOS 7.4.1708
+    - bash 4.2.46
+    - git 2.15.0
+
 ## Setup for Linux
 
 ### Download public keys
