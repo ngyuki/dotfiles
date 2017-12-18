@@ -43,8 +43,8 @@
 	# for 1.7 nothing matching tracking current
 	default = simple
 
-[difftool "WinMerge"]
-    cmd = git-difftool-winmerge \"$LOCAL\" \"$REMOTE\"
+[difftool "windiff"]
+	cmd = "LOCAL=\"$LOCAL\" REMOTE=\"$REMOTE\" git-difftool-winmerge"
 
 [alias]
-    windiff = difftool -y -d -t WinMerge
+	windiff = difftool -y -d -t windiff
