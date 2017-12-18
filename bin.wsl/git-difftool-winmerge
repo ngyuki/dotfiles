@@ -1,15 +1,3 @@
 #!/bin/bash
 
-set -eux
-
-tmp="/mnt/c/Users/$USER/AppData/Local/Temp/git-difftool-winmerge-$(date +%Y%m%dT%H%M%S.%N)"
-trap 'rm -fr "$tmp"' EXIT
-
-mkdir -p "$tmp"
-
-rsync -rL "$LOCAL/" "$tmp/local/"
-rsync -rL "$REMOTE/" "$tmp/remote/"
-
-cd "$tmp"
-
-'/mnt/c/Program Files/WinMerge/WinMergeU.exe' -f '*.*' -e -u -r 'local/' 'remote/'
+exec winpath '/mnt/c/Program Files/WinMerge/WinMergeU.exe' -f '*.*' -e -u -r "$@"

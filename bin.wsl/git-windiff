@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export TMPDIR="/mnt/c/Users/$USER/AppData/Local/Temp"
+git difftool -y -d --no-symlinks -x git-difftool-winmerge "$@"
