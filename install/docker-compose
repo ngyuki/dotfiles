@@ -1,0 +1,21 @@
+#!/bin/bash
+
+(
+  set -eux
+
+  url="https://github.com/docker/compose/releases/latest"
+  latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
+
+  url="https://github.com/docker/compose/releases/download/${latest}/docker-compose-Linux-x86_64"
+
+  tmp=$(mktemp -t docker-compose.XXXXXXXX)
+  trap 'rm -f -- "$tmp"' EXIT
+
+  curl -fSL "$url" > "$tmp" &&:
+
+  install -D -m0755 "$tmp" "$HOME/bin/docker-compose"
+)
+
+echo
+echo "docker-compose is installed"
+docker-compose --version
