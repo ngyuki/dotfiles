@@ -69,6 +69,9 @@ export EDITOR=vim
 # man enable prompt, raw
 export MANPAGER='less -MR'
 
+# ignore dll for WSL
+export FIGNORE=".dll:.DLL"
+
 # less colors
 export LESS_TERMCAP_mb=$(printf "\e[1;31m")
 export LESS_TERMCAP_md=$(printf "\e[1;31m")
