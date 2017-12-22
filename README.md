@@ -65,4 +65,4 @@ $ exec bash --login
 
 ## Setup for Windows
 
-DoubleClick dotfiles/setup.wsf
+DoubleClick dotfiles/setup-win.bat

@@ -1,5 +1,0 @@
-<job>
-<script language="JavaScript">
-    WScript.CreateObject("Shell.Application").ShellExecute("setup\\setup.bat", "", "", "runas");
-</script>
-</job>
