@@ -1,29 +1,19 @@
 #!/bin/bash
 
-if hash direnv 2>/dev/null; then
-  echo "direnv is already installed"
-  direnv version
-  exit 0
-fi
-
 (
   set -eux
 
   url="https://github.com/direnv/direnv/releases/latest"
-  latest=$(curl -fsSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
+  latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
 
   url="https://github.com/direnv/direnv/releases/download/${latest}/direnv.linux-amd64"
 
-  mkdir -p "$HOME/bin"
-  curl -fsSL "$url" > "$HOME/bin/direnv" &&:
+  tmp=$(mktemp -t direnv.XXXXXXXX)
+  trap 'rm -f -- "$tmp"' EXIT
 
-  #if [ $? -ne 0 ]; then
-  #  url="https://github.com/direnv/direnv/releases/download/v2.6.0/direnv.linux-amd64"
-  #  pp "direnv download ... $url"
-  #  curl -fsSL "$url" > "$HOME/bin/direnv"
-  #fi
+  curl -fSL "$url" > "$tmp"
 
-  chmod +x "$HOME/bin/direnv"
+  install -D -m0755 "$tmp" "$HOME/bin/direnv"
 )
 
 echo
