@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec '/mnt/c/Program Files/WinMerge/WinMergeU.exe' /r /e /u /f '*.*' "$@"
