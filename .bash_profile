@@ -6,8 +6,12 @@ dotfiles=${BASH_SOURCE[0]%/*}
 case ${OSTYPE} in
   linux*)
     if [ -d /mnt/c/Windows/ ]; then
-        # windows subsystem for linux
-        export PS1='\n\e[0;35m\u@\h \e[0;33m\w\e[0m\n\$ '
+        # WSL
+        if hash __git_ps1 1>&/dev/null 2>&1; then
+            export PS1='\n\e[0;35m\u@\h \e[0;33m\w$(__git_ps1 " \\e[0;36m(%s)")\e[0m\n\$ '
+        else
+            export PS1='\n\e[0;35m\u@\h \e[0;33m\w\e[0m\n\$ '
+        fi
 
         # $dotfiles/bin.win, $HOME/bin
         export PATH=$HOME/bin:$dotfiles/bin.wsl:$PATH
