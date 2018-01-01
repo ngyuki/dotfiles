@@ -38,5 +38,5 @@ function __bind_command_find() {
   READLINE_POINT=$(($pos + ${#input}))
 }
 
-bind -r '"\C-x\C-f"'
-bind -x '"\C-x\C-f":__bind_command_find'
+bind -r '"\C-f\C-f"'
+bind -x '"\C-f\C-f":__bind_command_find'
