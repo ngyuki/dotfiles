@@ -72,7 +72,7 @@ fi
 # grep options
 if hash grep 2>/dev/null; then
     grep_options=()
-    if echo | grep '--color=auto' '' >/dev/null '' 2>&1; then
+    if echo | grep '--color=auto' '' >/dev/null 2>&1; then
         grep_options+=('--color=auto')
     fi
     if echo | grep '--exclude-dir=.svn,.git' '' >/dev/null 2>&1; then
@@ -81,6 +81,9 @@ if hash grep 2>/dev/null; then
         grep_options+=('--exclude=.svn,.git')
     fi
     alias grep="grep ${grep_options[@]}"
+    alias egrep="egrep ${grep_options[@]}"
+    alias fgrep="fgrep ${grep_options[@]}"
+
     unset grep_options
 fi
 
