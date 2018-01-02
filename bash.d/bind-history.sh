@@ -15,7 +15,7 @@ function __bind_history() {
     HISTTIMEFORMAT= builtin history |
     sed 's/ *[0-9][0-9]* *//' |
     awk '!a[$0]++' |
-    fzf +m --tac --query "$READLINE_LINE"
+    fzf +m --tac --tiebreak=begin --height=40% --query "$READLINE_LINE"
   )
 
   if [ -z "$input" ]; then
@@ -26,5 +26,5 @@ function __bind_history() {
   READLINE_POINT=${#READLINE_LINE}
 }
 
-bind -r '"\C-x\C-x"'
-bind -x '"\C-x\C-x":__bind_history'
+bind -r '"\C-r"'
+bind -x '"\C-r":__bind_history'

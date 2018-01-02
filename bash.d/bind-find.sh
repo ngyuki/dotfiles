@@ -11,9 +11,15 @@ fi
 
 function __bind_command_find() {
 
+  local left=${READLINE_LINE:0:${READLINE_POINT}}
+  local right=${READLINE_LINE:${READLINE_POINT}}
+  local left=${left##* }
+  local right=${right%% *}
+  local word=${left}${right}
+
   local input=$(
-    find -L "${1:-.}" -path '*/\.*' -prune -o -print 2> /dev/null |
-    fzf -m
+    find -L . -path '*/\.*' -prune -o -print 2> /dev/null |
+    fzf -m --height=40% --query "${word:-}"
   )
 
   if [ -z "$input" ]; then
@@ -31,11 +37,11 @@ function __bind_command_find() {
 
   local input="${arr[@]}"
 
-  local pos=$READLINE_POINT
-  local len=${#READLINE_LINE}
+  local left=$(($READLINE_POINT - ${#left}))
+  local right=$(($READLINE_POINT + ${#right}))
 
-  READLINE_LINE="${READLINE_LINE:0:$pos}${input}${READLINE_LINE:$pos:$len}"
-  READLINE_POINT=$(($pos + ${#input}))
+  READLINE_LINE="${READLINE_LINE:0:$left}${input}${READLINE_LINE:$right}"
+  READLINE_POINT=$(($left + ${#input}))
 }
 
 bind -r '"\C-f\C-f"'
