@@ -19,7 +19,7 @@ function __bind_command_find() {
 
   local input=$(
     find -L . -path '*/\.*' -prune -o -print 2> /dev/null |
-    fzf -m --height=40% --query "${word:-}"
+    fzf -m --query "${word:-}"
   )
 
   if [ -z "$input" ]; then

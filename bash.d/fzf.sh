@@ -3,7 +3,12 @@
 o() {
   local line
   line=$(
-    find -L "${1:-.}" -path '*/\.*' -prune -o -type f -print 2> /dev/null | fzf --reverse +m
+    if [ $# -eq 0 ]; then
+      find -L . -path '*/\.*' -prune -o -type f -print 2> /dev/null | fzf --reverse +m
+    else
+      IFS=$'\n'
+      echo "$*" | fzf --reverse +m
+    fi
   ) && open "$line"
 }
 
