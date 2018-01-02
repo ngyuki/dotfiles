@@ -7,11 +7,6 @@ case ${OSTYPE} in
   linux*)
     if [ -d /mnt/c/Windows/ ]; then
         # WSL
-        if hash __git_ps1 1>&/dev/null 2>&1; then
-            export PS1='\n\e[0;35m\u@\h \e[0;33m\w$(__git_ps1 " \\e[0;36m(%s)")\e[0m\n\$ '
-        else
-            export PS1='\n\e[0;35m\u@\h \e[0;33m\w\e[0m\n\$ '
-        fi
 
         # $dotfiles/bin.win, $HOME/bin
         export PATH=$HOME/bin:$dotfiles/bin.wsl:$PATH
@@ -33,7 +28,6 @@ case ${OSTYPE} in
         export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
     else
         # POSIX
-        export PS1=$"\n\e[4$(( $(uname -n | sum | cut -f1 -d' ' | sed 's/^0*//') % 7 + 1 ));30m \e[m \e[0;36m\u@\h \e[0;33m\w\e[0m\n\\$ "
 
         # $dotfiles/bin.linux, $HOME/bin
         export PATH=$HOME/bin:$dotfiles/bin.linux:$PATH
@@ -42,7 +36,6 @@ case ${OSTYPE} in
 
   darwin*)
     # MAC
-    export PS1='\n\e[0;32m\u@\h \e[0;33m\w\e[0m\n\$ '
 
     # $dotfiles/bin.mac, $HOME/bin
     export PATH=$HOME/bin:$dotfiles/bin.mac:$PATH
@@ -50,7 +43,6 @@ case ${OSTYPE} in
 
   msys)
     # Windows
-    export PS1='\n\e[0;32m\u@\h \e[0;33m\w\e[0m\n\$ '
 
     if [ -n "$PhpStorm" ]; then
         export ConEmuANSI=ON

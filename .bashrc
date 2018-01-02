@@ -8,6 +8,40 @@ fi
 
 case ${OSTYPE} in
   linux*)
+    if [ -d '/mnt/c/Windows/' ]; then
+      function __bash_prompt_command(){
+        if [ $? -eq 0 ]; then
+          local status='\[\e[0;37m\]\$'
+        else
+          local status='\[\e[0;31m\]\$'
+        fi
+        if hash __git_ps1 1>&/dev/null 2>&1; then
+          local git=$(__git_ps1 " \\e[0;36m(%s)")
+        else
+          local git=
+        fi
+        PS1="\e]0;\u\007\n\e[0;35m\u@\h \e[0;33m\w$git\n$status \[\e[0m\]"
+      }
+      if [[ ";$PROMPT_COMMAND;" != *";__bash_prompt_command;"* ]]; then
+        PROMPT_COMMAND="__bash_prompt_command;$PROMPT_COMMAND";
+      fi
+    else
+      # POSIX
+      PS1=$"\n\e[4$(( $(uname -n | sum | cut -f1 -d' ' | sed 's/^0*//') % 7 + 1 ));30m \e[m \e[0;36m\u@\h \e[0;33m\w\e[0m\n\\$ "
+    fi
+    ;;
+
+  darwin*)
+    PS1='\n\e[0;32m\u@\h \e[0;33m\w\e[0m\n\$ '
+    ;;
+
+  msys)
+    PS1='\n\e[0;32m\u@\h \e[0;33m\w\e[0m\n\$ '
+    ;;
+esac
+
+case ${OSTYPE} in
+  linux*)
     # alias
     alias ls='ls --color=auto'
     alias ll='ls -alF'
