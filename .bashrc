@@ -1,11 +1,10 @@
 ################################################################################
 ### .bashrc
 
-# If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-    *) return;;
-esac
+# 非対話モードではスキップ (ssh <host> <command> など)
+if [[ ! $- =~ i ]]; then
+  return
+fi
 
 case ${OSTYPE} in
   linux*)
