@@ -7,8 +7,6 @@ case $- in
     *) return;;
 esac
 
-dotfiles=${BASH_SOURCE[0]%/*}
-
 case ${OSTYPE} in
   linux*)
     # alias
@@ -107,10 +105,7 @@ if hash direnv 2>/dev/null; then
     eval "$(direnv hook bash)"
 fi
 
-# function
-for fn in "$dotfiles"/function/*.sh; do
+# bash.d
+for fn in "${BASH_SOURCE[0]%/*}"/bash.d/*.sh; do
     source "$fn"
 done
-
-# cleanup
-unset dotfiles
