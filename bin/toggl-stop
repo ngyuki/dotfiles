@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -eu
+
+: ${TOGGL_APIKEY:?}
+
+id=$(curl -fsSL \
+  -X GET https://www.toggl.com/api/v8/time_entries/current \
+  -u "$TOGGL_APIKEY":api_token \
+  -H "Content-Type: application/json" \
+  | jq '.data.id' -r)
+
+curl -fsSL \
+  -X PUT "https://www.toggl.com/api/v8/time_entries/$id/stop" \
+  -u "$TOGGL_APIKEY":api_token \
+  -H "Content-Type: application/json" \
+  -d '{}' \
+  | jq .
