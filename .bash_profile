@@ -61,13 +61,6 @@ export LESS_TERMCAP_so=$(printf "\e[1;44;33m")
 export LESS_TERMCAP_ue=$(printf "\e[0m")
 export LESS_TERMCAP_us=$(printf "\e[1;32m")
 
-# history
-export HISTSIZE=9999
-export HISTFILESIZE=$HISTSIZE
-export HISTTIMEFORMAT='[%y/%m/%d %H:%M:%S] '
-export HISTCONTROL=ignoreboth
-export HISTIGNORE='halt *:shutdown *:reboot *:poweroff *'
-
 # fzf
 if type fzf >/dev/null 2>&1; then
   export FZF_DEFAULT_OPTS='--reverse --ansi --color=16 --inline-info'

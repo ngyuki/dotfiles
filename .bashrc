@@ -85,6 +85,13 @@ if [[ ";$PROMPT_COMMAND;" != *";_share_history;"* ]]; then
     PROMPT_COMMAND="_share_history;$PROMPT_COMMAND";
 fi
 
+# history
+HISTSIZE=9999
+HISTFILESIZE=$HISTSIZE
+HISTTIMEFORMAT='[%y/%m/%d %H:%M:%S] '
+HISTCONTROL=ignoreboth
+HISTIGNORE='halt *:shutdown *:reboot *:poweroff *'
+
 # grep options
 if hash grep 2>/dev/null; then
     grep_options=()
