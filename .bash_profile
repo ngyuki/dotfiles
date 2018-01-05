@@ -77,38 +77,39 @@ if [ -n "$DOTFILES_SSH_AGENT_FILE" ]; then
     source "$DOTFILES_SSH_AGENT_FILE" > /dev/null
   fi
 fi
+
 # packer
-if [ -z "$PACKER_CACHE_DIR" ]; then
-    export PACKER_CACHE_DIR=$HOME/.packer/
+if [[ -z $PACKER_CACHE_DIR ]]; then
+  export PACKER_CACHE_DIR=$HOME/.packer/
 fi
 
 # phpenv
-if [ -d "$HOME/.phpenv/bin" ]; then
-    export PATH="$HOME/.phpenv/bin:$PATH"
+if [[ -x $HOME/.phpenv/bin/phpenv ]]; then
+  export PATH=$HOME/.phpenv/bin:$PATH
 fi
 
 # rbenv
-if [ -d "$HOME/.rbenv/bin" ]; then
-    export PATH="$HOME/.rbenv/bin:$PATH"
+if [[ -x $HOME/.rbenv/bin/rbenv ]]; then
+  export PATH=$HOME/.rbenv/bin:$PATH
 fi
 
 # pyenv
-if [ -d "$HOME/.pyenv/bin" ]; then
-    export PATH="$HOME/.pyenv/bin:$PATH"
+if [[ -x $HOME/.pyenv/bin/pyenv ]]; then
+  export PATH=$HOME/.pyenv/bin:$PATH
 fi
 
 # nvm
-if [ -s "$HOME/.nvm/nvm.sh" ]; then
+if [[ -s $HOME/.nvm/nvm.sh ]]; then
   export NVM_DIR=$HOME/.nvm
 fi
 
 # vagrant
-if [ -z "$VAGRANT_DOTFILE_PATH" ]; then
-    export VAGRANT_DOTFILE_PATH=".vagrant-$(uname -n | tr '[A-Z]' '[a-z]')"
+if [[ -z $VAGRANT_DOTFILE_PATH ]]; then
+  export VAGRANT_DOTFILE_PATH=.vagrant-${HOSTNAME,,}
 fi
 
 # hman (man2html)
-if type temoto >/dev/null 2>&1 && type hman >/dev/null 2>&1; then
+if hash temoto 2>/dev/null && hash hman 2>/dev/null; then
   export MANHTMLHOST=$HOSTNAME
   export MANHTMLPAGER='temoto open'
 fi
