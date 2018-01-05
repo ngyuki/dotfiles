@@ -6,8 +6,6 @@ dotfiles=${BASH_SOURCE[0]%/*}
 case ${OSTYPE} in
   linux*)
     if [ -d /mnt/c/Windows/ ]; then
-      # WSL
-
       # PATH $dotfiles/bin.win
       export PATH=$dotfiles/bin.wsl:$PATH
 
@@ -21,11 +19,6 @@ case ${OSTYPE} in
       # PATH $dotfiles/bin.linux
       export PATH=$dotfiles/bin.linux:$PATH
     fi
-    ;;
-
-  darwin*)
-    # PATH $dotfiles/bin.mac
-    export PATH=$dotfiles/bin.mac:$PATH
     ;;
 
   msys)
