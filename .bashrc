@@ -135,6 +135,11 @@ PROMPT_COMMAND="__bash_delay;$PROMPT_COMMAND";__bash_delay(){ __bash_delay(){ :;
     eval "$(pyenv init -)"
   fi
 
+  # nvm
+  if [ -s "$NVM_DIR/nvm.sh" ]; then
+    source "$NVM_DIR/nvm.sh"
+  fi
+
   # direnv
   if hash direnv 2>/dev/null; then
     eval "$(direnv hook bash)"

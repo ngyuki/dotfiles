@@ -111,6 +111,11 @@ if [ -d "$HOME/.pyenv/bin" ]; then
     export PATH="$HOME/.pyenv/bin:$PATH"
 fi
 
+# nvm
+if [ -s "$HOME/.nvm/nvm.sh" ]; then
+  export NVM_DIR=$HOME/.nvm
+fi
+
 # vagrant
 if [ -z "$VAGRANT_DOTFILE_PATH" ]; then
     export VAGRANT_DOTFILE_PATH=".vagrant-$(uname -n | tr '[A-Z]' '[a-z]')"
