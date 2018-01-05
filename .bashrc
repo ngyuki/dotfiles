@@ -40,32 +40,18 @@ case ${OSTYPE} in
     ;;
 esac
 
+# alias
+alias ls='ls --color=auto'
+alias la='ls -A'
+alias ll='ls -alF'
+alias l.='ls -d .*'
+alias l='ls -CF'
+alias vi='vim'
+
 case ${OSTYPE} in
-  linux*)
-    # alias
-    alias ls='ls --color=auto'
-    alias ll='ls -alF'
-    alias la='ls -A'
-    alias l='ls -CF'
-    alias l.='ls -d .*'
-    alias vi='vim'
-    ;;
-
-  darwin*)
-    # alias
-    alias l.='ls -d .*'
-    alias ll='ls -l -G'
-    alias ls='ls -G'
-    alias vi='vim'
-    ;;
-
   msys)
-    # alias
-    alias ls='ls -F --color=auto --show-control-chars'
-    alias ll='ls -l'
+    alias ls='ls --color=auto --show-control-chars'
     alias ps='ps -Wael'
-    alias vi='vim'
-    alias vim='sakura.exe -CODE=4 -GROUP=9'
     ;;
 esac
 
