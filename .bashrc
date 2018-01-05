@@ -15,7 +15,7 @@ case ${OSTYPE} in
         else
           local status='\[\e[0;31m\]\$'
         fi
-        if hash __git_ps1 1>&/dev/null 2>&1; then
+        if hash __git_ps1 2>/dev/null; then
           local git=$(__git_ps1 " \\e[0;36m(%s)")
         else
           local git=
@@ -117,27 +117,36 @@ if hash grep 2>/dev/null; then
     unset grep_options
 fi
 
-# phpenv
-if hash phpenv 2>/dev/null; then
+# delay
+PROMPT_COMMAND="__bash_delay;$PROMPT_COMMAND";__bash_delay(){ __bash_delay(){ :; }
+
+  # phpenv
+  if hash phpenv 2>/dev/null; then
     eval "$(phpenv init - --no-rehash)"
-fi
+  fi
 
-# rbenv
-if hash rbenv 2>/dev/null; then
+  # rbenv
+  if hash rbenv 2>/dev/null; then
     eval "$(rbenv init -)"
-fi
+  fi
 
-# pyenv
-if hash pyenv 2>/dev/null; then
+  # pyenv
+  if hash pyenv 2>/dev/null; then
     eval "$(pyenv init -)"
-fi
+  fi
 
-# direnv
-if hash direnv 2>/dev/null; then
+  # direnv
+  if hash direnv 2>/dev/null; then
     eval "$(direnv hook bash)"
-fi
+  fi
 
-# bash.d
-for fn in "${BASH_SOURCE[0]%/*}"/bash.d/*.sh; do
+  # awscli
+  if hash aws 2>/dev/null; then
+    complete -C aws_completer aws
+  fi
+
+  # bash.d
+  for fn in "${BASH_SOURCE[0]%/*}"/bash.d/*.sh; do
     source "$fn"
-done
+  done
+}

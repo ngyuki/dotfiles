@@ -6,58 +6,49 @@ dotfiles=${BASH_SOURCE[0]%/*}
 case ${OSTYPE} in
   linux*)
     if [ -d /mnt/c/Windows/ ]; then
-        # WSL
+      # WSL
 
-        # $dotfiles/bin.win, $HOME/bin
-        export PATH=$HOME/bin:$dotfiles/bin.wsl:$PATH
+      # PATH $dotfiles/bin.win
+      export PATH=$dotfiles/bin.wsl:$PATH
 
-        # ssh-agent
-        if [ -f ~/.ssh/ssh-agent ] ; then
-            source ~/.ssh/ssh-agent > /dev/null
-        fi
-        ssh-add -l > /dev/null 2>&1
-        if [ $? -gt 1 ]; then
-            if [ ! -d ~/.ssh ]; then
-                install -d -m0700 ~/.ssh
-            fi
-            ssh-agent > ~/.ssh/ssh-agent
-            source ~/.ssh/ssh-agent > /dev/null
-        fi
+      # ssh-agent
+      [ ! -d ~/.ssh/ ] && install -m0700 -d ~/.ssh/
+      export DOTFILES_SSH_AGENT_FILE=~/.ssh/ssh-agent
 
-        # vagrant
-        export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
+      # vagrant
+      export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
     else
-        # POSIX
-
-        # $dotfiles/bin.linux, $HOME/bin
-        export PATH=$HOME/bin:$dotfiles/bin.linux:$PATH
+      # PATH $dotfiles/bin.linux
+      export PATH=$dotfiles/bin.linux:$PATH
     fi
     ;;
 
   darwin*)
-    # MAC
-
-    # $dotfiles/bin.mac, $HOME/bin
-    export PATH=$HOME/bin:$dotfiles/bin.mac:$PATH
+    # PATH $dotfiles/bin.mac
+    export PATH=$dotfiles/bin.mac:$PATH
     ;;
 
   msys)
-    # Windows
-
     if [ -n "$PhpStorm" ]; then
-        export ConEmuANSI=ON
-        export ANSICON=1
+      export ConEmuANSI=ON
+      export ANSICON=1
     fi
-
     if [ -n "$CONEMUANSI" ]; then
-        export ConEmuANSI=$CONEMUANSI
-        export ANSICON=1
+      export ConEmuANSI=$CONEMUANSI
+      export ANSICON=1
     fi
     ;;
 esac
 
-# dotfiles/bin
-export PATH="$dotfiles/bin:$PATH"
+# PATH $dotfiles/bin
+if [[ ":$PATH:" != *":$dotfiles/bin:"* ]]; then
+  export PATH=$dotfiles/bin:$PATH
+fi
+
+# PATH ~/bin
+if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
+  export PATH=$HOME/bin:$PATH
+fi
 
 # editor
 export EDITOR=vim
@@ -89,6 +80,17 @@ if type fzf >/dev/null 2>&1; then
   export FZF_DEFAULT_OPTS='--reverse --ansi --color=16 --inline-info'
 fi
 
+# ssh-agent
+if [ -n "$DOTFILES_SSH_AGENT_FILE" ]; then
+  if [ -f "$DOTFILES_SSH_AGENT_FILE" ] ; then
+    source "$DOTFILES_SSH_AGENT_FILE" > /dev/null
+  fi
+  ssh-add -l > /dev/null 2>&1
+  if [ $? -gt 1 ]; then
+    ssh-agent > "$DOTFILES_SSH_AGENT_FILE"
+    source "$DOTFILES_SSH_AGENT_FILE" > /dev/null
+  fi
+fi
 # packer
 if [ -z "$PACKER_CACHE_DIR" ]; then
     export PACKER_CACHE_DIR=$HOME/.packer/
@@ -114,25 +116,11 @@ if [ -z "$VAGRANT_DOTFILE_PATH" ]; then
     export VAGRANT_DOTFILE_PATH=".vagrant-$(uname -n | tr '[A-Z]' '[a-z]')"
 fi
 
-# check last update
-if [ -n "$(find "$dotfiles/.git/" -maxdepth 0 -mtime +60 | head -1)" ]; then
-    printf "\e[0;33m%s\e[m\n" "Warning: dotfiles is over 60 days old." 1>&2
-    printf "\e[0;33m%s\e[m\n" "Warning: Please try \"cd $dotfiles; git pull --rebase\"" 1>&2
-fi
-
-# awscli
-if type aws >/dev/null 2>&1; then
-  complete -C aws_completer aws
-fi
-
 # hman (man2html)
 if type temoto >/dev/null 2>&1 && type hman >/dev/null 2>&1; then
   export MANHTMLHOST=$HOSTNAME
   export MANHTMLPAGER='temoto open'
 fi
-
-# .bashrc
-source "$dotfiles/.bashrc"
 
 # cleanup
 unset dotfiles
