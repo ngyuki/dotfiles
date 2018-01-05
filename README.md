@@ -13,6 +13,10 @@
     - CentOS 7.4.1708
     - bash 4.2.46
     - git 2.15.0
+- CentOS 5
+    - CentOS 5.5
+    - bash 3.2.25
+    - git 1.7.6.1
 
 ## Setup for Linux
 
