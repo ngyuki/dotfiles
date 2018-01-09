@@ -104,8 +104,10 @@ if [[ -s $HOME/.nvm/nvm.sh ]]; then
 fi
 
 # vagrant
-if [[ -z $VAGRANT_DOTFILE_PATH ]]; then
-  export VAGRANT_DOTFILE_PATH=.vagrant-${HOSTNAME,,}
+if [[ ${BASH_VERSINFO[0]} -ge 4 ]]; then
+  if [[ -z $VAGRANT_DOTFILE_PATH ]]; then
+    export VAGRANT_DOTFILE_PATH=.vagrant-${HOSTNAME,,}
+  fi
 fi
 
 # hman (man2html)
