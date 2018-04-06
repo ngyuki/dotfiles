@@ -73,8 +73,10 @@ if [ -n "$DOTFILES_SSH_AGENT_FILE" ]; then
   fi
   ssh-add -l > /dev/null 2>&1
   if [ $? -gt 1 ]; then
+    rm -rf /tmp/ssh-*
     ssh-agent > "$DOTFILES_SSH_AGENT_FILE"
     source "$DOTFILES_SSH_AGENT_FILE" > /dev/null
+    ssh-add 2> /dev/null
   fi
 fi
 
