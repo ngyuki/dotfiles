@@ -1,3 +1,0 @@
-#!/bin/bash
-
-docker ps -f status=exited -q | xargs -r docker rm
