@@ -1,15 +1,15 @@
 #!/bin/bash
 
+set -eu
+
 args=()
 prog=$1
 shift
 
 for x in "$@"; do
-    p=$(realpath -qeLP -- "$x")
+    p=$(realpath -qeLP -- "$x" ||:)
     if [ -e "$p" ]; then
-        p=${p//\//\\}
-        p=${p/#\\mnt\\c\\/c:\\}
-        args+=( "${p//\//\\}" )
+        args+=( "$(wslpath -w "$p")" )
     else
         args+=( "$x" )
     fi
