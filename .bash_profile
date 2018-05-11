@@ -15,9 +15,10 @@ case ${OSTYPE} in
 
       # vagrant
       export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
-    else
-      # PATH $dotfiles/bin.linux
-      export PATH=$dotfiles/bin.linux:$PATH
+
+    elif type temoto >/dev/null 2>&1; then
+      # PATH $dotfiles/bin.temoto
+      export PATH=$dotfiles/bin.temoto:$PATH
     fi
     ;;
 
