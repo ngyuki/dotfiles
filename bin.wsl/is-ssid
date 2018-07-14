@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec netsh.exe wlan show interfaces | grep SSID | grep "$1" > /dev/null
