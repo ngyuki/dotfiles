@@ -8,7 +8,7 @@ fi
 
 case ${OSTYPE} in
   linux*)
-    if [ -d '/mnt/c/Windows/' ]; then
+    if type wsl.exe >/dev/null 2>&1; then
       function __bash_prompt_command(){
         if [ $? -eq 0 ]; then
           local status='\[\e[0;37m\]\$'

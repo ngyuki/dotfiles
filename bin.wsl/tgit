@@ -8,13 +8,6 @@ function usage()
     exit 1
 }
 
-: ${TGIT_BIN_DIR:=/mnt/c/Program Files/TortoiseGit/bin}
-
-if [ ! -x "$TGIT_BIN_DIR/TortoiseGitProc.exe" ]; then
-    echo "You should be set \$TGIT_BIN_DIR Environment variable." 1>&2
-    exit 1
-fi
-
 if [ -z "${1:-}" ]; then
     usage
 fi
@@ -38,4 +31,6 @@ path=${2:-.}
 #    path=$2
 #fi
 
-"$TGIT_BIN_DIR/TortoiseGitProc.exe" "/command:$command" "/path:$path"
+prog=$(wslpath -u 'C:\Program Files\TortoiseGit\bin\TortoiseGitProc.exe')
+
+exec "$prog" "/command:$command" "/path:$path"

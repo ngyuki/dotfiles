@@ -1,3 +1,5 @@
 #!/bin/bash
 
-wslexec "/mnt/c/Program Files/Sublime Text 3/subl.exe" "$@"
+prog=$(wslpath -u 'C:\Program Files\Sublime Text 3\subl.exe')
+
+wslexec "$prog" "$@"

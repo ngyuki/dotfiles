@@ -1,3 +1,7 @@
 #!/bin/bash
 
-exec wslexec '/mnt/c/Program Files/WinMerge/WinMergeU.exe' -f '*.*' -e -u -r "$@"
+prog=$(wslpath -u 'C:\Program Files\WinMerge\WinMergeU.exe')
+
+exec "$prog" -e -u -r -x -wl \
+    "$(wslpath -wa "$1")" \
+    "$(wslpath -wa "$2")"
