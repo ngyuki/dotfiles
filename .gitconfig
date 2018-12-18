@@ -35,6 +35,15 @@
 
 [merge]
 	ff = false
+	tool = WinMerge
+
+[mergetool]
+	prompt = false
+	keepBackup = false
+
+[mergetool "WinMerge"]
+	cmd = git-mergetool-winmerge \"$MERGED\"
+	trustExitCode = false
 
 [pull]
 	ff = only
