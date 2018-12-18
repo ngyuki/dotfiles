@@ -29,7 +29,7 @@ function __fzf_find
     set files ''
   end
 
-  command find -L $dirs -mindepth 1 -path '*/\.*' -prune -o -printf '%P\0' 2> /dev/null |\
+  command find -L $dirs -mindepth 1 -maxdepth 3 -path '*/\.*' -prune -o -printf '%P\0' 2> /dev/null |\
     fzf --read0 --print0 -m --prompt $dirs --query (string join / $files) |\
     while read --null --local select
       set selects $selects (builtin string escape "$dirs/$select")
