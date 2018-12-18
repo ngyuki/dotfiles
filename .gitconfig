@@ -10,12 +10,14 @@
 
 [alias]
 	co = checkout
+	cm = commit -v -c @
 	br = branch
 	b  = branch
 	st = status
 	s  = status
 	sb = status -sb
 	f  = fetch -pv
+	ds = diff --staged --find-renames
 	g  = log --graph --date=short --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\"
 	gg = log --graph --date=short --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\" --all
 	chmod = update-index --chmod
