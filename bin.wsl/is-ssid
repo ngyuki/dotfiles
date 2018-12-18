@@ -1,3 +1,20 @@
 #!/bin/bash
 
-exec netsh.exe wlan show interfaces | grep SSID | grep "$1" > /dev/null
+set -eu
+
+opt_v=
+
+while getopts v OPT; do
+  case "$OPT" in
+    v) opt_v=1 ;;
+    *) exit 1 ;;
+  esac
+done
+
+shift "$((OPTIND - 1))"
+
+if [[ $opt_v ]]; then
+  exec netsh.exe wlan show interfaces | grep SSID | grep -v "$1" > /dev/null
+else
+  exec netsh.exe wlan show interfaces | grep SSID | grep "$1" > /dev/null
+fi
