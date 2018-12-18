@@ -34,3 +34,6 @@ sys$command
 
 # vagrant
 .vagrant-*/
+
+# dotenv
+.envrc
