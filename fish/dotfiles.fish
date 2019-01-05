@@ -25,7 +25,7 @@ function fish_prompt
 
   echo
   echo (set_color yellow)(__fish_pwd)$git_branch
-  echo "$color\$ "
+  echo "$color\$ "(set_color $fish_color_normal)
 end
 
 function fish_right_prompt
