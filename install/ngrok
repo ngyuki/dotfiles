@@ -8,10 +8,7 @@ fi
 
 (
   set -eux
-  url=$(
-    curl -fsSL "https://ngrok.com/download" |
-      xmllint --xpath 'string(//*[@id="dl-linux-amd64"]//a/@href)' --html - 2>/dev/null
-  )
+  url=$(curl -fsSL 'https://ngrok.com/download' | grep -Po 'https:\/\/[./\w]+/ngrok-stable-linux-amd64.zip')
   if [ -z "$url" ]; then
     exit 1
   fi
