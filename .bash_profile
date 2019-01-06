@@ -123,3 +123,11 @@ fi
 
 # cleanup
 unset dotfiles
+
+# bash_profile.d
+if [[ -d "$HOME"/.bash_profile.d ]]; then
+  for _ in "$HOME"/.bash_profile.d/*.sh; do
+    source "$_"
+  done
+  unset _
+fi
