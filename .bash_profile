@@ -15,6 +15,8 @@ case ${OSTYPE} in
 
       # vagrant
       export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
+      export VAGRANT_WSL_DISABLE_VAGRANT_HOME=1
+      export VAGRANT_HOME=$HOME/.vagrant.d
 
     elif type temoto >/dev/null 2>&1; then
       # PATH $dotfiles/bin.temoto
