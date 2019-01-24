@@ -1,4 +1,6 @@
 
+.local/
+
 # git-svn
 sys$command
 
@@ -9,7 +11,7 @@ sys$command
 .externalToolBuilders
 
 # phpstorm
-.idea
+.idea/
 
 # sublime text
 *.sublime-project
