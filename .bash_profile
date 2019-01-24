@@ -18,6 +18,9 @@ case ${OSTYPE} in
       export VAGRANT_WSL_DISABLE_VAGRANT_HOME=1
       export VAGRANT_HOME=$HOME/.vagrant.d
 
+      # editor
+      export EDITOR='subl -w'
+
     elif type temoto >/dev/null 2>&1; then
       # PATH $dotfiles/bin.temoto
       export PATH=$dotfiles/bin.temoto:$PATH
@@ -47,7 +50,9 @@ if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
 fi
 
 # editor
-export EDITOR=vim
+if [[ -z $EDITOR ]]; then
+  export EDITOR=vim
+fi
 
 # man enable prompt, raw
 export MANPAGER='less -MR'
