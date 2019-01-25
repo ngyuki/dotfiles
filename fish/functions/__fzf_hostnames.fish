@@ -1,9 +1,14 @@
 function __fzf_hostnames
 
-  set selects (__fish_print_hostnames | fzf -m --query (commandline -t))
-  if count $selects >/dev/null
-    commandline -rt -- (string join ' ' $selects)
-    commandline -f repaint
+  __fish_print_hostnames | sort | uniq | fzf --multi --no-sort --query (commandline -t) |\
+    while read --local result
+      set results $results $result
+    end
+
+  if [ -z $results ]
+    return
   end
 
+  commandline -rt -- (builtin string join ' ' $results)
+  commandline -f repaint
 end
