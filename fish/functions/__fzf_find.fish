@@ -10,7 +10,7 @@ function __fzf_find
       set results $results (builtin string escape $result)
     end
 
-  if [ -z $result ]
+  if [ -z $results ]
     return
   end
 
