@@ -1,0 +1,92 @@
+##
+# Use fzf as fish completion widget.
+#
+#
+# When FZF_COMPLETE variable is set, fzf is used as completion
+# widget for the fish shell by binding the TAB key.
+#
+# FZF_COMPLETE can have some special numeric values:
+#
+#   `set FZF_COMPLETE 0` basic widget accepts with TAB key
+#   `set FZF_COMPLETE 1` extends 0 with candidate preview window
+#   `set FZF_COMPLETE 2` same as 1 but TAB walks on candidates
+#   `set FZF_COMPLETE 3` multi TAB selection, RETURN accepts selected ones.
+#
+# Any other value of FZF_COMPLETE is given directly as options to fzf.
+#
+# If you prefer to set more advanced options, take a look at the
+# `__fzf_complete_opts` function and override that in your environment.
+
+
+# modified from https://github.com/junegunn/fzf/wiki/Examples-(fish)#completion
+function __fzf_complete -d 'fzf completion and print selection back to commandline'
+    # As of 2.6, fish's "complete" function does not understand
+    # subcommands. Instead, we use the same hack as __fish_complete_subcommand and
+    # extract the subcommand manually.
+    set -l cmd (commandline -co) (commandline -ct)
+
+    switch $cmd[1]
+        case env sudo
+            for i in (seq 2 (count $cmd))
+                switch $cmd[$i]
+                    case '-*'
+                    case '*=*'
+                    case '*'
+                        set cmd $cmd[$i..-1]
+                        break
+                end
+            end
+    end
+
+    set -l cmd_lastw $cmd[-1]
+    set cmd (string join -- ' ' $cmd)
+
+    set -l initial_query ''
+    test -n "$cmd_lastw"; and set initial_query --query="$cmd_lastw"
+
+    set -l complist (complete -C$cmd | sort -u -k1,1 | cut -f1)
+    set -l result
+
+    # do nothing if there is nothing to select from
+    test -z "$complist"; and return
+
+    if test (count $complist) -eq 1
+        # if there is only one option dont open fzf
+        set result "$complist"
+    else
+        set -l opts --cycle --reverse --inline-info --with-nth=1 --height=40% --multi --bind tab:down,btab:up,ctrl-space:toggle-out,esc:print-query
+        string join -- \n $complist \
+        | eval (__fzfcmd) $initial_query $opts \
+        | while read -l r
+            set result $result $r
+          end
+
+        # exit if user canceled
+        if test -z "$result"
+            commandline -f repaint
+            return
+        end
+    end
+
+    set prefix (string sub -s 1 -l 1 -- (commandline -t))
+    for i in (seq (count $result))
+        set -l r $result[$i]
+        switch $prefix
+            case "'"
+                commandline -t -- (string escape -- $r)
+            case '"'
+                if string match '*"*' -- $r >/dev/null
+                    commandline -t --  (string escape -- $r)
+                else
+                    commandline -t -- '"'$r'"'
+                end
+            case '~'
+                commandline -t -- (string sub -s 2 (string escape -n -- $r))
+            case '*'
+                commandline -t -- (string escape -n -- $r)
+        end
+        [ $i -lt (count $result) ]; and commandline -i ' '
+    end
+
+    commandline -f repaint
+end

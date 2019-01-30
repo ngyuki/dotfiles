@@ -35,12 +35,3 @@ end
 if type direnv >/dev/null 2>&1
   eval (direnv hook fish)
 end
-
-# https://github.com/jethrokuan/fzf/issues/103
-# Workaround!!!
-bind \t '__fzf_complete_fix_height'
-function __fzf_complete_fix_height
-  set -g FZF_COMPLETE "--cycle --reverse --inline-info --with-nth=1 --height=40% --multi --bind tab:down,btab:up,ctrl-space:toggle"
-  __fzf_complete
-  commandline -f repaint
-end
