@@ -20,6 +20,10 @@
 
 # modified from https://github.com/junegunn/fzf/wiki/Examples-(fish)#completion
 function __fzf_complete -d 'fzf completion and print selection back to commandline'
+
+    commandline --search-mode; and return
+    commandline --paging-mode; and return
+
     # As of 2.6, fish's "complete" function does not understand
     # subcommands. Instead, we use the same hack as __fish_complete_subcommand and
     # extract the subcommand manually.
@@ -38,13 +42,10 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
             end
     end
 
-    set -l cmd_lastw $cmd[-1]
+    set -l query $cmd[-1]
     set cmd (string join -- ' ' $cmd)
 
-    set -l initial_query ''
-    test -n "$cmd_lastw"; and set initial_query --query="$cmd_lastw"
-
-    set -l complist (complete -C$cmd | sort -u -k1,1 | cut -f1)
+    set -l complist (complete -C$cmd | cut -f1 -d\t | sort -u)
     set -l result
 
     # do nothing if there is nothing to select from
@@ -54,9 +55,10 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
         # if there is only one option dont open fzf
         set result "$complist"
     else
-        set -l opts --cycle --reverse --inline-info --with-nth=1 --height=40% --multi --bind tab:down,btab:up,ctrl-space:toggle-out,esc:print-query
+        set -l opts --cycle --reverse --inline-info --height=40% --multi
+        set -l bind --bind tab:down,btab:up,ctrl-space:toggle-out,esc:print-query
         string join -- \n $complist \
-        | eval (__fzfcmd) $initial_query $opts \
+        | fzf --query="$query" $opts $bind \
         | while read -l r
             set result $result $r
           end
@@ -68,25 +70,15 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
         end
     end
 
-    set prefix (string sub -s 1 -l 1 -- (commandline -t))
-    for i in (seq (count $result))
-        set -l r $result[$i]
-        switch $prefix
-            case "'"
-                commandline -t -- (string escape -- $r)
-            case '"'
-                if string match '*"*' -- $r >/dev/null
-                    commandline -t --  (string escape -- $r)
-                else
-                    commandline -t -- '"'$r'"'
-                end
-            case '~'
-                commandline -t -- (string sub -s 2 (string escape -n -- $r))
-            case '*'
-                commandline -t -- (string escape -n -- $r)
-        end
-        [ $i -lt (count $result) ]; and commandline -i ' '
+    set -l completion
+    for r in $result
+        set completion $completion (string escape -- $r)
     end
 
+    if [ ! -d $result[-1] ]
+        set completion $completion ''
+    end
+
+    commandline -t -- (string join -- ' ' $completion)
     commandline -f repaint
 end
