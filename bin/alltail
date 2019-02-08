@@ -1,0 +1,73 @@
+#!/bin/bash
+
+################################################################################
+### 全てのホストの指定されたファイルに tail -F
+################################################################################
+
+set -eu
+
+err(){
+  cat <<EOS
+${0##*/}: $*
+
+Usage: ${0##*/} <host>... -- <file>...
+EOS
+  exit 1
+}
+
+opt_p=
+hosts=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --) break ;;
+    -p) opt_p=1 ;;
+    -*) err "invalid option $1" ;;
+    *)  hosts+=( "$1" ) ;;
+  esac
+  shift
+done
+
+if [ $# -gt 0 ]; then
+	shift
+fi
+
+files=()
+while [ $# -gt 0 ]; do
+	files+=( "$1" )
+	shift
+done
+
+: ${hosts?}
+: ${files?}
+
+kill_children() {
+	pkill -P $$
+	wait
+}
+
+trap "kill_children" EXIT
+
+if [ -z "$opt_p" ]; then
+  for h in "${hosts[@]}"; do
+    ssh -tt "$h" tail -Fq "$files" 2>/dev/null &
+  done
+else
+  c=1
+  m=1
+  for h in "${hosts[@]}"; do
+    if [[ ${#h} -gt ${m} ]]; then
+      m=${#h}
+    fi
+  done
+  ((m++))
+  for h in "${hosts[@]}"; do
+      (
+      	ssh -tt "$h" tail -Fq "$files" 2>/dev/null | while read -r x; do
+          printf "%s%-${m}s%s %s\n" "$(tput setaf $c)" "$h:" "$(tput sgr0)" "$x"
+        done
+      ) &
+      ((c++))
+  done
+fi
+
+wait

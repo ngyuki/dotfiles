@@ -1,0 +1,44 @@
+#!/bin/bash
+
+################################################################################
+### 全てのホストで SSH で順番にコマンド実行
+################################################################################
+
+set -eu
+
+err(){
+  cat <<EOS
+${0##*/}: $*
+
+Usage: ${0##*/} <host>... -- <command>...
+EOS
+  exit 1
+}
+
+hosts=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --) break ;;
+    -*) err "invalid option $1" ;;
+    *)  hosts+=( "$1" ) ;;
+  esac
+  shift
+done
+
+if [ $# -gt 0 ]; then
+  shift
+fi
+
+command=()
+while [ $# -gt 0 ]; do
+  command+=( "$1" )
+  shift
+done
+
+: ${hosts?}
+: ${command?}
+
+for h in "${hosts[@]}"; do
+  printf "%s%-$(tput cols)s%s\n" "$(tput setab 5)" "# $h ${command[*]}" "$(tput sgr0)"
+  ssh $h "${command[@]}"
+done

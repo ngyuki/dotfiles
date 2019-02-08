@@ -1,0 +1,73 @@
+#!/bin/bash
+
+################################################################################
+### 全てのホストで SSH で並列にコマンド実行
+################################################################################
+
+set -eu
+
+err(){
+  cat <<EOS
+${0##*/}: $*
+
+Usage: ${0##*/} [-p] <host>... -- <command>...
+EOS
+  exit 1
+}
+
+opt_p=
+hosts=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --) break ;;
+    -p) opt_p=1 ;;
+    -*) err "invalid option $1" ;;
+    *)  hosts+=( "$1" ) ;;
+  esac
+  shift
+done
+
+if [ $# -gt 0 ]; then
+  shift
+fi
+
+command=()
+while [ $# -gt 0 ]; do
+  command+=( "$1" )
+  shift
+done
+
+: ${hosts?}
+: ${command?}
+
+kill_children() {
+  pkill -P $$
+  wait
+}
+
+trap "kill_children" EXIT
+
+if [ -z "$opt_p" ]; then
+  for h in "${hosts[@]}"; do
+    ssh -tt "$h" "${command[@]}" &
+  done
+else
+  c=1
+  m=1
+  for h in "${hosts[@]}"; do
+    if [[ ${#h} -gt ${m} ]]; then
+      m=${#h}
+    fi
+  done
+  ((m++))
+  for h in "${hosts[@]}"; do
+      (
+        ssh -tt "$h" "${command[@]}" | while read -r x; do
+          printf "%s%-${m}s%s %s\n" "$(tput setaf $c)" "$h:" "$(tput sgr0)" "$x"
+        done
+      ) &
+      ((c++))
+  done
+fi
+
+wait
