@@ -72,10 +72,14 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
 
     set -l completion
     for r in $result
-        set completion $completion (string escape -- $r)
+        if test (string sub -l 1 -- $r) = '~'
+            set completion $completion (string sub -s 2 (string escape -n -- $r))
+        else
+            set completion $completion (string escape -- $r)
+        end
     end
 
-    if [ ! -d $result[-1] ]
+    if eval "[ ! -d $result[-1] ]"
         set completion $completion ''
     end
 
