@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+set -o pipefail
+
+src_dir=${BASH_SOURCE[0]%/*/*}/git-hooks
+dst_dir="$(git rev-parse --git-dir)/hooks/"
+
+for path in "$src_dir"/*; do
+    if [ ! -x $path ]; then
+        continue
+    fi
+    ln -vsfn "$path" "$dst_dir"
+done
