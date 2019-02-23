@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec tee /dev/stderr | clip.exe
