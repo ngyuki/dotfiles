@@ -55,7 +55,7 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
         # if there is only one option dont open fzf
         set result "$complist"
     else
-        set -l opts --cycle --reverse --inline-info --height=40% --multi
+        set -l opts --cycle --reverse --inline-info --height=40% --multi --print-query
         set -l bind --bind tab:down,btab:up,ctrl-space:toggle-out,esc:print-query
         string join -- \n $complist \
         | fzf --query="$query" $opts $bind \
@@ -68,6 +68,14 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
             commandline -f repaint
             return
         end
+
+        if test (count $result) -eq 1
+            commandline -f repaint
+        commandline -t -- $result
+            return
+        end
+
+        set result $result[2..-1]
     end
 
     set -l completion
@@ -83,6 +91,6 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
         set completion $completion ''
     end
 
-    commandline -t -- (string join -- ' ' $completion)
     commandline -f repaint
+    commandline -t -- (string join -- ' ' $completion)
 end
