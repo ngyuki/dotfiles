@@ -5,7 +5,7 @@ dotfiles=${BASH_SOURCE[0]%/*}
 
 case ${OSTYPE} in
   linux*)
-    if type wsl.exe >/dev/null 2>&1; then
+    if uname -r | grep Microsoft >/dev/null 2>&1; then
       # PATH $dotfiles/bin.win
       export PATH=$dotfiles/bin.wsl:$PATH
 
