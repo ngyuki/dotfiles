@@ -5,6 +5,9 @@
 	preloadindex = true
 	fscache = true
 
+[log]
+	date = iso
+
 [color]
 	ui = auto
 
