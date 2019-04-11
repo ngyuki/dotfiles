@@ -10,8 +10,23 @@ case ${OSTYPE} in
       export PATH=$dotfiles/bin.wsl:$PATH
 
       # ssh-agent
-      [ ! -d ~/.ssh/ ] && install -m0700 -d ~/.ssh/
-      export DOTFILES_SSH_AGENT_FILE=~/.ssh/ssh-agent
+      if [[ -e "/c/Users/$USER/.ssh/.ssh-agent" ]]; then
+        # pageant+
+        export SSH_AUTH_SOCK="/c/Users/$USER/.ssh/.ssh-agent"
+      else
+        # openssh
+        if [ -f ~/.ssh/ssh-agent.env ] ; then
+          source ~/.ssh/ssh-agent.env > /dev/null
+        fi
+        ssh-add -l > /dev/null 2>&1
+        if [ $? -gt 1 ]; then
+          install -m0700 -d ~/.ssh/
+          rm -rf /tmp/ssh-*
+          ssh-agent > ~/.ssh/ssh-agent.env
+          source ~/.ssh/ssh-agent.env > /dev/null
+          ssh-add 2> /dev/null
+        fi
+      fi
 
       # vagrant
       export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
@@ -72,20 +87,6 @@ export LESS_TERMCAP_us=$(printf "\e[1;32m")
 # fzf
 if type fzf >/dev/null 2>&1; then
   export FZF_DEFAULT_OPTS='--reverse --ansi --color=16 --inline-info'
-fi
-
-# ssh-agent
-if [ -n "$DOTFILES_SSH_AGENT_FILE" ]; then
-  if [ -f "$DOTFILES_SSH_AGENT_FILE" ] ; then
-    source "$DOTFILES_SSH_AGENT_FILE" > /dev/null
-  fi
-  ssh-add -l > /dev/null 2>&1
-  if [ $? -gt 1 ]; then
-    rm -rf /tmp/ssh-*
-    ssh-agent > "$DOTFILES_SSH_AGENT_FILE"
-    source "$DOTFILES_SSH_AGENT_FILE" > /dev/null
-    ssh-add 2> /dev/null
-  fi
 fi
 
 # packer
