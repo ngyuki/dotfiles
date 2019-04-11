@@ -3,8 +3,12 @@ function __fzf_find
   set -l dir $commandline[1]
   set -l fzf_query $commandline[2]
 
-  command find -L $dir -mindepth 1 -maxdepth 3 -path '*/\.*' -prune -o -print0 2> /dev/null |\
-    sed -z 's@^\./@@' |\
+  if hash fd 2>/dev/null
+    command fd -L . $dir --print0 2> /dev/null
+  else
+    command find -L $dir -mindepth 1 -maxdepth 3 -path '*/\.*' -prune -o -print0 2> /dev/null |\
+      sed -z 's@^\./@@'
+  end |\
     fzf --read0 --print0 --multi --prompt "$dir/" --query $fzf_query |\
     while read --null --local result
       set results $results (builtin string escape $result)
