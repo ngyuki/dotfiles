@@ -13,8 +13,15 @@ done
 
 shift "$((OPTIND - 1))"
 
+if [[ -e /tmp/ssid ]]; then
+  find /tmp/ssid -mmin +60 -exec rm -f -- {} \;
+fi
+if [[ ! -e /tmp/ssid ]]; then
+  /c/Windows/System32/netsh.exe wlan show interfaces | grep -w SSID > /tmp/ssid
+fi
+
 if [[ $opt_v ]]; then
-  exec netsh.exe wlan show interfaces | grep SSID | grep -v "$1" > /dev/null
+  grep -v "$1" </tmp/ssid >/dev/null
 else
-  exec netsh.exe wlan show interfaces | grep SSID | grep "$1" > /dev/null
+  grep "$1" </tmp/ssid >/dev/null
 fi
