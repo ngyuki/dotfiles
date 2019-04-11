@@ -40,6 +40,9 @@ case ${OSTYPE} in
     ;;
 esac
 
+# umask
+umask 0022
+
 # alias
 alias ls='ls --color=auto'
 alias la='ls -A'
