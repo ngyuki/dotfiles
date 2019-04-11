@@ -1,8 +1,8 @@
 #!/bin/bash
 
-prog=$(wslpath -u 'C:\Program Files\WinMerge\WinMergeU.exe')
+prog='C:\Program Files\WinMerge\WinMergeU.exe'
 
-exec "$prog" "$(wslpath -wa "$1")"
+exec wslexec "$prog" "$1"
 
 #cmd = \"WinMergeU.exe\" -r -e -u -al \
 #-dl Local -wm -dm Remote -wr -dr 共通祖先  \

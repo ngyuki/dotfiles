@@ -2,17 +2,29 @@
 
 set -eu
 
+winexec="$(wslpath -u "C:\Users\\$USER\winexec.exe")"
+
+if [[ ! -x "$winexec" ]]; then
+  echo "download winexec.exe ..."
+
+  url="https://github.com/ngyuki/go-winexec/releases/latest"
+  latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
+  url="https://github.com/ngyuki/go-winexec/releases/download/${latest}/winexec.exe"
+  curl -fSL "$url" -o "$winexec"
+  chmod +x "$winexec"
+
+  echo
+  echo "installed $winexec"
+fi
+
 args=()
-prog=$1
-shift
 
 for x in "$@"; do
-    p=$(realpath -qeLP -- "$x" ||:)
-    if [ -e "$p" ]; then
-        args+=( "$(wslpath -w "$p")" )
-    else
-        args+=( "$x" )
-    fi
+  if [ -e "$x" ]; then
+    args+=( "$(wslpath -wa -- "$x")" )
+  else
+    args+=( "$x" )
+  fi
 done
 
-exec "$prog" "${args[@]}"
+exec "$winexec" "${args[@]}"

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-prog=$(wslpath -u 'C:\Windows\explorer.exe')
+prog='C:\Windows\explorer.exe'
 
 wslexec "$prog" "$@"

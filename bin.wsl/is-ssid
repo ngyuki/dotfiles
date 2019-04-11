@@ -17,7 +17,7 @@ if [[ -e /tmp/ssid ]]; then
   find /tmp/ssid -mmin +60 -exec rm -f -- {} \;
 fi
 if [[ ! -e /tmp/ssid ]]; then
-  /c/Windows/System32/netsh.exe wlan show interfaces | grep -w SSID > /tmp/ssid
+  wslexec 'C:\Windows\System32\netsh.exe' wlan show interfaces | grep -w SSID > /tmp/ssid
 fi
 
 if [[ $opt_v ]]; then

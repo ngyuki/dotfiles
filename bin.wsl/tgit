@@ -31,6 +31,6 @@ path=${2:-.}
 #    path=$2
 #fi
 
-prog=$(wslpath -u 'C:\Program Files\TortoiseGit\bin\TortoiseGitProc.exe')
+prog='C:\Program Files\TortoiseGit\bin\TortoiseGitProc.exe'
 
-exec "$prog" "/command:$command" "/path:$path"
+wslexec "$prog" "/command:$command" "/path:$path"

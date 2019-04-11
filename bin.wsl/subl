@@ -1,22 +1,29 @@
 #!/bin/bash
 
-set -eu
+prog='C:\Program Files\Sublime Text 3\subl.exe'
 
-args=()
+wslexec "$prog" "$@"
 
-for x in "$@"; do
-  if [[ "${x:0:1}" ==  "-" ]]; then
-    args+=( "$x" )
-    continue
-  fi
-  p=$(wslpath -wa -- "$x" ||:)
-  if [ -n "$p" ]; then
-    args+=( "$p" )
-    continue
-  fi
-  args+=( "$x" )
-done
-
+####################################################################################################
+#
 # fstab で C:\Program Files を cifs マウントしているときに直接 subl.exe を呼ぶと
 # タスクバーでウィンドウがまとまらなくなったので cmd.exe を噛まして実行する
-"$(wslpath -u 'C:\Windows\System32\cmd.exe')" /C 'C:\Program Files\Sublime Text 3\subl.exe' "${args[@]}"
+#
+# ... 別のラッパー winexec.exe を噛まして解決
+
+# set -eu
+# args=()
+# for x in "$@"; do
+#   if [[ "${x:0:1}" ==  "-" ]]; then
+#     args+=( "$x" )
+#     continue
+#   fi
+#   p=$(wslpath -wa -- "$x" ||:)
+#   if [ -n "$p" ]; then
+#     args+=( "$p" )
+#     continue
+#   fi
+#   args+=( "$x" )
+# done
+#
+#"$(wslpath -u 'C:\Windows\System32\cmd.exe')" /C 'C:\Program Files\Sublime Text 3\subl.exe' "${args[@]}"
