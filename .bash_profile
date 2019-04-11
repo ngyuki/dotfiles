@@ -114,6 +114,11 @@ if [[ -s $HOME/.nvm/nvm.sh ]]; then
   export NVM_DIR=$HOME/.nvm
 fi
 
+# golang
+if [[ -d $HOME/go/bin ]]; then
+  export PATH=$HOME/go/bin:$PATH
+fi
+
 # vagrant
 if [[ ${BASH_VERSINFO[0]} -ge 4 ]]; then
   if [[ -z $VAGRANT_DOTFILE_PATH ]]; then
