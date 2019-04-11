@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#if [[ $# -eq 0 ]]; then
+#  message="$(cat -)"
+#  title="$*"
+#else
+#  message="$*"
+#fi
+
+if [[ -t 0 ]]; then
+  message="$*"
+else
+  message="$(tee /dev/stderr)"
+  title="$*"
+fi
+
+: ${title:=SnoreToast}
+: ${message:=done}
+
+/c/app/SnoreToast/SnoreToast.exe -close SnoreToast >/dev/null
+/c/app/SnoreToast/SnoreToast.exe -t "$title" -m "$message" -w -id SnoreToast >/dev/null &
