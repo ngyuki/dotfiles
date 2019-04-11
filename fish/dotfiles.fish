@@ -38,3 +38,17 @@ end
 
 # complete
 complete -c tmux-cssh -w ssh
+
+# alias
+if status --is-interactive
+  if hash exa 2>/dev/null
+    alias ls='exa --time-style=long-iso'
+  end
+  if hash bat 2>/dev/null
+    alias cat='bat --paging=never'
+    alias less='bat --paging=always'
+  end
+  if hash rg 2>/dev/null
+    alias grep='rg'
+  end
+end
