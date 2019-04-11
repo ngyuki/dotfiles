@@ -35,11 +35,34 @@
 # SOB=$(git var GIT_AUTHOR_IDENT | sed -n 's/^\(.*>\).*$/Signed-off-by: \1/p')
 # grep -qs "^$SOB" "$1" || echo "$SOB" >> "$1"
 
-{
-    cat "$1" | sed -n -e '/^#/q' -e 'p'
-    git g -n 10 | sed 's/^/#-> /'
-    echo '#'
-    cat "$1" | sed -n -e '/^#/,$p'
-} > "$1.tmp"
+# $2 コミットログメッセージの元の種類を示す
+#   message  ... -m や -F オプションが指定されている
+#   template ... -t オプションまたは commit.template が指定されている
+#   merge    ... マージコミットまたは .git/MERGE_MSG が存在する
+#   squash   ... .git/SQUASH_MSG が存在する
+#   commit   ... -c や -C や --amend が指定されている（$3 が元となるコミットを示す）
 
-mv -f "$1.tmp" "$1"
+# リベースで連続して squash したとき両方 message となる
+# メッセージにコメント行が追加されるのは最後の１回のみなので
+# フックでコメント行を追加するとめっさ重複する
+
+# リベースでコミットを入れ替えたときは message になる
+# このときコメント行を追加するとそれもメッセージに含まれてしまうので
+# message ではコメント行を埋めないようにする
+#
+# コミットメッセージを編集するエディタが起動する直前
+# にフックが差し込めれば良いのだけれども
+
+case "$2" in
+  message)
+    ;;
+  *)
+    {
+        cat "$1" | sed -n -e '/^#/q' -e 'p'
+        git g -n 10 | sed 's/^/#-> /'
+        echo '#'
+        cat "$1" | sed -n -e '/^#/,$p'
+    } > "$1.tmp"
+    mv -f "$1.tmp" "$1"
+    ;;
+esac
