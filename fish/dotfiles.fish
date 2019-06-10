@@ -10,6 +10,14 @@ function fish_greeting
 end
 
 function fish_prompt
+  if test $CMD_DURATION
+    if test $CMD_DURATION -gt (math "1000 * 30")
+      set secs (math "$CMD_DURATION / 1000")
+      echo "returned $status, $secs seconds" | toast "$history[1]" 1> /dev/null 2>&1
+      set CMD_DURATION 0
+    end
+  end
+
   if [ $status -eq 0 ]
     set color (set_color green)
   else
