@@ -132,6 +132,12 @@ if hash temoto 2>/dev/null && hash hman 2>/dev/null; then
   export MANHTMLPAGER='temoto open'
 fi
 
+# ansible
+export ANSIBLE_FORCE_COLOR=true
+export ANSIBLE_GATHERING=explicit
+export ANSIBLE_PIPELINING=true
+export ANSIBLE_RETRY_FILES_ENABLED=false
+
 # mdlive
 export MDLIVE_BROWSER='wslexec explorer.exe'
 
