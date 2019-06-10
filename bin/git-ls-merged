@@ -1,0 +1,9 @@
+#!/bin/bash
+
+ref=${@:-HEAD}
+
+git for-each-ref --format='%(refname:short)' refs/heads/ | while read -r x; do
+  if ! git merge-tree "$(git merge-base "$x" "$ref")" "$ref" "$x" 2>/dev/null | read -r; then
+    echo "$x"
+  fi
+done
