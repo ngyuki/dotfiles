@@ -132,6 +132,9 @@ if hash temoto 2>/dev/null && hash hman 2>/dev/null; then
   export MANHTMLPAGER='temoto open'
 fi
 
+# mdlive
+export MDLIVE_BROWSER='wslexec explorer.exe'
+
 # cleanup
 unset dotfiles
 
