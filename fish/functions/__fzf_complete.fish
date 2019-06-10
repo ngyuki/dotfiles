@@ -55,6 +55,27 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
         # if there is only one option dont open fzf
         set result "$complist"
     else
+        # 一致部分を取得
+        set -l query ""
+        for cmd in $complist
+            if [ -z "$query" ]
+                set query $cmd
+            else
+                set -l i 1
+                set -l len (string length -- "$query")
+                while [ $i -le $len ]
+                    if [ (string sub -l "$i" -- "$query") != (string sub -l "$i" -- "$cmd") ]
+                        set query (string sub -l (math $i - 1) -- "$query")
+                        break
+                    end
+                    set i (math $i + 1)
+                end
+            end
+            if [ -z "$query" ]
+                break
+            end
+        end
+
         set -l opts --cycle --reverse --inline-info --height=40% --multi --print-query
         set -l bind --bind tab:down,btab:up,ctrl-space:toggle-out,esc:print-query
         string join -- \n $complist \
@@ -66,12 +87,13 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
         # exit if user canceled
         if test -z "$result"
             commandline -f repaint
+            commandline -t -- $query
             return
         end
 
         if test (count $result) -eq 1
             commandline -f repaint
-        commandline -t -- $result
+            commandline -t -- $result
             return
         end
 
