@@ -1,0 +1,54 @@
+#!/bin/bash
+
+if [[ -v DOCKER_COMPOSE_WRAPPER ]]; then
+  echo "$0: infinite loop"
+  exit 1
+fi
+export DOCKER_COMPOSE_WRAPPER=1
+
+set -e -o pipefail
+
+# オリジナルの docker-compose のパスを得る
+orig_command=$(which -a docker-compose | grep -v -F -e "$0" | head -1)
+
+if [[ ! -v DOCKER_HOST ]] || [[ ! $DOCKER_HOST =~ ^ssh://([^:]+)(:.*)?$ ]]; then
+  exec "$orig_command" "$@"
+fi
+
+host=${BASH_REMATCH[1]}
+port=${BASH_REMATCH[2]}
+
+pid=
+tmp=
+sock=
+
+on_exit(){
+  set +e
+  [ -n "$pid"  ] && kill  -- "$pid"
+  [ -n "$sock" ] && rm -f -- "$sock"
+  [ -n "$tmp"  ] && rmdir -- "$tmp"
+}
+
+trap on_exit EXIT
+
+tmp=$(mktemp -d /tmp/docker.XXXXXXXXXX)
+sock="$tmp/docker.sock"
+
+export DOCKER_TLS_VERIFY=
+export DOCKER_HOST=unix://$sock
+
+ssh_command=(ssh "$host" -p "${port:-22}" -L "$sock:/var/run/docker.sock" -nNT)
+printf "\e[1;30m%s\e[m\n" "Using \`${ssh_command[*]}\`" 1>&2
+"${ssh_command[@]}" &
+pid=$!
+
+# openssh 7.4 のバグで root だと Unix ドメインソケットの転送が許可されていないので nc で代替
+# https://twitter.com/ngyuki/status/1144766681782165504
+#export SSH_HOST=${host}
+#export SSH_PORT=${port:-22}
+#ssh_command='ssh "$SSH_HOST" -p "$SSH_PORT" -T nc -U /var/run/docker.sock'
+#printf "\e[1;30m%s\e[m\n" "Using $DOCKER_HOST -> \`$(eval printf %s \"$ssh_command\")\`" 1>&2
+#nc --sh-exec "exec $ssh_command" -Ulk "$sock" &
+#pid=$!
+
+"$orig_command" "$@"
