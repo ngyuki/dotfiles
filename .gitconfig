@@ -1,58 +1,58 @@
 [core]
-	quotepath = false
-	autocrlf = false
-	excludesfile = ~/.gitignore
-	preloadindex = true
-	fscache = true
+    quotepath = false
+    autocrlf = false
+    excludesfile = ~/.gitignore
+    preloadindex = true
+    fscache = true
 
 [log]
-	date = iso
+    date = iso
 
 [color]
-	ui = auto
+    ui = auto
 
 [alias]
-	co = checkout
-	cm = commit -v -c @
-	br = branch
-	b  = branch
-	st = status
-	s  = status
-	sb = status -sb
-	f  = fetch -pv
-	ds = diff --staged --find-renames --irreversible-delete
-	du = diff '@{u}' --find-renames --irreversible-delete
-	g  = log --graph --date=short --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\"
-	gg = log --graph --date=short --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\" --all
-	ore = !git config user.name ngyuki && git config user.email ngyuki.jp@gmail.com
-	first = !git commit -m first --allow-empty && git config core.filemode false
+    co = checkout
+    cm = commit -v -c @
+    br = branch
+    b  = branch
+    st = status
+    s  = status
+    sb = status -sb
+    f  = fetch --all -pvtf
+    ds = diff --staged --find-renames --irreversible-delete
+    du = diff '@{u}' --find-renames --irreversible-delete
+    g  = log --graph --date=short --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\"
+    gg = log --graph --date=short --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\" --all
+    ore = !git config user.name ngyuki && git config user.email ngyuki.jp@gmail.com
+    first = !git commit -m first --allow-empty && git config core.filemode false
 
 [diff]
-	algorithm = histogram
+    algorithm = histogram
 
 [fetch]
-	prune = true
+    prune = true
 
 [rebase]
-	autosquash = true
+    autosquash = true
 
 [merge]
-	ff = false
-	tool = WinMerge
+    ff = false
+    tool = WinMerge
 
 [mergetool]
-	prompt = false
-	keepBackup = false
+    prompt = false
+    keepBackup = false
 
 [mergetool "WinMerge"]
-	cmd = git-mergetool-winmerge \"$MERGED\"
-	trustExitCode = false
+    cmd = git-mergetool-winmerge \"$MERGED\"
+    trustExitCode = false
 
 [pull]
-	ff = only
-	rebase = preserve
+    ff = only
+    rebase = preserve
 
 [push]
-	# for 1.8 nothing matching upstream current simple
-	# for 1.7 nothing matching tracking current
-	default = current
+    # for 1.8 nothing matching upstream current simple
+    # for 1.7 nothing matching tracking current
+    default = current
