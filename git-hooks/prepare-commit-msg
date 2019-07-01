@@ -59,7 +59,7 @@ case "$2" in
   *)
     {
         cat "$1" | sed -n -e '/^#/q' -e 'p'
-        git g -n 10 | sed 's/^/#-> /'
+        git log --graph --date=short --format="%h [%ad]%d %s" -n 10 | sed 's/^/#-> /'
         echo '#'
         cat "$1" | sed -n -e '/^#/,$p'
     } > "$1.tmp"
