@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export XDEBUG_CONFIG='remote_enable=1 idekey=default'
+export PHP_IDE_CONFIG=serverName=wsl
+exec "$@"
