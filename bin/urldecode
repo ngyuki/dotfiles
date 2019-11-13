@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env python
 
-exec python -c 'import sys, urllib
+import sys, urllib
 for line in sys.stdin:
-  sys.stdout.write(urllib.unquote_plus(line))'
+  sys.stdout.write(urllib.unquote_plus(line))
