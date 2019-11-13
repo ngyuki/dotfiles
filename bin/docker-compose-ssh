@@ -1,22 +1,13 @@
 #!/bin/bash
 
-if [[ -v DOCKER_COMPOSE_WRAPPER ]]; then
-  echo "$0: infinite loop"
-  exit 1
-fi
-export DOCKER_COMPOSE_WRAPPER=1
-
 set -e -o pipefail
 
-# オリジナルの docker-compose のパスを得る
-orig_command=$(which -a docker-compose | grep -v -F -e "$0" | head -1)
-
-if [[ ! -v DOCKER_HOST ]] || [[ ! $DOCKER_HOST =~ ^ssh://([^:]+)(:.*)?$ ]]; then
-  exec "$orig_command" "$@"
+if [ -z DOCKER_COMPOSE_SSH ] || [[ ! -v DOCKER_HOST ]] || [[ ! $DOCKER_HOST =~ ^ssh://([^:]+)(:(.*))?$ ]]; then
+  exec command docker-compose "$@"
 fi
 
 host=${BASH_REMATCH[1]}
-port=${BASH_REMATCH[2]}
+port=${BASH_REMATCH[3]}
 
 pid=
 tmp=
@@ -37,7 +28,12 @@ sock="$tmp/docker.sock"
 export DOCKER_TLS_VERIFY=
 export DOCKER_HOST=unix://$sock
 
-ssh_command=(ssh "$host" -p "${port:-22}" -L "$sock:/var/run/docker.sock" -nNT)
+ssh_command=(ssh "$host" -L "$sock:/var/run/docker.sock" -nNT)
+
+if [ -n "$port" ]; then
+  ssh_command+=(-p "$port")
+fi
+
 printf "\e[1;30m%s\e[m\n" "Using \`${ssh_command[*]}\`" 1>&2
 "${ssh_command[@]}" &
 pid=$!
@@ -51,4 +47,4 @@ pid=$!
 #nc --sh-exec "exec $ssh_command" -Ulk "$sock" &
 #pid=$!
 
-"$orig_command" "$@"
+command docker-compose "$@"
