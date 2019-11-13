@@ -10,13 +10,14 @@ function fish_greeting
 end
 
 function fish_prompt
-  if test $CMD_DURATION
-    if test $CMD_DURATION -gt (math "1000 * 30")
-      set secs (math "$CMD_DURATION / 1000")
-      echo "returned $status, $secs seconds" | toast "$history[1]" 1> /dev/null 2>&1
-      set CMD_DURATION 0
-    end
-  end
+  # 一定以上の時間を要したら自動で通知する
+  # if test $CMD_DURATION
+  #   if test $CMD_DURATION -gt (math "1000 * 30")
+  #     set secs (math "$CMD_DURATION / 1000")
+  #     echo "returned $status, $secs seconds" | toast "$history[1]" 1> /dev/null 2>&1
+  #     set CMD_DURATION 0
+  #   end
+  # end
 
   if [ $status -eq 0 ]
     set color (set_color green)
@@ -50,7 +51,8 @@ complete -c tmux-cssh -w ssh
 # alias
 if status --is-interactive
   if hash exa 2>/dev/null
-    alias ls='exa --time-style=long-iso'
+    export EXA_COLORS="reset"
+    alias ls='exa --time-style=long-iso --classify'
   end
   if hash bat 2>/dev/null
     alias cat='bat --paging=never'
@@ -58,5 +60,8 @@ if status --is-interactive
   end
   if hash rg 2>/dev/null
     alias grep='rg'
+  end
+  if hash docker-compose-ssh 2>/dev/null
+    alias docker-compose='docker-compose-ssh'
   end
 end
