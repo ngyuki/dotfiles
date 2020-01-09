@@ -1,0 +1,37 @@
+#!/bin/bash
+
+usage_exit(){
+  echo "Usage: ${0##*/} <-s|-u> <file...>"
+  exit 1
+}
+
+opt=
+files=()
+
+while [ $# -ne 0 ]; do
+  case "$1" in
+    -s)
+      opt=--skip-worktree
+      ;;
+    -u)
+      opt=--no-skip-worktree
+      ;;
+    --)
+      break
+      ;;
+    -*)
+      usage_exit
+      ;;
+    *)
+      files+=( "$1" )
+      ;;
+  esac
+  shift
+done
+
+files+=( "$@" )
+
+[[ -z $opt ]] && usage_exit
+
+git ls-files -z -- "${files[@]}" | xargs -0 git update-index "$opt" --
+git ls-files -t -- "${files[@]}"
