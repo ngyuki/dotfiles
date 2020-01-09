@@ -1,0 +1,4 @@
+#!/bin/bash
+
+printf "Before  %s\n" "$(docker run --privileged --rm alpine date -u '+%Y-%m-%d %H:%M:%S %Z')"
+printf "After   %s\n" "$(docker run --privileged --rm alpine date -u '+%Y-%m-%d %H:%M:%S %Z' -s "$(date -u '+%Y-%m-%d %H:%M:%S')" )"
