@@ -52,7 +52,9 @@ complete -c tmux-cssh -w ssh
 if status --is-interactive
   if hash exa 2>/dev/null
     export EXA_COLORS="reset"
-    alias ls='exa --time-style=long-iso --classify'
+    alias ls='exa --color=auto --time-style=long-iso'
+    alias la='ls -a'
+    alias ll='ls -alF'
   end
   if hash bat 2>/dev/null
     #alias cat='bat --paging=never' # でかいファイルでおもすぎるので無効
