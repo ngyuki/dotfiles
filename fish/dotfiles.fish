@@ -55,7 +55,7 @@ if status --is-interactive
     alias ls='exa --time-style=long-iso --classify'
   end
   if hash bat 2>/dev/null
-    alias cat='bat --paging=never'
+    #alias cat='bat --paging=never' # でかいファイルでおもすぎるので無効
     alias less='bat --paging=always'
   end
   if hash rg 2>/dev/null
