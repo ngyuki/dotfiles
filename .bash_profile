@@ -69,6 +69,9 @@ if [[ -z $EDITOR ]]; then
   export EDITOR=vim
 fi
 
+# ls time-style
+export TIME_STYLE=long-iso
+
 # man enable prompt, raw
 export MANPAGER='less -MR'
 
