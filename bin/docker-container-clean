@@ -1,0 +1,9 @@
+#!/bin/bash
+
+usage_exit() {
+  echo "Usage: $0" 1>&2
+  exit 1
+}
+
+docker container ls -a --format 'table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.RunningFor}}\t{{.Status}}' |\
+  tail -n +2 | fzf -m | awk '{print $1 }' | xargs --no-run-if-empty docker rm
