@@ -12,6 +12,6 @@ function pessh
     ssh $hosts $argv
   else if test (count $hosts) -gt 1
     history_add tmux-cssh $hosts $argv
-    tmux-cssh $hosts $argv
+    tmux-cssh --new-session $hosts $argv
   end
 end
