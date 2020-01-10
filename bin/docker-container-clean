@@ -6,4 +6,4 @@ usage_exit() {
 }
 
 docker container ls -a --format 'table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.RunningFor}}\t{{.Status}}' |\
-  tail -n +2 | fzf -m | awk '{print $1 }' | xargs --no-run-if-empty docker rm
+  tail -n +2 | fzf -m | awk '{print $1 }' | xargs --no-run-if-empty docker rm -v
