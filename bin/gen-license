@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -eu
+
+usage_exit() {
+  echo 'Usage: $0 <cc0|mit>'
+}
+
+base=$(readlink -f -- "${BASH_SOURCE[0]}")
+base=${base%/*}
+base=${base%/*}
+share=$base/share/license
+
+case "${1-}" in
+  cc0|cc-0)
+    # https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
+    cat "$share/cc-zero-1.0.txt" > LICENSE
+    echo 'generated "LICENSE" file'
+    ;;
+  mit)
+    # http://www.opensource.org/licenses/mit-license.php
+    year="$(date +%Y)"
+    cat "$share/mit.txt" | sed "s/{{YEAR}}/$year/" > LICENSE
+    echo 'generated "LICENSE" file'
+    ;;
+  *)
+    usage_exit
+    ;;
+esac
