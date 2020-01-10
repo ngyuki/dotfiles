@@ -69,6 +69,11 @@ if [[ -z $EDITOR ]]; then
   export EDITOR=vim
 fi
 
+# editor
+if [[ -z $PAGER ]]; then
+  export PAGER=less
+fi
+
 # ls time-style
 export TIME_STYLE=long-iso
 
