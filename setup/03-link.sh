@@ -15,6 +15,7 @@ fi
 files=(
   .gitignore
   .inputrc
+  .tigrc
 )
 
 for fn in "${files[@]}"; do
