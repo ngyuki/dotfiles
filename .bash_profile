@@ -135,9 +135,9 @@ if [[ ${BASH_VERSINFO[0]} -ge 4 ]]; then
 fi
 
 # hman (man2html)
-if hash temoto 2>/dev/null && hash hman 2>/dev/null; then
-  export MANHTMLHOST=$HOSTNAME
-  export MANHTMLPAGER='temoto open'
+if hash wslpath 2>/dev/null && hash hman 2>/dev/null; then
+  export MANHTMLHOST=mzk
+  export MANHTMLPAGER=open
 fi
 
 # ansible
