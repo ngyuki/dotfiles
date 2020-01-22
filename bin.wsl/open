@@ -2,4 +2,6 @@
 
 prog=powershell.exe
 
-wslexec "$prog" start "$@"
+for x in "$@"; do
+  wslexec "$prog" start "$x"
+done
