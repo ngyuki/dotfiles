@@ -1,5 +1,5 @@
 #!/bin/bash
 
-prog='C:\Windows\explorer.exe'
+prog=powershell.exe
 
-wslexec "$prog" "$@"
+wslexec "$prog" start "$@"
