@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec wslexec /c/Users/ngyuki/bin/PhpStorm.cmd "$@"
