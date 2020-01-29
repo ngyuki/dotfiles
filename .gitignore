@@ -1,5 +1,6 @@
 
 .local/
+/bin.local/
 
 # git-svn
 sys$command

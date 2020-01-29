@@ -59,6 +59,11 @@ if [[ ":$PATH:" != *":$dotfiles/bin:"* ]]; then
   export PATH=$dotfiles/bin:$PATH
 fi
 
+# PATH $dotfiles/bin.local
+if [[ ":$PATH:" != *":$dotfiles/bin.local:"* ]]; then
+  export PATH=$dotfiles/bin.local:$PATH
+fi
+
 # PATH ~/bin
 if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
   export PATH=$HOME/bin:$PATH
