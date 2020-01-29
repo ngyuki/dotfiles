@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -eu
+
+if [ $# -ne 2 ]; then
+  echo "Usage: ${0##*/} running-config|startup-config|backup-config <outout-file>"
+  exit 1
+fi
+
+base=$(realpath -- "${BASH_SOURCE[0]}")
+base=${base%/*}
+
+export IOS_SRC_FILE=${1?}
+export IOS_DEST_FILE=${2?}
+
+expect -f "$base/ios-fetch-config.exp"

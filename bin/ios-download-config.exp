@@ -7,8 +7,7 @@ set IOS_SSH_PASSWORD $env(IOS_SSH_PASSWORD)
 set IOS_ENABLE_PASSWORD $env(IOS_ENABLE_PASSWORD)
 set IOS_TFTP_HOST $env(IOS_TFTP_HOST)
 
-spawn env LANG=C ssh "${IOS_SSH_TARGET}"
-
+spawn env LANG=C ssh -o PreferredAuthentications=keyboard-interactive "${IOS_SSH_TARGET}"
 expect {
   "Password:" {
     send "${IOS_SSH_PASSWORD}\n"
@@ -18,7 +17,6 @@ expect {
 }
 
 send "enable\n"
-
 expect {
   "Password:" {
     send "${IOS_ENABLE_PASSWORD}\n"
