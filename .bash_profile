@@ -151,6 +151,10 @@ export ANSIBLE_GATHERING=explicit
 export ANSIBLE_PIPELINING=true
 export ANSIBLE_RETRY_FILES_ENABLED=false
 
+# docker
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+
 # mdlive
 export MDLIVE_BROWSER='wslexec explorer.exe'
 
