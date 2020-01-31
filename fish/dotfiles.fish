@@ -63,6 +63,9 @@ if status --is-interactive
   if hash rg 2>/dev/null
     alias grep='rg'
   end
+  if hash docker-wrapper 2>/dev/null
+    alias docker='docker-wrapper'
+  end
   if hash docker-compose-ssh 2>/dev/null
     alias docker-compose='docker-compose-ssh'
   end
