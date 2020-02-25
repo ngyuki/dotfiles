@@ -1,0 +1,48 @@
+#!/bin/bash
+
+TMUX_SESSION_NAME=tmux-cmds-$(date +%s)
+TMUX_LAYOUT=even-vertical
+
+usage_exit() {
+  echo "Usage: $(basename $0) cmd args... ( :: cmd args... )..."
+  exit 1
+}
+
+tmux_cmds=()
+add_tmux_cmd() {
+  tmux_cmds+=("$@" \;)
+}
+
+tmux_session_started=
+add_tmux_spawn() {
+  if [ "${#args[@]}" -ne 0 ]; then
+    if [ -z "$tmux_session_started" ]; then
+      add_tmux_cmd new-session -d -s "${TMUX_SESSION_NAME}" "$@"
+      tmux_session_started=1
+    else
+      add_tmux_cmd split-window -t "${TMUX_SESSION_NAME}" "$@"
+    fi
+  fi
+}
+
+args=()
+for x in "$@"; do
+  if [ "$x" == "::" ]; then
+    add_tmux_spawn "${args[@]}"
+    args=()
+  else
+    args+=("$x")
+  fi
+done
+add_tmux_spawn "${args[@]}"
+
+if [ "${#tmux_cmds[@]}" -eq 0 ]; then
+  usage_exit
+fi
+
+add_tmux_cmd select-layout -t "${TMUX_SESSION_NAME}" "${TMUX_LAYOUT}"
+add_tmux_cmd set-window-option -t "${TMUX_SESSION_NAME}" synchronize-panes on
+add_tmux_cmd select-pane -t "${TMUX_SESSION_NAME}:^.0"
+add_tmux_cmd attach-session
+
+exec tmux "${tmux_cmds[@]}"
