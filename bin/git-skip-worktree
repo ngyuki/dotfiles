@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage_exit(){
-  echo "Usage: ${0##*/} <-s|-u> <file...>"
+  echo "Usage: ${0##*/} <-s|-u> [file...]"
   exit 1
 }
 
@@ -31,7 +31,18 @@ done
 
 files+=( "$@" )
 
-[[ -z $opt ]] && usage_exit
+[ -z "$opt" ] && usage_exit
 
-git ls-files -z -- "${files[@]}" | xargs -0 git update-index "$opt" --
-git ls-files -t -- "${files[@]}"
+if [ "${#files[@]}" -eq 0 ]; then
+  if [ "$opt" == "--skip-worktree" ]; then
+    git ls-files -mz | xargs -0 -n1
+    git ls-files -mz | git update-index "$opt" -z --stdin
+  else
+    git ls-files -tz | sed -zn '/^S /{s/^S //;p}' | xargs -0 -n1
+    git ls-files -tz | sed -zn '/^S /{s/^S //;p}' | git update-index "$opt" -z --stdin
+  fi
+else
+  git ls-files -t -- "${files[@]}"
+  git ls-files -z -- "${files[@]}" | xargs -0 git update-index "$opt" --
+fi
+
