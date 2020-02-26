@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+  echo "Usage: ${0##*/} <host> [path...]"
+  exit 1
+fi
+
+set -eux
+
+host=$1
+shift
+opts=()
+
+for x in "$@"; do
+  opts+=( -path "$x" )
+done
+
+dir=$(pwd -P)
+ssh "$host" mkdir -pv -- "$dir"
+
+unison . "ssh://$host/$(pwd -P)" \
+  -ignore 'Name .git' \
+  -ignore 'Name .idea' \
+  -ignore 'Name vendor' \
+  -ignore 'Name node_modules' \
+  "${opts[@]}" \
+  -auto -batch -repeat watch
