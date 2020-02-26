@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -eu
+
+dir=$PWD
+
+while [ ! -e "$dir/.unison/fsv-sync.prf" ]; do
+  dir="$(dirname -- "$dir")"
+  if [ "$dir" == "/" ]; then
+    echo ".unison/fsv-sync.prf notfound"
+    exit
+  fi
+done
+
+cd "$dir"
+
+#wslexec unison.exe fsv-sync -auto
+
+cat <<'EOS'>.unison/.fsv-sync.bat
+@echo off
+color 2f
+set UNISON=.unison
+cd %~dp0\..
+unison.exe fsv-sync -auto
+pause
+EOS
+
+open ".unison/.fsv-sync.bat"
