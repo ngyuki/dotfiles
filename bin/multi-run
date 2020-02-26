@@ -1,0 +1,59 @@
+#!/bin/bash
+
+set -eu
+
+usage_exit() {
+    echo "Usage: ${0##*/} cmd args... ( :: cmd args... )..."
+}
+
+pids=()
+
+spawn() {
+    local pid
+    if [ $# -ne 0 ]; then
+        "$@" &
+        pid=$!
+        echo "spawn [$pid] ${args[@]}"
+        pids+=( $pid )
+    fi
+}
+
+kill_pids() {
+    local pid
+    for pid in "$@"; do
+        echo "kill [$pid]"
+        kill -0 -- "$pid" 2>/dev/null && kill -- "$pid"
+    done
+}
+
+wait_pids() {
+    local pid
+    for pid in "$@"; do
+        kill -0 -- "$pid" 2>/dev/null && wait -- "$pid"
+    done
+}
+
+fin() {
+    kill_pids "${pids[@]}"
+    wait_pids "${pids[@]}"
+    pids=()
+}
+trap fin EXIT
+
+args=()
+while [ $# -ne -0 ]; do
+    if [ "$1" == "::" ]; then
+        spawn "${args[@]}"
+        args=()
+    else
+        args+=( "$1" )
+    fi
+    shift
+done
+spawn "${args[@]}"
+
+if [ "${#pids[@]}" -eq 0 ]; then
+    usage_exit
+fi
+
+wait_pids "${pids[@]}"
