@@ -1,0 +1,5 @@
+#!/bin/bash
+
+SECONDS=0
+"${@}"
+echo "returned $?, $SECONDS seconds" | toast "${@}" 1> /dev/null 2>&1
