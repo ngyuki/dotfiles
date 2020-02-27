@@ -17,7 +17,7 @@ tmux_session_started=
 add_tmux_spawn() {
   if [ "${#args[@]}" -ne 0 ]; then
     if [ -z "$tmux_session_started" ]; then
-      add_tmux_cmd new-session -d -s "${TMUX_SESSION_NAME}" "$@"
+      add_tmux_cmd new-session -s "${TMUX_SESSION_NAME}" "$@"
       tmux_session_started=1
     else
       add_tmux_cmd split-window -t "${TMUX_SESSION_NAME}" "$@"
@@ -43,6 +43,5 @@ fi
 add_tmux_cmd select-layout -t "${TMUX_SESSION_NAME}" "${TMUX_LAYOUT}"
 add_tmux_cmd set-window-option -t "${TMUX_SESSION_NAME}" synchronize-panes on
 add_tmux_cmd select-pane -t "${TMUX_SESSION_NAME}:^.0"
-add_tmux_cmd attach-session
 
 exec tmux "${tmux_cmds[@]}"
