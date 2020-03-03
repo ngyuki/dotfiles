@@ -12,7 +12,7 @@ fi
   latest=$(
     curl -fsSI "https://github.com/junegunn/fzf-bin/releases/latest" |
       tr -d '\r' |
-      awk -F'/' '/^Location:/{print $NF}'
+      awk -F'/' 'BEGIN{IGNORECASE=1}/^Location:/{print $NF}'
   )
 
   url="https://github.com/junegunn/fzf-bin/releases/download/${latest}/fzf-${latest}-linux_amd64.tgz"
