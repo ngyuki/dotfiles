@@ -12,6 +12,8 @@ end
 function fish_greeting
 end
 
+set distribution_prompt " "(set_color red)"["(sh -c '. /etc/os-release; echo $NAME')"]"
+
 function fish_prompt
   # 一定以上の時間を要したら自動で通知する
   # if test $CMD_DURATION
@@ -23,9 +25,9 @@ function fish_prompt
   # end
 
   if [ $status -eq 0 ]
-    set color (set_color green)
+    set status_color (set_color green)
   else
-    set color (set_color red)
+    set status_color (set_color red)
   end
 
   set git_branch (git branch --no-color 2> /dev/null -a | sed -n -e '/^\*/{s/^[* ]*//;p}')
@@ -36,8 +38,8 @@ function fish_prompt
   end
 
   echo
-  echo (set_color yellow)(__fish_pwd)$git_branch
-  echo "$color\$ "(set_color $fish_color_normal)
+  echo (set_color yellow)(__fish_pwd)$git_branch(set_color red)$distribution_prompt
+  echo "$status_color\$ "(set_color $fish_color_normal)
 end
 
 function fish_right_prompt
