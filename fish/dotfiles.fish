@@ -55,23 +55,23 @@ complete -c tmux-cssh -w ssh
 
 # alias
 if status --is-interactive
-  if hash exa 2>/dev/null
+  if type -fq exa
     export EXA_COLORS="reset"
     alias ls='exa --color=auto --time-style=long-iso'
     alias la='ls -a'
     alias ll='ls -alF'
   end
-  if hash bat 2>/dev/null
+  if type -fq bat
     #alias cat='bat --paging=never' # でかいファイルでおもすぎるので無効
     alias less='bat --paging=always'
   end
-  if hash rg 2>/dev/null
+  if type -fq rg
     alias grep='rg'
   end
-  if hash docker-wrapper 2>/dev/null
+  if type -fq docker-wrapper
     alias docker='docker-wrapper'
   end
-  if hash docker-compose-ssh 2>/dev/null
+  if type -fq docker-compose-ssh
     alias docker-compose='docker-compose-ssh'
   end
 end
