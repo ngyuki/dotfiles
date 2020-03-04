@@ -8,6 +8,7 @@ if not contains $my_function_path $fish_function_path
   set fish_function_path $my_function_path $fish_function_path
 end
 
+# `Welcome to fish, the friendly interactive shell` みたいなメッセージを表示しない
 function fish_greeting
 end
 
