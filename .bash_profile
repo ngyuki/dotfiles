@@ -168,3 +168,8 @@ if [[ -d "$HOME"/.bash_profile.d ]]; then
   done
   unset _
 fi
+
+# fish
+if hash fish 2>/dev/null; then
+  exec fish
+fi
