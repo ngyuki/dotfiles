@@ -1,5 +1,7 @@
 
-#set TERM cygwin
+# 謎のゴミが表示される問題 ... TERM を変更すると tig がまともに動かない・・
+# https://github.com/fish-shell/fish-shell/issues/789#issuecomment-207898381
+# set TERM cygwin
 
 set -l my_function_path (dirname -- (realpath -- (status -f)))/functions
 if not contains $my_function_path $fish_function_path
