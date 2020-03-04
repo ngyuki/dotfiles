@@ -8,7 +8,7 @@ if [[ ! -x "$winexec" ]]; then
   echo "download winexec.exe ..."
 
   url="https://github.com/ngyuki/go-winexec/releases/latest"
-  latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
+  latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' 'BEGIN{IGNORECASE=1}/^Location:/{print $NF}')
   url="https://github.com/ngyuki/go-winexec/releases/download/${latest}/winexec.exe"
   curl -fSL "$url" -o "$winexec"
   chmod +x "$winexec"
