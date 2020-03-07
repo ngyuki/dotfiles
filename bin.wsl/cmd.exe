@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec /c/Windows/system32/cmd.exe "$@"
