@@ -156,7 +156,7 @@ export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
 # mdlive
-export MDLIVE_BROWSER='wslexec explorer.exe'
+export MDLIVE_BROWSER='open'
 
 # cleanup
 unset dotfiles
