@@ -1,5 +1,26 @@
 #!/bin/bash
 
+# wsl のパスを windows のパスに変換しつつ winexec.exe ラッパーで Win32 exe を実行
+# https://twitter.com/ngyuki/status/1113618529197019141 で解決させたので winexec.exe は使わない
+
+cmd=$1
+shift
+if [ ! -e "$cmd" ]; then
+  cmd="$(wslpath -u -- "$cmd")"
+fi
+args=()
+for x in "$@"; do
+  if [ -e "$x" ]; then
+    args+=( "$(wslpath -wa -- "$x")" )
+  else
+    args+=( "$x" )
+  fi
+done
+
+exec "$cmd" "${args[@]}"
+
+################################################################################
+
 set -eu
 
 winexec="$(wslpath -u "C:\Users\\$USER\winexec.exe")"
