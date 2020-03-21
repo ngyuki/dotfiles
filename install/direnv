@@ -1,21 +1,9 @@
 #!/bin/bash
 
-(
-  set -eux
+source "$(dirname "$0")/functions.sh"
 
-  url="https://github.com/direnv/direnv/releases/latest"
-  latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
-
-  url="https://github.com/direnv/direnv/releases/download/${latest}/direnv.linux-amd64"
-
-  tmp=$(mktemp -t direnv.XXXXXXXX)
-  trap 'rm -f -- "$tmp"' EXIT
-
-  curl -fSL "$url" > "$tmp"
-
-  install -D -m0755 "$tmp" "$HOME/bin/direnv"
-)
-
-echo
-echo "direnv is installed"
-direnv version
+install-github-latest-release \
+  "https://github.com/direnv/direnv" \
+  "direnv.linux-amd64" \
+  "direnv" \
+  "direnv version"

@@ -3,12 +3,6 @@
 set -eux
 set -o pipefail
 
-if type terraform 1>/dev/null 2>&1; then
-  echo "terraform is already installed"
-  terraform --version
-  exit 0
-fi
-
 url=$(
   curl -fsSL 'https://www.terraform.io/downloads.html' | grep -Po 'https:\/\/releases\.hashicorp\.com\/terraform\/[.\d]+/terraform_[.\d]+_linux_amd64.zip'
 )
