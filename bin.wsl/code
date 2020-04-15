@@ -3,12 +3,12 @@
 VSCODE_PATH="$(wslpath -u 'C:\\Program Files\\Microsoft VS Code')"
 
 if [ ! -x "$VSCODE_PATH/Code.exe" ]; then
-  printf "%e is not executable" "$VSCODE_PATH/Code.exe"
+  printf "%s is not executable" "$VSCODE_PATH/Code.exe"
   exit 1
 fi
 
 export WSLENV=ELECTRON_RUN_AS_NODE/w:$WSLENV
-#"$VSCODE_PATH/Code.exe" "$@"
-#exit $?
+
+export ELECTRON_RUN_AS_NODE=1
 CLI=$(wslpath -m "$VSCODE_PATH/resources/app/out/cli.js")
-ELECTRON_RUN_AS_NODE=1 exec "$VSCODE_PATH/Code.exe" "$CLI" "$@"
+wslexec "$VSCODE_PATH/Code.exe" "$CLI" "$@"
