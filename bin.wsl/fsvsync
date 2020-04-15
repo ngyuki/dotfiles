@@ -14,15 +14,13 @@ done
 
 cd "$dir"
 
-#wslexec unison.exe fsv-sync -auto
-
-cat <<'EOS'>.unison/.fsv-sync.bat
+cat <<EOS>.unison/.fsv-sync.bat
 @echo off
-color 2f
+color 1f
 set UNISON=.unison
 cd %~dp0\..
-unison.exe fsv-sync -auto
-pause
+unison.exe fsv-sync -auto $*
 EOS
 
-open ".unison/.fsv-sync.bat"
+cmd.exe /C ".unison\\.fsv-sync.bat"
+rm -f .unison/.fsv-sync.bat
