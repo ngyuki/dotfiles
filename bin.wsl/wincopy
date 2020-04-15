@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -eu
+
+wincopy="$(wslpath -u "C:\Users\\$USER\wincopy.exe")"
+
+if [[ ! -x "$wincopy" ]]; then
+  echo "download wincopy.exe ..."
+
+  url="https://github.com/ngyuki/go-wincopy/releases/latest"
+  latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
+  url="https://github.com/ngyuki/go-wincopy/releases/download/${latest}/wincopy.exe"
+  curl -fSL "$url" -o "$wincopy"
+  chmod +x "$wincopy"
+
+  echo
+  echo "installed $wincopy"
+fi
+
+args=()
+
+for x in "$@"; do
+  if [ -e "$x" ]; then
+    args+=( "$(wslpath -wa -- "$x")" )
+  else
+    args+=( "$x" )
+  fi
+done
+
+exec "$wincopy" "${args[@]}"
+
