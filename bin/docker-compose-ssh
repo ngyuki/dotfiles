@@ -47,4 +47,8 @@ pid=$!
 #nc --sh-exec "exec $ssh_command" -Ulk "$sock" &
 #pid=$!
 
+while [ ! -e "$sock" ]; do
+  sleep 0.1
+done
+
 command docker-compose "$@"
