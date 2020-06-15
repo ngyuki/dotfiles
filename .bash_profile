@@ -158,6 +158,9 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 # mdlive
 export MDLIVE_BROWSER='open'
 
+# homebrew
+export HOMEBREW_NO_AUTO_UPDATE=1
+
 # cleanup
 unset dotfiles
 
