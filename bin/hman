@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -eux
+
+name=$1
+file=$(man -w "$name")
+
+dir=$(mktemp -d -t hman-XXXXXXXX)
+trap 'rm -fr -- $dir' EXIT
+
+cd -- "$dir"
+man2html -r "$file" > "$name.html"
+
+browser-sync start \
+  -s \
+  --cwd "$dir" \
+  --startPath "/$name.html" \
+  --directory \
+  --open local \
+  --no-online \
+  --no-ui

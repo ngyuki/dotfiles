@@ -139,12 +139,6 @@ if [[ ${BASH_VERSINFO[0]} -ge 4 ]]; then
   fi
 fi
 
-# hman (man2html)
-if hash wslpath 2>/dev/null && hash hman 2>/dev/null; then
-  export MANHTMLHOST=mzk
-  export MANHTMLPAGER=open
-fi
-
 # ansible
 export ANSIBLE_FORCE_COLOR=true
 export ANSIBLE_GATHERING=explicit
