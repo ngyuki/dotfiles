@@ -1,2 +1,117 @@
+################################################################################
+# keybind
 
-set diff-highlight = true
+bind generic H        :set diff-highlight = yes
+bind generic <Ctrl-h> :set diff-highlight = no
+
+bind generic I ?git rebase -i %(commit)
+
+# bind generic <Tab>       next
+# bind generic <BackTab>   previous
+# bind generic <Down>      move-down
+# bind generic <Up>        move-up
+
+bind generic <Ctrl-C> none
+bind main    <Ctrl-C> +tig-clip --commit  "%(commit)"
+bind log     <Ctrl-C> +tig-clip --commit  "%(commit)"
+bind diff    <Ctrl-C> +tig-clip --file    "%(file)" "%(lineno)"
+bind stage   <Ctrl-C> +tig-clip --file    "%(file)" "%(lineno)"
+bind refs    <Ctrl-C> +tig-clip --refname "%(refname)"
+bind status  <Ctrl-C> +tig-clip --file    "%(file)"
+bind reflog  <Ctrl-C> none
+bind help    <Ctrl-C> none
+bind pager   <Ctrl-C> none
+bind tree    <Ctrl-C> none
+bind blob    <Ctrl-C> none
+bind blame   <Ctrl-C> none
+bind stash   <Ctrl-C> none
+bind grep    <Ctrl-C> none
+
+# main
+bind main ! ?git revert --no-edit %(commit)
+
+# status
+bind status C !git commit -v
+
+# stage
+bind stage C !git commit -v
+
+################################################################################
+# Variables
+
+# [ascii|default|utf-8|<bool>]
+set line-graphics = default
+
+# [auto|<bool>]
+set vertical-split = yes
+
+set tab-size = 4
+set horizontal-scroll = 4
+
+# [<bool>|<string>]
+set diff-highlight = no
+
+# [no|all|some|at−eol|<bool>]
+set ignore-space = all
+
+# [auto|default|topo|date|author−date|reverse]
+set commit-order = auto
+
+# [manual|auto|after−command|periodic|<bool>]
+set refresh-mode = auto
+
+set focus-child = yes
+
+################################################################################
+# View settings
+
+set main-view = \
+    id \
+    date:custom,format=%Y-%m-%d,local=true \
+    author:full \
+    commit-title:graph=v2,refs=yes
+
+set status-view = \
+    line-number:no \
+    status:short \
+    file-name:always
+
+#set stash-view = author date commit-title id line-number
+
+set blame-view = \
+    id:yes,color \
+    author:full \
+    date:custom,format=%Y-%m-%d,local=true \
+    file-name:auto \
+    line-number:interval=1 \
+    text
+
+set tree-view = \
+    line-number:no \
+    mode \
+    author:full \
+    file-size:units \
+    date:custom,format="%Y-%m-%d %H:%M:%S",local=true \
+    id:no \
+    file-name
+
+set refs-view = \
+    line-number:no \
+    ref \
+    date:custom,format="%Y-%m-%d",local=true \
+    author:full \
+    id:no \
+    commit-title
+
+set reflog-view = \
+    line-number:no \
+    id \
+    date:custom,format="%Y-%m-%d %H:%M:%S",local=true \
+    author:full \
+    commit-title:refs=yes
+
+set blob-view  = line-number:yes,interval=1 text
+set diff-view  = line-number:yes,interval=1 text
+set log-view   = line-number:yes,interval=1 text
+set pager-view = line-number:yes,interval=1 text
+set stage-view = line-number:yes,interval=1 text
