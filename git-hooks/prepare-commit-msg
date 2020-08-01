@@ -50,19 +50,28 @@
 # このときコメント行を追加するとそれもメッセージに含まれてしまうので
 # message ではコメント行を埋めないようにする
 #
+# commit -C では # のコメントを含めてはならない
+# 引数で判断することができないのでファイルの中身で判断する
+#
 # コミットメッセージを編集するエディタが起動する直前
 # にフックが差し込めれば良いのだけれども
+
+apply() {
+  {
+      cat "$1" | sed -n -e '/^#/q' -e 'p'
+      git log --graph --date=short --format="%h [%ad]%d %s" -n 10 | sed 's/^/#-> /'
+      echo '#'
+      cat "$1" | sed -n -e '/^#/,$p'
+  } > "$1.tmp"
+  mv -f "$1.tmp" "$1"
+}
 
 case "$2" in
   message)
     ;;
   *)
-    {
-        cat "$1" | sed -n -e '/^#/q' -e 'p'
-        git log --graph --date=short --format="%h [%ad]%d %s" -n 10 | sed 's/^/#-> /'
-        echo '#'
-        cat "$1" | sed -n -e '/^#/,$p'
-    } > "$1.tmp"
-    mv -f "$1.tmp" "$1"
+    if grep -q '^#' "$1" 2>/dev/null; then
+      apply "$1"
+    fi
     ;;
 esac
