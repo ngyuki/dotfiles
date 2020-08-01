@@ -1,3 +1,9 @@
 #!/bin/bash
 
-exec tee /dev/stderr | wslexec 'C:\Windows\System32\clip.exe'
+if [ $# -eq 0 ]; then
+  exec 2>&1
+  exec tee /dev/stderr | wslexec 'C:\Windows\System32\clip.exe'
+else
+  echo "$*"
+  echo -n "$*" | wslexec 'C:\Windows\System32\clip.exe'
+fi
