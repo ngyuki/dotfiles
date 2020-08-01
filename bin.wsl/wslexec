@@ -23,7 +23,7 @@ exec "$cmd" "${args[@]}"
 
 set -eu
 
-winexec="$(wslpath -u "C:\Users\\$USER\winexec.exe")"
+wincopy=/c/app/winexec.exe
 
 if [[ ! -x "$winexec" ]]; then
   echo "download winexec.exe ..."

@@ -2,13 +2,13 @@
 
 set -eu
 
-wincopy="$(wslpath -u "C:\Users\\$USER\wincopy.exe")"
+wincopy=/c/app/wincopy.exe
 
 if [[ ! -x "$wincopy" ]]; then
   echo "download wincopy.exe ..."
 
   url="https://github.com/ngyuki/go-wincopy/releases/latest"
-  latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' '/^Location:/{print $NF}')
+  latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' 'BEGIN{IGNORECASE=1}/^Location:/{print $NF}')
   url="https://github.com/ngyuki/go-wincopy/releases/download/${latest}/wincopy.exe"
   curl -fSL "$url" -o "$wincopy"
   chmod +x "$wincopy"
