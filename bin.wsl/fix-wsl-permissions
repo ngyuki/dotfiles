@@ -1,0 +1,8 @@
+#!/bin/bash
+
+dir=$(readlink -f -- "${BASH_SOURCE[0]}")
+base=${dir##*/}
+dir=${dir%/*}
+cd -- "$dir"
+
+powershell.exe ".\\$base.ps1"
