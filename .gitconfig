@@ -4,6 +4,9 @@
     excludesfile = ~/.gitignore
     preloadindex = true
     fscache = true
+    trustctime = true
+    checkStat = minimal
+    editor = code-git
 
 [log]
     date = iso
@@ -12,8 +15,10 @@
     ui = auto
 
 [alias]
+    sw = switch
     co = checkout
-    cm = commit -v -c @
+    cm = commit -v -c HEAD
+    amend = commit --amend -C HEAD
     br = branch
     b  = branch
     st = status
@@ -57,7 +62,11 @@
     # for 1.7 nothing matching tracking current
     default = current
 
-[pager]
-    log  = diff-highlight | less
-    show = diff-highlight | less
-    diff = diff-highlight | less
+################################################################################
+# diff-highlight
+
+[core]
+    pager = diff-highlight | less
+
+[interactive]
+    diffFilter = diff-highlight
