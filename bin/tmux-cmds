@@ -1,21 +1,85 @@
 #!/bin/bash
 
+# Usage: $0 [options] cmd args... ( :: cmd args... )...
+#
+# Options:
+#   -h            display this help and exit
+#   -q            automatically close pane at exit command
+#   -s            synchronize-panes off
+#   -l <layout>   select layout
+#                     t     tiled
+#                     eh    even-horizontal
+#                     ev    even-vertical
+#                     mh    main-horizontal
+#                     mv    main-vertical
+
+set -eu
+
 TMUX_SESSION_NAME=tmux-cmds-$(date +%s)
 TMUX_LAYOUT=even-vertical
 
 usage_exit() {
-  echo "Usage: $(basename $0) cmd args... ( :: cmd args... )..."
+  sed -rn '/^# Usage/,${/^#/!q;s/^# ?//;p}' "$0" |
+  sed -r "s/\\\$0/$(basename "$0")/" |
+  head -1
   exit 1
 }
+
+help_exit() {
+  sed -rn '/^# Usage/,${/^#/!q;s/^# ?//;p}' "$0" |
+  sed -r "s/\\\$0/$(basename "$0")/"
+  exit 1
+}
+
+autoclose=
+synchronize=1
+layout=$TMUX_LAYOUT
+
+while getopts :hqsl: opt; do
+  case "$opt" in
+    h) help_exit       ;;
+    q) autoclose=1     ;;
+    s) synchronize=    ;;
+    l) layout=$OPTARG  ;;
+    \?)
+      printf "%s: illegal option -- '%s'\n\n"  "$(basename "$0")" "$OPTARG" 1>&2
+      usage_exit
+      ;;
+  esac
+done
+
+shift $((OPTIND - 1))
+
+case "$layout" in
+  t)  layout=tiled           ;;
+  eh) layout=even-horizontal ;;
+  ev) layout=even-vertical   ;;
+  mh) layout=main-horizontal ;;
+  mv) layout=main-vertical   ;;
+esac
 
 tmux_cmds=()
 add_tmux_cmd() {
   tmux_cmds+=("$@" \;)
 }
 
+__tmux_cmds_spawn() {
+  printf "> \e[1;33m%s\e[m\n" "$*"
+  if "$@"; then
+    printf "\e[1;32m%s\e[m" "Exit code [$?]. Press [Enter] to exit..."
+  else
+    printf "\e[1;31m%s\e[m" "Exit code [$?]. Press [Enter] to exit..."
+  fi
+  read -s
+}
+export -f __tmux_cmds_spawn
+
 tmux_session_started=
 add_tmux_spawn() {
   if [ "${#args[@]}" -ne 0 ]; then
+    if [ ! "$autoclose" ]; then
+      set -- bash -c '__tmux_cmds_spawn "$@"' -- "$@"
+    fi
     if [ -z "$tmux_session_started" ]; then
       add_tmux_cmd new-session -s "${TMUX_SESSION_NAME}" "$@"
       tmux_session_started=1
@@ -40,8 +104,12 @@ if [ "${#tmux_cmds[@]}" -eq 0 ]; then
   usage_exit
 fi
 
-add_tmux_cmd select-layout -t "${TMUX_SESSION_NAME}" "${TMUX_LAYOUT}"
-add_tmux_cmd set-window-option -t "${TMUX_SESSION_NAME}" synchronize-panes on
+add_tmux_cmd select-layout -t "${TMUX_SESSION_NAME}" "${layout}"
+
+if [ "$synchronize" ]; then
+  add_tmux_cmd set-window-option -t "${TMUX_SESSION_NAME}" synchronize-panes on
+fi
+
 add_tmux_cmd select-pane -t "${TMUX_SESSION_NAME}:^.0"
 
 exec tmux "${tmux_cmds[@]}"
