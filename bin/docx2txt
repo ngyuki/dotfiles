@@ -1,0 +1,25 @@
+#!/bin/bash
+
+usage() {
+  basename=$(basename -- "$0")
+  cat <<EOS
+Usage: $basename [file]...
+
+Convert msword docx file to txt.
+
+e.g.)
+    $basename a.docx b.docx c.docx
+EOS
+  exit
+}
+
+[ $# -eq 0 ] && usage
+getopts h opt && usage
+
+for f in "$@"; do
+  o="${f%.*}.txt"
+  if [ "$o" == "$f" ]; then
+    o="${f}.txt"
+  fi
+  abiword --to txt --to-name "$o" "$f"
+done
