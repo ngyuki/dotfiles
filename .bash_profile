@@ -38,7 +38,7 @@ case ${OSTYPE} in
       export VAGRANT_HOME=$HOME/.vagrant.d
 
       # editor
-      export EDITOR='subl -w'
+      export EDITOR='code -w'
 
     elif type temoto >/dev/null 2>&1; then
       # PATH $dotfiles/bin.temoto
