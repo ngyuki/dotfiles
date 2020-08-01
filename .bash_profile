@@ -10,7 +10,11 @@ case ${OSTYPE} in
       export PATH=$dotfiles/bin.wsl:$PATH
 
       # ssh-agent
-      if [[ -e "/c/Users/$USER/.ssh/.ssh-agent" ]]; then
+      if [[ -e "/c/Users/$USER/.ssh/ssh-agent.sock" ]]; then
+        # wsl-ssh-agent-gui
+        export SSH_AUTH_SOCK="/c/Users/$USER/.ssh/ssh-agent.sock"
+        ssh-add </dev/null >/dev/null 2>/dev/null
+      elif [[ -e "/c/Users/$USER/.ssh/.ssh-agent" ]]; then
         # pageant+
         export SSH_AUTH_SOCK="/c/Users/$USER/.ssh/.ssh-agent"
       else
