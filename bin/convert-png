@@ -1,0 +1,25 @@
+#!/bin/bash
+
+usage() {
+  basename=$(basename -- "$0")
+  cat <<EOS
+Usage: $basename [file]...
+
+Convert multiple images to png.
+
+e.g.)
+    $basename a.bmp b.bmp c.bmp
+EOS
+  exit
+}
+
+[ $# -eq 0 ] && usage
+getopts h opt && usage
+
+for old in "$@"; do
+  new=${old%.*}.png
+  if [ "$new" != "$old" ]; then
+    echo "$old => $new"
+    convert "$old" "$new"
+  fi
+done
