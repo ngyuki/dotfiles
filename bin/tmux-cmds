@@ -64,13 +64,36 @@ add_tmux_cmd() {
 }
 
 __tmux_cmds_spawn() {
-  printf "> \e[1;33m%s\e[m\n" "$*"
-  if "$@"; then
-    printf "\e[1;32m%s\e[m" "Exit code [$?]. Press [Enter] to exit..."
-  else
-    printf "\e[1;31m%s\e[m" "Exit code [$?]. Press [Enter] to exit..."
-  fi
-  read -s
+  while :; do
+    clear
+    trap true INT
+    printf "> \e[1;33m%s\e[m\n" "$*"
+    "$@"
+    code=$?
+    if [ "$code" -eq 0 ]; then
+      color=32
+    else
+      color=31
+    fi
+    printf "\e[1;%sm%s\e[m" "$color" "Exit code [$code]. Press [Enter] to exit, [r] to restart..."
+
+    while read -r -t 0.1 -N 100; do true; done
+
+    trap exit INT
+    while read -s -N 1 x; do
+      case "$x" in
+        r|R)
+          break
+          ;;
+        $'\n')
+          exit
+          ;;
+        *)
+          continue
+          ;;
+      esac
+    done
+  done
 }
 export -f __tmux_cmds_spawn
 
