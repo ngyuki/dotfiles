@@ -1,8 +1,14 @@
 #!/bin/bash
 
-dir=$(readlink -f -- "${BASH_SOURCE[0]}")
-base=${dir##*/}
-dir=${dir%/*}
-cd -- "$dir"
+arr=(
+  "$USERPROFILE/scoop/apps/vscode/current/bin/code"
+  "$USERPROFILE/scoop/apps/vscode/current/Code.exe"
+  "$USERPROFILE/scoop/apps/winmerge/current/WinMergeU.exe"
+  "$USERPROFILE/scoop/apps/unison/current/unison.exe"
+)
 
-powershell.exe ".\\$base.ps1"
+for x in "${arr[@]}"; do
+  if [ -e "$x" ]; then
+    chmod +x -v "$x"
+  fi
+done
