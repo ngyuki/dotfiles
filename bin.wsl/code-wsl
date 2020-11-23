@@ -1,14 +1,10 @@
 #!/bin/bash
 
-VSCODE_PATH="$(wslpath -u 'C:\\Program Files\\Microsoft VS Code')"
+VSCODE_PATH="$USERPROFILE/scoop/apps/vscode/current"
+[ ! -e $VSCODE_PATH ] && VSCODE_PATH="$(wslpath -u 'C:\\Program Files\\Microsoft VS Code')"
 
 if [ ! -x "$VSCODE_PATH/bin/code" ]; then
   printf "%e is not executable" "$VSCODE_PATH/bin/code"
-  exit 1
-fi
-
-if [ ! -x "$VSCODE_PATH/Code.exe" ]; then
-  printf "%e is not executable" "$VSCODE_PATH/Code.exe"
   exit 1
 fi
 

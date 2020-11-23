@@ -1,6 +1,7 @@
 #!/bin/bash
 
-VSCODE_PATH="$(wslpath -u 'C:\\Program Files\\Microsoft VS Code')"
+VSCODE_PATH="$USERPROFILE/scoop/apps/vscode/current"
+[ ! -e $VSCODE_PATH ] && VSCODE_PATH="$(wslpath -u 'C:\\Program Files\\Microsoft VS Code')"
 ELECTRON="$VSCODE_PATH/Code.exe"
 
 if [ ! -x "$ELECTRON" ]; then
@@ -11,4 +12,5 @@ fi
 export WSLENV=ELECTRON_RUN_AS_NODE/w:$WSLENV
 export ELECTRON_RUN_AS_NODE=1
 CLI=$(wslpath -m "$VSCODE_PATH/resources/app/out/cli.js")
+
 wslexec "$ELECTRON" "$CLI" "$@"
