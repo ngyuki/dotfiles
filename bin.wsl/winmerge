@@ -1,5 +1,9 @@
 #!/bin/bash
 
-prog='C:\Program Files\WinMerge\WinMergeU.exe'
+if [ -e ~/winprofile/scoop/apps/winmerge/current/WinMergeU.exe ]; then
+    prog=$(wslpath -wa ~/winprofile/scoop/apps/winmerge/current/WinMergeU.exe)
+else
+    prog='C:\Program Files\WinMerge\WinMergeU.exe'
+fi
 
 wslexec "$prog" /r /e /u /f '*.*' "$@"

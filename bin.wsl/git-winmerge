@@ -1,4 +1,4 @@
 #!/bin/bash
 
-export TMPDIR=$(wslpath -u "C:\\Users\\$USER\\AppData\\Local\\Temp")
+export TMPDIR=$(realpath "$USERPROFILE/AppData/Local/Temp")
 git mergetool -y -t WinMerge "$@"
