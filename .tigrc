@@ -6,6 +6,9 @@ bind generic <Ctrl-h> :set diff-highlight = no
 
 bind generic I <git rebase -i %(commit)
 
+bind generic F ?git commit --fixup %(commit)
+bind main    F ?git commit --fixup %(commit)
+
 # bind generic <Tab>       next
 # bind generic <BackTab>   previous
 # bind generic <Down>      move-down
@@ -27,13 +30,13 @@ bind blame   <Ctrl-C> none
 bind stash   <Ctrl-C> none
 bind grep    <Ctrl-C> none
 
-# main
+# main view
 bind main ! ?git revert --no-edit %(commit)
 
-# status
+# status view
 bind status C !git commit -v
 
-# stage
+# stage view
 bind stage C !git commit -v
 
 ################################################################################
