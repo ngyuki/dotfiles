@@ -1,21 +1,36 @@
 #!/bin/bash
 
 usage_exit() {
-  echo "Usage: $0 [-t]" 1>&2
+  echo "Usage: $0 [-tsh]" 1>&2
   exit 1
 }
 
-TAG=
+opt_tag=
+opt_size=
 
-while getopts th OPT; do
+while getopts tsh OPT; do
   case $OPT in
-    t) TAG=1 ;;
+    t) opt_tag=1 ;;
+    s) opt_size=1 ;;
     *) usage_exit ;;
   esac
 done
 
-if [[ -n $TAG ]]; then
-  docker images | tail -n +2 | sort -k 1,2V | fzf -m | awk '{print $1 ":" $2 }' | xargs --no-run-if-empty docker rmi
+if [ "$opt_tag" ]; then
+  awk_arg='{print $1 ":" $2 }'
 else
-  docker images | tail -n +2 | sort -k 1,2V | fzf -m | awk '{print $3 }' | xargs --no-run-if-empty docker rmi
+  awk_arg='{print $3 }'
 fi
+
+if [ "$opt_size" ]; then
+  sort_arg=-k4hr
+else
+  sort_arg=-k1,2V
+fi
+
+docker images --format '{{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}\t{{.CreatedSince}}' \
+  | column -t -s $'\t' \
+  | sort "$sort_arg" \
+  | fzf -m --layout=reverse \
+  | awk "$awk_arg" \
+  | xargs --no-run-if-empty docker rmi
