@@ -2,4 +2,9 @@
 
 export XDEBUG_CONFIG='remote_enable=1 idekey=default'
 export PHP_IDE_CONFIG=serverName=wsl
+
+case "$1" in
+    -*) set -- php "$@" ;;
+esac
+
 exec "$@"
