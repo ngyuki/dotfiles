@@ -1,0 +1,28 @@
+#!/bin/bash
+
+max=1
+for dir in "$@"; do
+  if [ "$max" -lt "${#dir}" ]; then
+    max=${#dir}
+  fi
+done
+
+for dir in "$@"; do
+  (
+    cd -- "$dir"
+    printf "\e[1;36m%-${max}s\e[m " "$dir"
+    if ! git rev-parse --git-dir 1>/dev/null 2>&1; then
+      printf "\e[1;31m%s\e[m\n" "no git repository" && exit
+    fi
+
+    git remote get-url origin 2>/dev/null && exit
+
+    remote=$(git remote | head -1)
+    if [ -n "$remote" ]; then
+      git remote get-url "$remote" 2>/dev/null && exit
+    else
+      printf "\e[1;33m%s\e[m\n" "no remote repository" && exit
+    fi
+    printf "\n"
+  )
+done
