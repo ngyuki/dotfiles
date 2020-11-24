@@ -19,8 +19,9 @@ sys$command
 *.sublime-workspace
 .sublime/
 
-# vscode text
-.vscode
+# vscode
+.vscode/*
+* copy.*
 
 # windows shortcut
 *.lnk
