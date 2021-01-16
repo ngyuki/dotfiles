@@ -1,19 +1,31 @@
 #!/bin/bash
 
-if [ $__FZF_PREVIEW__ ]; then
-  docker volume inspect -- "$1" | jq . -C
-  echo '---'
-  dir="$(docker volume inspect -- "$1" | jq '.[].Mountpoint' -r)"
-  exec docker exec "$cid" ls --color=always -AFx -- "$dir"
-  exit
-fi
-
 export cid="$(docker run -d --rm --privileged --pid=host ngyuki/hostenter sleep 600)"
 
 trap cleanup EXIT
-cleanup(){
+cleanup() {
   docker rm -vf "$cid" >/dev/null
 }
 
-export __FZF_PREVIEW__=$0
-docker volume ls | tail -n +2 | fzf -m --preview='"$__FZF_PREVIEW__" {2}' | awk '{print $2}' | xargs --no-run-if-empty docker volume rm --
+docker_volume_clean_fzf_preview() {
+  docker volume inspect -- "$1" | jq . -C
+  echo '---'
+  dir="$(docker volume inspect -- "$1" | jq '.[].Mountpoint' -r)"
+  docker exec "$cid" ls --color=always -AFx -- "$dir" | {
+    if read -r x; then
+      printf "%s" "$x"
+      cat
+    else
+      echo '(empty!)'
+    fi
+  }
+  exit
+}
+
+export -f docker_volume_clean_fzf_preview
+
+docker volume ls |
+  tail -n +2 |
+  fzf -m --preview='docker_volume_clean_fzf_preview {2}' |
+  awk '{print $2}' |
+  xargs --no-run-if-empty docker volume rm --
