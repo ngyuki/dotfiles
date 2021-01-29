@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+
+pwd=$(pwd -P)
+base=$(realpath -P -- "$(dirname -- "${BASH_SOURCE[0]}")")
+
+if [ -e  pdf.css ]; then
+  :
+else
+  cp -v -- "$base/mdpdf.css" pdf.css
+fi
+
+exec docker run --rm -v "${pwd}:${pwd}" -w "${pwd}" ngyuki/markdown-pdf markdown-pdf -m '{"html":true}' -s pdf.css "$@"

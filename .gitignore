@@ -1,6 +1,5 @@
 
 .local/
-/bin.local/
 
 # git-svn
 sys$command
@@ -44,3 +43,9 @@ sys$command
 
 # dotenv
 .envrc
+
+# unison
+*.unison.tmp
+
+# terraform
+.terraform-version

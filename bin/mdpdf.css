@@ -1,0 +1,90 @@
+html {
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+h1 {
+    margin: 1rem 0;
+    padding: 0.5rem;
+    font-size: 1.4rem;
+    background-color: #e8e8e8;
+}
+
+h2 {
+    margin: 1rem 0;
+    padding: 0 0.5rem;
+    font-size: 1.2rem;
+    border: 1px solid #666;
+    border-width: 1px 0;
+}
+
+h3 {
+    margin: 1rem 0;
+    padding: 0 0.5rem;
+    font-size: 1.1rem;
+    border: 1px dotted #666;
+    border-width: 0 0 1px;
+}
+
+pre {
+    margin: 1rem;
+    padding: 0.4rem;
+    background-color: #fcfcfc;
+    font-family: monospace;
+}
+
+ul {
+    margin: 1rem;
+    padding: 0 0 0 2rem;
+}
+
+li > ul {
+    margin: 0;
+}
+
+li {
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin: 0.5rem 0;
+    padding: 0;
+}
+
+table {
+    margin: 8px 16px;
+    padding: 0;
+    border: 1px solid #888;
+    font-size: 9px;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+td,th {
+    border: 1px solid #888;
+    padding: 2px 4px;
+    font-weight: normal;
+}
+
+th {
+    background-color: #e8e8e8;
+}
+
+@media print{
+    hr {
+        page-break-after: always;
+        visibility: hidden;
+    }
+    h1, h2 {
+        page-break-before: always;
+    }
+    h1:first-of-type, h2:first-of-type {
+        page-break-before: auto;
+    }
+
+    .page {
+        background-color: #e8e8e8;
+        page-break-after: always;
+    }
+}

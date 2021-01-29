@@ -3,7 +3,7 @@
 # docker run の -v でソースを realpath に変換するラッパー
 # docker run 以外の -v やコンテナで実行するコマンドの -v まで処理してしまう不完全版
 
-args=(command docker)
+args=(docker)
 
 while [ $# -ne 0 ]; do
   case "$1" in

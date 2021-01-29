@@ -24,7 +24,7 @@
     st = status
     s  = status
     sb = status -sb
-    f  = fetch --all -pvtf
+    f  = fetch --all --prune --verbose --force
     ds = diff --staged --find-renames --irreversible-delete
     du = diff '@{u}' --find-renames --irreversible-delete
     g  = log --graph --date=short --date-order --format=\"%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)\"
