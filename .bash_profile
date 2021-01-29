@@ -103,7 +103,7 @@ export LESS_TERMCAP_us=$(printf "\e[1;32m")
 
 # fzf
 if type fzf >/dev/null 2>&1; then
-  export FZF_DEFAULT_OPTS='--ansi --color=16 --inline-info'
+  export FZF_DEFAULT_OPTS='--ansi --color=16 --inline-info --bind ctrl-s:toggle-sort'
 fi
 
 # packer
