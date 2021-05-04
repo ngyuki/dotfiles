@@ -1,0 +1,33 @@
+#!/bin/bash
+
+VSCODE_PATH="$USERPROFILE/scoop/apps/vscode/current"
+[ ! -e $VSCODE_PATH ] && VSCODE_PATH="$(wslpath -u 'C:\\Program Files\\Microsoft VS Code')"
+ELECTRON="$VSCODE_PATH/Code.exe"
+
+if [ ! -x "$ELECTRON" ]; then
+  printf "%s is not executable" "$ELECTRON"
+  exit 1
+fi
+
+export WSLENV=ELECTRON_RUN_AS_NODE/w:$WSLENV
+export ELECTRON_RUN_AS_NODE=1
+CLI=$(wslpath -m "$VSCODE_PATH/resources/app/out/cli.js")
+
+if [ "$1" == "-" ]; then
+  tmp=$(mktemp -t code-stdin-XXXXXXX)
+  cat > "$tmp"
+  wslexec "$ELECTRON" "$CLI" -w "$tmp"
+  cat -- "$tmp"
+  rm -f -- "$tmp"
+elif [ "$1" == "-x" ]; then
+  tmp=$(mktemp -t code-stdin-XXXXXXX)
+  cat > "$tmp"
+  wslexec "$ELECTRON" "$CLI" -w "$tmp"
+  cat -- "$tmp" | while read -r x; do
+    printf "\e[1;35m# %s\e[m\n" "$x"
+    eval "$x"
+  done
+  rm -f -- "$tmp"
+else
+  wslexec "$ELECTRON" "$CLI" "$@"
+fi
