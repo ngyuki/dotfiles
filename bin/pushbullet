@@ -2,14 +2,16 @@
 
 set -eu
 
-if [ -e "$HOME/.pushbullet" ]; then
-    source "$HOME/.pushbullet"
+if [ -e "$HOME/.config/oreore/pushbullet.sh" ]; then
+    source "$HOME/.config/oreore/pushbullet.sh"
 fi
 
+
 if [ -z "${PUSHBULLET_ACCESS_TOKEN:-}" ]; then
-    echo "Please append to \"\$HOME/.pushbullet\""
+    echo 'Please append to "$HOME/.config/oreore/pushbullet.sh"'
     echo
-    echo "    PUSHBULLET_ACCESS_TOKEN=..."
+    echo '    mkdir -pv "$HOME/.config/oreore"'
+    echo '    echo export PUSHBULLET_ACCESS_TOKEN=... > "$HOME/.config/oreore/pushbullet.sh"'
     echo
     exit 1
 fi
