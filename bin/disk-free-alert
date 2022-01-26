@@ -1,0 +1,12 @@
+#!/bin/sh
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+
+threshold=${1:-80}
+
+df -x tmpfs -x devtmpfs -x iso9660 -h -l -T | grep -Po '\b[0-9]+(?=%)' | while read -r x; do
+  if [ "$x" -ge "$threshold" ]; then
+    df -x tmpfs -x devtmpfs -x iso9660 -h -l -T
+    exit
+  fi
+done
