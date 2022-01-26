@@ -16,7 +16,7 @@ EOS
 }
 
 ssh_add_loop(){
-  while ! ssh-add "$@"; do
+  while ! DISPLAY=  ssh-add "$@"; do
     :
   done
 }
