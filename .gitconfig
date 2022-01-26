@@ -17,7 +17,7 @@
 [alias]
     sw = switch
     co = checkout
-    cm = commit -v -c HEAD
+    cm = !"_() { git ds --stat; git commit -m \"$*\"; }; _"
     amend = commit --amend -C HEAD
     br = branch
     b  = branch

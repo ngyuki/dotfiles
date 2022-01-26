@@ -19,7 +19,6 @@ sys$command
 .sublime/
 
 # vscode
-.vscode/*
 * copy.*
 
 # windows shortcut

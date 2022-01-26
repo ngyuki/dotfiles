@@ -4,7 +4,7 @@
 bind generic H        :set diff-highlight = yes
 bind generic <Ctrl-h> :set diff-highlight = no
 
-bind generic I <git rebase -i %(commit)
+bind generic I <git rebase -i -r %(commit)
 
 bind generic F ?git commit --fixup %(commit)
 bind main    F ?git commit --fixup %(commit)
