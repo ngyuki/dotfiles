@@ -1,3 +1,15 @@
 #!/bin/bash
 
-exec cmd.exe /C "$(wslpath -wa "/c/Users/$USER/bin/PhpStorm.cmd")" "$@"
+set -eu
+
+args=()
+
+for x in "$@"; do
+    a="$(wslpath -wa -- "$x")"
+    if [ -z "$a" ]; then
+        exit 1
+    fi
+    args+=( "$a" )
+done
+
+exec cmd.exe /C "$(wslpath -wa "$USERPROFILE/bin/PhpStorm.cmd")" "${args[@]}"
