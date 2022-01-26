@@ -35,14 +35,14 @@ files+=( "$@" )
 
 if [ "${#files[@]}" -eq 0 ]; then
   if [ "$opt" == "--skip-worktree" ]; then
-    git ls-files -mz | xargs -0 -n1
     git ls-files -mz | git update-index "$opt" -z --stdin
+    git ls-files -mz | xargs -0 -n1
   else
-    git ls-files -tz | sed -zn '/^S /{s/^S //;p}' | xargs -0 -n1
     git ls-files -tz | sed -zn '/^S /{s/^S //;p}' | git update-index "$opt" -z --stdin
+    git ls-files -tz | sed -zn '/^S /{s/^S //;p}' | xargs -0 -n1
   fi
 else
-  git ls-files -t -- "${files[@]}"
   git ls-files -z -- "${files[@]}" | xargs -0 git update-index "$opt" --
+  git ls-files -t -- "${files[@]}"
 fi
 
