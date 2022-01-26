@@ -61,7 +61,8 @@ complete -c tmux-cssh -w ssh
 if status --is-interactive
   if type -fq exa
     export EXA_COLORS="reset"
-    alias ls='exa --color=auto --time-style=long-iso'
+    #alias ls='exa --color=auto --time-style=long-iso' # オプションが違いすぎてわかりにくい
+    alias ls='ls --color=auto'
     alias la='ls -a'
     alias ll='ls -alF'
   end
@@ -71,11 +72,5 @@ if status --is-interactive
   end
   if type -fq rg
     alias grep='rg'
-  end
-  if type -fq docker-wrapper
-    alias docker='docker-wrapper'
-  end
-  if type -fq docker-compose-ssh
-    alias docker-compose='docker-compose-ssh'
   end
 end

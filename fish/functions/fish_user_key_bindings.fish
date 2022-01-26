@@ -12,5 +12,6 @@ function fish_user_key_bindings
   bind \t complete
   bind -k btab complete-and-search
   #bind \t '__fzf_complete'
-  #bind -k btab 'commandline -f repaint'
+
+  bind \cq 'commandline -f repaint'
 end

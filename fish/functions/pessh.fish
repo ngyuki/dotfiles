@@ -11,7 +11,7 @@ function pessh
     history_add ssh $hosts $argv
     ssh $hosts $argv
   else if test (count $hosts) -gt 1
-    history_add tmux-cssh $hosts $argv
+    history_add tmux-cssh --new-session $hosts $argv
     tmux-cssh --new-session $hosts $argv
   end
 end
