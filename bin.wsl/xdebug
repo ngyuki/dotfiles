@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# WSL2 だと 127.0.0.1 だとダメなのでデフォルトゲートウェイを得る
+gw="$(ip -o route get 8.8.8.8 | perl -lne 'print $1 if /via (\S+)/')"
+
+if [ -z "$XDEBUG_MODE" ]; then
+  export XDEBUG_MODE=debug
+fi
+
+export XDEBUG_CONFIG="$XDEBUG_CONFIG client_host=$gw discover_client_host=0"
+export PHP_IDE_CONFIG=serverName=wsl
+export XDEBUG_SESSION=wsl
+
+
+case "$1" in
+  -*) set -- php "$@" ;;
+esac
+
+exec "$@"
