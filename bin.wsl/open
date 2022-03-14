@@ -1,7 +1,1 @@
-#!/bin/bash
-
-prog=powershell.exe
-
-for x in "$@"; do
-  wslexec "$prog" start "$x"
-done
+xdg-open
