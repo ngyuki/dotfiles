@@ -1,0 +1,310 @@
+#!/bin/bash
+
+set -eu
+
+: ${TOGGL_PROFILE_FILE:?}
+
+source "$TOGGL_PROFILE_FILE"
+
+: ${TOGGL_APIKEY:?}
+: ${TOGGL_USERAGENT:?}
+: ${TOGGL_WORKSPACE:?}
+
+###
+
+curl_toggl() {
+  curl -sSL -H "Content-Type: application/json" -u "$TOGGL_APIKEY":api_token "$@"
+}
+
+toggl_new() {
+  local description="$*"
+  if [ -z "$description" ]; then
+    usage
+    exit
+  fi
+
+  _toggl_start "$description"
+}
+
+toggl_start() {
+  local description
+  description="$(
+    current="$(toggl_current)"
+    since="$(date +%Y-%m-%d -d "-30 days")"
+    until="$(date +%Y-%m-%d)"
+    {
+      if [ -n "$current" ]; then
+        printf "%s\n" "$current"
+      fi
+      curl_toggl -f -G "https://api.track.toggl.com/reports/api/v2/details" \
+        -d user_agent="$TOGGL_USERAGENT" \
+        -d workspace_id="$TOGGL_WORKSPACE" \
+        -d since="$since" \
+        -d until="$until" \
+        -d grouping=projects \
+        -d subgrouping=time_entries \
+        -d display_hours=decimal \
+        -d order_field=date \
+        -d order_desc=on \
+      | jq -r '.data[].description'
+    } \
+    | awk '!a[$0]++{print}' \
+    | (
+        if [ -n "$current" ]; then
+          fzf +m --no-sort --print-query --header-lines=1
+        else
+          fzf +m --no-sort --print-query
+        fi
+    ) | tail -n 1
+  )"
+
+  if [ -z "$description" ]; then
+    return
+  fi
+
+  _toggl_start "$description"
+}
+
+_toggl_start() {
+  local description=$1
+
+  local time="$(date +%s)"
+  local start="$(date --utc +%Y-%m-%dT%H:%M:%S.000Z -d "@$time")"
+  local duration="-$time"
+
+  json="$(jq -n \
+    --arg workspace_id "$TOGGL_WORKSPACE" \
+    --arg description "$description" \
+    --arg duration "$duration" \
+    --arg start "$start" \
+    '{
+      "created_with": "cli",
+      "wid": $workspace_id|tonumber,
+      "description": $description,
+      "duration": $duration|tonumber,
+      "start": $start
+    }'
+  )"
+
+  description="$(
+    curl_toggl -X POST "https://api.track.toggl.com/api/v9/workspaces/$TOGGL_WORKSPACE/time_entries" -d "$json" \
+    | jq -r .description
+  )"
+
+  echo "starting: $description"
+}
+
+toggl_rename() {
+  local description
+  description=$*
+  if [ -z "$description" ]; then
+    description="$(
+      current="$(toggl_current)"
+      since="$(date +%Y-%m-%d -d "-30 days")"
+      until="$(date +%Y-%m-%d)"
+      {
+        if [ -n "$current" ]; then
+          printf "%s\n" "$current"
+        fi
+        curl_toggl -f -G "https://api.track.toggl.com/reports/api/v2/details" \
+          -d user_agent="$TOGGL_USERAGENT" \
+          -d workspace_id="$TOGGL_WORKSPACE" \
+          -d since="$since" \
+          -d until="$until" \
+          -d grouping=projects \
+          -d subgrouping=time_entries \
+          -d display_hours=decimal \
+          -d order_field=date \
+          -d order_desc=on \
+        | jq -r '.data[].description'
+      } \
+      | awk '!a[$0]++{print}' \
+      | fzf +m --no-sort --print-query --query="$current" \
+      | tail -n 1
+    )"
+  fi
+
+  if [ -z "$description" ]; then
+    return
+  fi
+
+  id="$(curl_toggl "https://api.track.toggl.com/api/v9/me/time_entries/current" | jq .id -r)"
+
+  json="$(jq -n \
+    --arg id "$id" \
+    --arg description "$description" \
+    '{
+      "id": $id|tonumber,
+      "description": $description
+    }'
+  )"
+
+  description="$(
+    curl_toggl -X PUT "https://api.track.toggl.com/api/v9/time_entries/$id" -d "$json" \
+    | jq -r .description
+  )"
+
+  echo "rename: $description"
+}
+
+toggl_stop() {
+  now="$(date +%s)"
+
+  current="$(
+    curl_toggl "https://api.track.toggl.com/api/v9/me/time_entries/current" \
+    | jq '[.id, .duration] | @tsv' -r
+  )"
+
+  IFS=$'\t' read -r id duration <<<"$current"
+
+  if [ -z "$id" -o -z "$duration" ]; then
+    echo "stopped: none"
+    return
+  fi
+
+  json="$(jq -n \
+    --argjson id "$id" \
+    --argjson duration "$duration" \
+    --argjson now "$now" \
+    '{
+      "id": $id,
+      "duration": ($duration + $now),
+    }'
+  )"
+
+  description="$(
+    curl_toggl -X PUT "https://api.track.toggl.com/api/v9/time_entries/$id" -d "$json" \
+    | jq -r .description
+  )"
+
+  echo "stopped: $description"
+}
+
+toggl_current() {
+  curl_toggl "https://api.track.toggl.com/api/v9/me/time_entries/current" | jq '.description // ""' -r
+}
+
+toggl_today() {
+  today="$(date +%Y-%m-%d -d "${1:-}")"
+
+  # echo -e "# $today reports by toggl.com\n"
+
+  curl -fsSL -G "https://api.track.toggl.com/reports/api/v2/summary" \
+    -d user_agent="$TOGGL_USERAGENT" \
+    -d workspace_id="$TOGGL_WORKSPACE" \
+    -d since="$today" \
+    -d until="$today" \
+    -d grouping=projects \
+    -d subgrouping=time_entries \
+    -d display_hours=decimal \
+    -d order_field=duration \
+    -d order_desc=on \
+    -u "$TOGGL_APIKEY":api_token |
+    jq -r '
+      .data[]
+      | (if .title.project != null then "[\(.title.project)] " else "" end) as $project
+      | .items[]
+      | "- \($project)\(.title.time_entry)"
+  '
+    # jq -r '
+    #   .data[] |
+    #   [ "- \(.title.project)" ] + [
+    #     .items[] | "    - \(.title.time_entry) (\(.time/1000|strftime("%H:%M")))"
+    #   ] | join("\n")
+    # '
+}
+
+toggl_weelky() {
+  since="${1:--7 days}"
+  until="${2:--0 days}"
+
+  since="$(date +%Y-%m-%d -d "$since")"
+  until="$(date +%Y-%m-%d -d "$until")"
+
+  echo "*${since} ... ${until}*"
+  echo
+
+  echo "*time entries*"
+  echo
+
+  curl_toggl -f -G "https://api.track.toggl.com/reports/api/v2/summary" \
+    -d user_agent="$TOGGL_USERAGENT" \
+    -d workspace_id="$TOGGL_WORKSPACE" \
+    -d since="$since" \
+    -d until="$until" \
+    -d grouping=projects \
+    -d subgrouping=time_entries \
+    -d display_hours=decimal \
+    -d order_field=duration \
+    -d order_desc=on \
+    | jq -r '.data[] | .title + .items[] | "- [" + .project + "] " + .title.time_entry + " (" + (.time/1000|strftime("%H:%M")) + ")"'
+
+  echo
+  echo "*project totals*"
+  echo
+
+  curl_toggl -f -G "https://api.track.toggl.com/reports/api/v2/summary" \
+    -d user_agent="$TOGGL_USERAGENT" \
+    -d workspace_id="$TOGGL_WORKSPACE" \
+    -d since="$since" \
+    -d until="$until" \
+    -d grouping=projects \
+    -d display_hours=decimal \
+    -d subgrouping=time_entries \
+    -d order_field=duration \
+    -d order_desc=on \
+    | jq '.data[] | [
+      .title.project,
+      (.time/1000/60/60|floor),
+      (.time/1000/60%60|floor),
+      (.time/1000/60/60%60|floor)
+    ] | map(tostring) | @tsv' -r \
+  | awk -F"\t" '{printf "%s (%02d:%02d:%02d)\n",$1,$2,$3,$4}'
+}
+
+toggl_monthly() {
+  cur="$(date -d "-1 month" +%Y-%m-01)"
+  end="$(date +%Y-%m-01)"
+
+  cur=${1-${cur}}
+  end=${2-${end}}
+
+  while [[ $cur < $end ]]; do
+    echo -e "\n[$cur]"
+    curl_toggl -fsSL -G "https://api.track.toggl.com/reports/api/v2/summary" \
+      -d user_agent="$TOGGL_USERAGENT" \
+      -d workspace_id="$TOGGL_WORKSPACE" \
+      -d since="$cur" \
+      -d until="$cur" \
+      -d grouping=projects \
+      -d subgrouping=time_entries \
+      -d display_hours=decimal \
+      -d order_field=duration \
+      -d order_desc=on \
+      | jq -r '.data[].items[] | "  " + .title.time_entry + " (" + (.time/1000|strftime("%H:%M")) + ")"'
+
+    # to next day
+    cur="$(date -d "$cur + 1 day" +%Y-%m-%d)"
+  done
+}
+
+usage() {
+  echo 'Usage:'
+  declare -f | grep -P '^toggl_[a-z]+\s+\(\)\s*$' | grep -Po '(?<=^toggl_)[a-z]+(?=\s)' | sed 's/^/  toggl /'
+  echo
+  echo 'Current:'
+  toggl_current | jq .description -r | sed 's/^/  /'
+}
+
+if [ $# -eq 0 ]; then
+  set -- start
+fi
+
+cmd=toggl_${1:-}
+shift || true
+
+if [ "$(type -t "$cmd")" == "function" ]; then
+  "$cmd" "$@"
+else
+  usage
+fi
