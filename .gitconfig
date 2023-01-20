@@ -34,6 +34,10 @@
 
 [diff]
     algorithm = histogram
+    tool = vscode
+
+[difftool "vscode"]
+    cmd = git-difftool-vscode $LOCAL $REMOTE
 
 [fetch]
     prune = true

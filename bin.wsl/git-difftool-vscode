@@ -1,0 +1,23 @@
+#!/bin/bash
+
+export path1=$1
+export path2=$2
+
+if [ -f "$path1" -o -f "$path2" ]; then
+  set -x
+  exec code --wait --diff "$path1" "$path2"
+else
+  find "$path1" "$path2" -type f -printf '%P\n' | sort | uniq | fzf --select-1 -m | xargs --no-run-if-empty sh -c '
+    for f in "$@"; do
+      file1="$path1/$f"
+      file2="$path2/$f"
+      [ -e "$file1" ] || file1=/dev/null
+      [ -e "$file2" ] || file2=/dev/null
+      (
+        set -x
+        code --wait --diff "$file1" "$file2"
+      ) &
+    done
+    wait
+  ' --
+fi
