@@ -8,12 +8,12 @@ if [ -z "$XDEBUG_MODE" ]; then
 fi
 
 export XDEBUG_CONFIG="$XDEBUG_CONFIG client_host=$gw discover_client_host=0"
+export XDEBUG_SESSION=1
 export PHP_IDE_CONFIG=serverName=wsl
-export XDEBUG_SESSION=wsl
-
 
 case "$1" in
-  -*) set -- php "$@" ;;
+  --)
+    exec "$@" ;;
 esac
 
-exec "$@"
+exec php -d zend_extension=xdebug.so "$@"
