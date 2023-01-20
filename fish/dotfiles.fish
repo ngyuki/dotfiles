@@ -82,9 +82,9 @@ if status --is-interactive
   end
   if type -fq bat
     #alias cat='bat --paging=never' # でかいファイルでおもすぎるので無効
-    alias less='bat --paging=always'
+    #alias less='bat --paging=always' # オプションが違いすぎてわかりにくい
   end
-  if type -fq rg
-    alias grep='rg'
-  end
+  # if type -fq rg
+  #   alias grep='rg' # 明示的に呼べばよいと思う
+  # end
 end
