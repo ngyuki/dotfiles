@@ -34,16 +34,30 @@ function fish_prompt
     set status_color (set_color green)
   end
 
+  set prompt \n(set_color yellow)(__fish_pwd)
+
   set git_branch (git branch --no-color 2> /dev/null -a | sed -n -e '/^\*/{s/^[* ]*//;p}')
-  if [ -z $git_branch ]
-    set git_branch ""
-  else
-    set git_branch (set_color magenta)" ($git_branch)"
+  if [ $git_branch ]
+    set prompt "$prompt $(set_color magenta)($git_branch)"
   end
 
-  echo
-  echo (set_color yellow)(__fish_pwd)$git_branch$distribution_prompt$status_prompt
-  echo $status_color"\$ "(set_color $fish_color_normal)
+  set append
+  if [ $AWS_VAULT ]
+    set append $append AWS_VAULT=$AWS_VAULT
+  end
+  if [ $TF_WORKSPACE ]
+    set append $append TF_WORKSPACE=$TF_WORKSPACE
+  end
+  if [ $ANSIBLE_INVENTORY ]
+    set append $append ANSIBLE_INVENTORY=$ANSIBLE_INVENTORY
+  end
+  if [ (count $append) -ne 0 ]
+    set prompt "$prompt $(set_color green)($append)"
+  end
+
+  set prompt $prompt$status_prompt\n$status_color"\$ "(set_color $fish_color_normal)
+
+  echo $prompt
 end
 
 function fish_right_prompt
