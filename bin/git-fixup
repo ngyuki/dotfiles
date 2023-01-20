@@ -7,7 +7,9 @@ if git diff --cached --quiet; then
     commits="No staged changes. Use git add -p to add them."
     ret=1
 else
-    commits=$(git log -n "$MAX_LOG_COUNT" --date=short --color=always --format="%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)" )
+    commits=$(
+      git log -n "$MAX_LOG_COUNT" --date=short --color=always --format="%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)" "$@"
+    )
     ret=$?
 fi
 
