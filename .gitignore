@@ -1,5 +1,6 @@
 
 .local/
+z.*
 
 # git-svn
 sys$command
@@ -44,6 +45,7 @@ sys$command
 .envrc
 
 # unison
+*.unison/
 *.unison.tmp
 
 # terraform
