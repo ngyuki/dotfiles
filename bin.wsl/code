@@ -1,9 +1,30 @@
 #!/bin/bash
 
-# if [ "$(stat -f -c %T .)" == "v9fs" ]; then
-#     exec code-win "$@"
-# else
-#     exec code-wsl "$@"
-# fi
+# この方法なら爆速で開くけどウィンドウがフォアグラウンドにならないので不便 → 廃止
+#
+# vscode_ipc_exec() {
+#   VSCODE_IPC_HOOK_CLI="$(ls /wslg/runtime-dir/vscode-ipc-* -t | head -1)"
+#   if [ ! -S "$VSCODE_IPC_HOOK_CLI" ]; then
+#     return
+#   fi
+#   VSCODE_BIN="$(ls ~/.vscode-server/bin/*/bin/remote-cli/code -t | head -1)"
+#   if [ ! -x "$VSCODE_BIN" ]; then
+#     return
+#   fi
+#   export VSCODE_IPC_HOOK_CLI
+#   exec "$VSCODE_BIN" "$@"
+# }
+# vscode_ipc_exec "$@"
 
-exec code-wsl "$@"
+VSCODE_PATH=
+
+[ ! -e "$VSCODE_PATH" ] && VSCODE_PATH="$USERPROFILE/AppData/Local/Programs/Microsoft VS Code"
+[ ! -e "$VSCODE_PATH" ] && VSCODE_PATH="$USERPROFILE/scoop/apps/vscode/current"
+[ ! -e "$VSCODE_PATH" ] && VSCODE_PATH="$(wslpath -u 'C:\\Program Files\\Microsoft VS Code')"
+
+if [ ! -x "$VSCODE_PATH/bin/code" ]; then
+  printf "%e is not executable" "$VSCODE_PATH/bin/code"
+  exit 1
+fi
+
+exec "$VSCODE_PATH/bin/code" "$@"
