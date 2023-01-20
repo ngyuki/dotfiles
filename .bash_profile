@@ -179,7 +179,10 @@ if [[ -d "$HOME"/.bash_profile.d ]]; then
   unset _
 fi
 
-# fish
-if hash fish 2>/dev/null; then
-  exec fish
+# fish ... vscode で remote container で docker-compose を使うときに fish だとダメっぽいので
+# https://github.com/microsoft/vscode-remote-release/issues/6111
+if ! [ -v REMOTE_CONTAINERS_IPC -a -v REMOTE_CONTAINERS_SOCKETS ]; then
+  if hash fish 2>/dev/null; then
+    exec fish
+  fi
 fi
