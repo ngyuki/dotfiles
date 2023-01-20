@@ -1,9 +1,16 @@
 #!/bin/bash
 
-if [ -e "$USERPROFILE/scoop/apps/winmerge/current/WinMergeU.exe" ]; then
-    prog=$(wslpath -wa "$USERPROFILE/scoop/apps/winmerge/current/WinMergeU.exe")
-else
-    prog='C:\Program Files\WinMerge\WinMergeU.exe'
-fi
+arr=(
+  "$USERPROFILE/scoop/apps/winmerge/current/WinMergeU.exe"
+  "$USERPROFILE/AppData/Local/Programs/WinMerge/WinMergeU.exe"
+  '/c/Program Files/WinMerge/WinMergeU.exe'
+)
 
-wslexec "$prog" /r /e /u /f '*.*' "$@"
+for prog in "${arr[@]}"; do
+  if [ -e "$prog" ]; then
+    prog=$(wslpath -wa "$prog")
+    exec wslexec "$prog" /r /e /u /f '*.*' "$@"
+  fi
+done
+
+echo 'WinMergeU.exe notfound' 1>&2
