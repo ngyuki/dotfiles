@@ -16,7 +16,8 @@
 
 [alias]
     sw = switch
-    co = checkout
+    re = restore
+    res = restore
     cm = !"_() { git ds --stat; git commit -m \"$*\"; }; _"
     amend = commit --amend -C HEAD
     br = branch

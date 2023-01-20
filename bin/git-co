@@ -1,0 +1,50 @@
+#!/bin/bash
+
+c="$(printf '\e[1;33m#')"
+e="$(printf '\e[m')"
+
+deco() {
+  sed -r "s/#(.*)/$c#\1$e/"
+}
+
+cat <<'EOS' | deco
+  # ブランチの切り替え
+  git checkout <branch>
+  git switch <branch>
+
+  # ブランチを作ってチェックアウト
+  git checkout -b <branch>
+  git switch -c <branch>
+
+  # ブランチを作ってチェックアウト（強制）
+  git checkout -B <branch>
+  git switch -C <branch>
+
+  # 追跡ブランチを作ってチェックアウト
+  git checkout -t origin/master
+  git switch -t origin/master
+
+  # 変更を戻す（インデックスからワーキングツリーに戻す）
+  git checkout -- <path>
+  git restore <path>
+
+  # ステージのリセット
+  git reset -- <path>
+  git restore -S <path>
+
+  # 指定コミットに戻す（ワーキングツリーとインデックスの両方＝戻した内容がステージされている）
+  git checkout <commit> -- <path>
+  git restore -SW -s <commit> <path>
+
+  # 指定コミットに戻す（ワーキングツリーはそのままでインデックスのみ反映）
+  git reset <commit> -- <path>
+  git restore -S -s <commit> <path>
+EOS
+
+# https://www.osstech.co.jp/cgi-bin/echo-sd
+printf "\e[1;31m %s \e[m\n" '
+  ＿人人人人人人人人人人人人人人人人人人人人人＿
+ ＞                                            ＜
+＞   git switch とか git restore とかを使えよ   ＜
+ ＞                                            ＜
+  ￣Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^￣'
