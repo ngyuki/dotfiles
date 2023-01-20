@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# aws-vault login で開く chrome を別セッションにするためにシークレットで開く
+exec chrome --incognito "$@"

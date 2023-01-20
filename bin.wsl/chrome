@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#set -eu
+
+# 標準入力から来た HTML を Chrome で開く
+
+arr=(
+    'C:\Program Files\Google\Chrome\Application\chrome.exe'
+)
+
+if [ ! -t 0 ] && [ "$1" == "-" ] && [ "$#" -eq 1 ] ; then
+    data="$(base64 -w 0)"
+    set -- "data:text/html;base64,$data"
+fi
+
+for exe in "${arr[@]}"; do
+    exe="$(wslpath -u -- "$exe")"
+    if [ -x "$exe" ]; then
+        exec "$exe" "$@"
+    fi
+done
+
+echo "chrome.exe notfound" 1>&2
