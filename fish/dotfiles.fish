@@ -74,6 +74,10 @@ if type direnv >/dev/null 2>&1
   eval (direnv hook fish)
 end
 
+if [ -e ~/.nix-profile/etc/profile.d/nix.fish ]
+  . ~/.nix-profile/etc/profile.d/nix.fish
+end
+
 # complete
 complete -c tmux-cssh -w ssh
 
