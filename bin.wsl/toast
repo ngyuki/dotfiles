@@ -7,15 +7,41 @@
 #  message="$*"
 #fi
 
-if [[ -t 0 ]]; then
-  message="$*"
+# if [[ -t 0 ]]; then
+#   message="$*"
+# else
+#   message="$(tee /dev/stderr)"
+#   title="$*"
+# fi
+
+title="no title"
+url=""
+
+while getopts :t:u: opt; do
+  case "$opt" in
+    t)
+      title=$OPTARG
+      ;;
+    u)
+      url=$OPTARG
+      ;;
+    *)
+      printf "%s: illegal option -- '%s'\n\n"  "$(basename "$0")" "$OPTARG" 1>&2
+      exit 1
+      ;;
+  esac
+done
+
+shift $((OPTIND - 1))
+
+if [[ $# -eq 0 ]]; then
+  message="$(cat -)"
 else
-  message="$(tee /dev/stderr)"
-  title="$*"
+  message="$*"
 fi
 
-: ${title:=SnoreToast}
-: ${message:=done}
+dir=${BASH_SOURCE[0]}
+dir=${dir%/*}
+cd -- "$dir"
 
-/c/app/SnoreToast/SnoreToast.exe -close SnoreToast >/dev/null
-/c/app/SnoreToast/SnoreToast.exe -t "$title" -m "$message" -w -id SnoreToast >/dev/null &
+powershell.exe -Sta -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File toast.ps1 -title "$title" -message "$message" -url "$url"
