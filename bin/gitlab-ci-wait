@@ -1,0 +1,52 @@
+#!/bin/bash
+
+set -eu
+
+commit="$(git show -q --format=format:%H)"
+json="$(glab api "projects/:fullpath/repository/commits/$commit")"
+title=$(jq -r .title <<<"$json")
+pipeline_id=$(jq -r .last_pipeline.id <<<"$json")
+web_url=$(jq -r .last_pipeline.web_url <<<"$json")
+status=$(jq -r .last_pipeline.status <<<"$json")
+
+if [ "$pipeline_id" == "null" ]; then
+  echo "No pipeline found for commit $commit"
+  exit 1
+fi
+
+print_status() {
+  case "$status" in
+    success)
+      printf "%s \e[1;32m%s\e[m \e[1;30m(%s)\e[m\n" "Pipeline #$pipeline_id" "$status" "$title ... $web_url"
+      ;;
+    failed)
+      printf "%s \e[1;31m%s\e[m \e[1;30m(%s)\e[m\n" "Pipeline #$pipeline_id" "$status" "$title ... $web_url"
+      ;;
+    *)
+      printf "%s \e[1;37m%s\e[m \e[1;30m(%s)\e[m\n" "Pipeline #$pipeline_id" "$status" "$title ... $web_url"
+      ;;
+  esac
+}
+
+print_status
+
+case "$status" in
+  success|failed) exit 0 ;;
+esac
+
+printf "\e]0;%s\a" "waiting..."
+echo waiting...
+
+while sleep 3; do
+  next="$(glab api "projects/:fullpath/repository/commits/$commit" | jq .last_pipeline.status -r)"
+  if [ "$status" != "$next" ]; then
+      status=$next
+      print_status
+  fi
+  case "$status" in
+    success|failed)
+      printf "%s\n%s" "$title" "$web_url" | pushbullet "Pipeline #$pipeline_id $status"
+      exit 0
+      ;;
+  esac
+done
