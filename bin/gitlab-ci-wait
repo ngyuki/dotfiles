@@ -45,7 +45,7 @@ while sleep 3; do
   fi
   case "$status" in
     success|failed)
-      printf "%s\n%s" "$title" "$web_url" | pushbullet "Pipeline #$pipeline_id $status"
+      toast -t "Pipeline #$pipeline_id $status" -u "$web_url" "$title"
       exit 0
       ;;
   esac
