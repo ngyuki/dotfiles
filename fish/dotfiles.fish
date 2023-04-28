@@ -66,7 +66,13 @@ end
 # ターミナルのタイトル
 # https://fishshell.com/docs/current/cmds/fish_title.html
 function fish_title
-  string replace -ra '^.*/' '' (__fish_pwd)
+  set abs (__fish_pwd)
+  set rel (string replace -ra '^.*/' './' $abs)
+  if [ (string length -- $rel) -lt (string length -- $abs) ]
+    echo $rel
+  else
+    echo $abs
+  end
 end
 
 # direnv
