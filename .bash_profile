@@ -152,9 +152,6 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 # terraform
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 
-# aws-vault
-export AWS_VAULT_PROMPT=pass
-
 # gpg ... aws-vault から pass 経由で呼ばれるときはプロンプトが tty でなければならない
 export GPG_TTY="$(tty)"
 
