@@ -1,8 +1,0 @@
-#!/bin/bash
-
-if [ ! -x "$WINMERGE_PATH/WinMergeU.exe" ]; then
-    echo "You should be set \$WINMERGE_PATH Environment variable." 1>&2
-    exit 1
-fi
-
-"$WINMERGE_PATH/WinMergeU.exe" -f "*.*" -e -u "$@"

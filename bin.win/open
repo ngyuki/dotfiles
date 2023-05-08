@@ -1,3 +1,0 @@
-#!/bin/bash
-
-"C:\\Windows\\explorer.exe" "$@"
