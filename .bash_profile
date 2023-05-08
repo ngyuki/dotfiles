@@ -155,6 +155,11 @@ export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 # gpg ... aws-vault から pass 経由で呼ばれるときはプロンプトが tty でなければならない
 export GPG_TTY="$(tty)"
 
+# deno
+if [ -d "$HOME/.deno/bin" ]; then
+  export PATH=$HOME/.deno/bin:$PATH
+fi
+
 # cleanup
 unset dotfiles
 
