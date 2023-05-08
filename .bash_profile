@@ -10,26 +10,16 @@ case ${OSTYPE} in
       export PATH=$dotfiles/bin.wsl:$PATH
 
       # ssh-agent
-      if [[ -e ~/.ssh/wsl-ssh-agent-gui.sock ]]; then
-        # wsl-ssh-agent-gui
-        export SSH_AUTH_SOCK=$(readlink -f ~/.ssh/wsl-ssh-agent-gui.sock)
-        ssh-add </dev/null >/dev/null 2>/dev/null
-      elif [[ -e "/c/Users/$USER/.ssh/.ssh-agent" ]]; then
-        # pageant+
-        export SSH_AUTH_SOCK="/c/Users/$USER/.ssh/.ssh-agent"
-      else
-        # openssh
-        if [ -f ~/.ssh/ssh-agent.env ] ; then
-          source ~/.ssh/ssh-agent.env > /dev/null
-        fi
-        ssh-add -l > /dev/null 2>&1
-        if [ $? -gt 1 ]; then
-          install -m0700 -d ~/.ssh/
-          rm -rf /tmp/ssh-*
-          ssh-agent > ~/.ssh/ssh-agent.env
-          source ~/.ssh/ssh-agent.env > /dev/null
-          ssh-add 2> /dev/null
-        fi
+      if [ -f ~/.ssh/ssh-agent.env ] ; then
+        source ~/.ssh/ssh-agent.env > /dev/null
+      fi
+      ssh-add -l > /dev/null 2>&1
+      if [ $? -gt 1 ]; then
+        install -m0700 -d ~/.ssh/
+        rm -rf /tmp/ssh-*
+        ssh-agent > ~/.ssh/ssh-agent.env
+        source ~/.ssh/ssh-agent.env > /dev/null
+        ssh-add 2> /dev/null
       fi
 
       # vagrant
