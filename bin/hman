@@ -17,5 +17,6 @@ browser-sync start \
   --startPath "/$name.html" \
   --directory \
   --open local \
+  --browser xdg-open \
   --no-online \
   --no-ui
