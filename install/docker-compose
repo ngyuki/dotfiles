@@ -1,9 +1,0 @@
-#!/bin/bash
-
-source "$(dirname "$0")/functions.sh"
-
-install-github-latest-release \
-  'https://github.com/docker/compose/releases/latest' \
-  'https://github.com/docker/compose/releases/download/${latest}/docker-compose-Linux-x86_64' \
-  'docker-compose' \
-  'docker-compose --version'

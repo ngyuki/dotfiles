@@ -1,9 +1,0 @@
-#!/bin/bash
-
-source "$(dirname "$0")/functions.sh"
-
-install-github-latest-release \
-  "https://github.com/direnv/direnv" \
-  "direnv.linux-amd64" \
-  "direnv" \
-  "direnv version"

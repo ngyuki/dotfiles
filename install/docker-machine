@@ -1,9 +1,0 @@
-#!/bin/bash
-
-source "$(dirname "$0")/functions.sh"
-
-install-github-latest-release \
-  'https://github.com/docker/machine/releases/latest' \
-  'https://github.com/docker/machine/releases/download/${latest}/docker-machine-Linux-x86_64' \
-  'docker-machine' \
-  'docker-machine --version'
