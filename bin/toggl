@@ -28,6 +28,11 @@ toggl_new() {
 
 toggl_start() {
   local description
+
+  current="$(toggl_current)"
+  since="$(date +%Y-%m-%d -d "-30 days")"
+  until="$(date +%Y-%m-%d)"
+
   description="$(
     current="$(toggl_current)"
     since="$(date +%Y-%m-%d -d "-30 days")"
@@ -46,7 +51,20 @@ toggl_start() {
         -d display_hours=decimal \
         -d order_field=date \
         -d order_desc=on \
+        -d distinct_rates=on \
       | jq -r '.data[].description'
+      curl -fsSL -G "https://api.track.toggl.com/reports/api/v2/summary" \
+        -d user_agent="$TOGGL_USERAGENT" \
+        -d workspace_id="$TOGGL_WORKSPACE" \
+        -d since="$since" \
+        -d until="$until" \
+        -d grouping=projects \
+        -d subgrouping=time_entries \
+        -d display_hours=decimal \
+        -d order_field=duration \
+        -d order_desc=on \
+        -u "$TOGGL_APIKEY":api_token \
+      | jq -r '.data[].items | sort_by(.local_start) | reverse | .[] | .title.time_entry'
     } \
     | awk '!a[$0]++{print}' \
     | (
@@ -64,7 +82,6 @@ toggl_start() {
 
   _toggl_start "$description"
 }
-
 _toggl_start() {
   local description=$1
 
@@ -187,8 +204,6 @@ toggl_current() {
 toggl_today() {
   today="$(date +%Y-%m-%d -d "${1:-}")"
 
-  # echo -e "# $today reports by toggl.com\n"
-
   curl -fsSL -G "https://api.track.toggl.com/reports/api/v2/summary" \
     -d user_agent="$TOGGL_USERAGENT" \
     -d workspace_id="$TOGGL_WORKSPACE" \
@@ -206,12 +221,6 @@ toggl_today() {
       | .items[]
       | "- \($project)\(.title.time_entry)"
   '
-    # jq -r '
-    #   .data[] |
-    #   [ "- \(.title.project)" ] + [
-    #     .items[] | "    - \(.title.time_entry) (\(.time/1000|strftime("%H:%M")))"
-    #   ] | join("\n")
-    # '
 }
 
 toggl_weelky() {
