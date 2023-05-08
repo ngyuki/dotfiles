@@ -1,4 +1,4 @@
-function pessh
+function xssh
 
   set fzf_multi
   if type -f tmux-cssh >/dev/null 2>&1
