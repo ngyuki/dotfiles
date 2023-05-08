@@ -2,7 +2,7 @@
 
 ref=${@:-HEAD}
 
-git for-each-ref --format='%(refname:short)' refs/ | while read -r x; do
+git for-each-ref --format='%(refname:short)' refs/heads/ refs/remotes/ | while read -r x; do
   if ! git log --right-only --cherry-pick --oneline "HEAD...$x" | read -r; then
     echo "$x"
   fi
