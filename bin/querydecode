@@ -1,0 +1,13 @@
+#!/usr/bin/env php
+<?php
+$input = $argv[1] ?? null;
+if ($input === null) {
+    return;
+}
+$url = parse_url($input);
+$query = $url['query'] ?? null;
+if ($query !== null) {
+    parse_str($query, $qs);
+    $url['query'] = $qs;
+}
+echo json_encode($url, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL;
