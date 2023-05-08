@@ -2,7 +2,12 @@
 
 set -eu
 
-commit="$(git show -q --format=format:%H)"
+if [ $# -eq 0 ]; then
+  commit="$(git show -q --format=format:%H)"
+else
+  commit=$1
+fi
+
 json="$(glab api "projects/:fullpath/repository/commits/$commit")"
 title=$(jq -r .title <<<"$json")
 pipeline_id=$(jq -r .last_pipeline.id <<<"$json")
@@ -45,7 +50,9 @@ while sleep 3; do
   fi
   case "$status" in
     success|failed)
-      toast -t "Pipeline #$pipeline_id $status" -u "$web_url" "$title"
+      if hash toast 2>/dev/null; then
+        toast -t "Pipeline #$pipeline_id $status" -u "$web_url" "$title"
+      fi
       exit 0
       ;;
   esac
