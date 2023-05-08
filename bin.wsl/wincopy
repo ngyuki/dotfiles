@@ -2,7 +2,7 @@
 
 set -eu
 
-wincopy=/c/app/wincopy.exe
+wincopy=~/.cache/ngyuki/wincopy.exe
 
 if [[ ! -x "$wincopy" ]]; then
   echo "download wincopy.exe ..."
@@ -10,6 +10,7 @@ if [[ ! -x "$wincopy" ]]; then
   url="https://github.com/ngyuki/go-wincopy/releases/latest"
   latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' 'BEGIN{IGNORECASE=1}/^Location:/{print $NF}')
   url="https://github.com/ngyuki/go-wincopy/releases/download/${latest}/wincopy.exe"
+  mkdir -p -- "$(dirname -- "$wincopy")"
   curl -fSL "$url" -o "$wincopy"
   chmod +x "$wincopy"
 
@@ -28,4 +29,3 @@ for x in "$@"; do
 done
 
 exec "$wincopy" "${args[@]}"
-
