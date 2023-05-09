@@ -21,6 +21,7 @@ sys$command
 
 # vscode
 * copy.*
+*.code-workspace
 
 # windows shortcut
 *.lnk
