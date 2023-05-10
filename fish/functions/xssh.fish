@@ -1,17 +1,17 @@
 function xssh
-
-  set fzf_multi
-  if type -f tmux-cssh >/dev/null 2>&1
-    set fzf_multi "-m"
+  set fzf_opts
+  if type -f xpanes >/dev/null 2>&1
+    set fzf_opts "-m"
   end
 
-  set hosts (__fish_print_hostnames | fzf $fzf_multi)
+  set hosts (__fish_print_hostnames | fzf $fzf_opts)
 
   if test (count $hosts) -eq 1
-    history_add ssh $hosts $argv
-    ssh $hosts $argv
+    set cmd ssh $hosts $argv
   else if test (count $hosts) -gt 1
-    history_add tmux-cssh --new-session $hosts $argv
-    tmux-cssh --new-session $hosts $argv
+    set cmd xpanes --ssh $hosts $argv
   end
+
+  history_add $cmd
+  $cmd
 end
