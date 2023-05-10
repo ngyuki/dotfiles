@@ -108,3 +108,10 @@ if status --is-interactive
   #   alias grep='rg' # 明示的に呼べばよいと思う
   # end
 end
+
+# zoxide
+if type zoxide >/dev/null 2>&1
+  export _ZO_FZF_OPTS="--ansi --color=16 --info=inline --scheme=path --keep-right --no-sort --preview 'ls -alF --color=always {2..}'"
+  zoxide init fish | source
+  alias zz=zi
+end
