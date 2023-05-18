@@ -9,6 +9,8 @@ bind generic I <git rebase -i -r %(commit)
 bind generic F ?git commit --fixup %(commit)
 bind main    F ?git commit --fixup %(commit)
 
+bind main <Ctrl-o> :toggle commit-order
+
 # bind generic <Tab>       next
 # bind generic <BackTab>   previous
 # bind generic <Down>      move-down
@@ -57,8 +59,8 @@ set diff-highlight = no
 # [no|all|some|at−eol|<bool>]
 set ignore-space = all
 
-# [auto|default|topo|date|author−date|reverse]
-set commit-order = auto
+# [auto|default|topo|date|author-date|reverse]
+set commit-order = default
 
 # [manual|auto|after−command|periodic|<bool>]
 set refresh-mode = auto
