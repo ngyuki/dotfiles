@@ -4,7 +4,12 @@ function fish_user_key_bindings
   bind \cf __fzf_find
   bind \ch __fzf_hostnames
 
-  bind \cj __dotfiles_exec
+  # https://github.com/fish-shell/fish-shell/issues/217
+  # ctrl+m == CR == enter
+  # ctrl+j == LF == ctrl+enter
+
+  # \cj や \cm をバインドすると xpanes の動作がおかしくなる
+  # bind \cj __dotfiles_exec
 
   bind -k ppage history-search-backward
   bind -k npage history-search-forward
