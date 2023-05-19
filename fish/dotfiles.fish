@@ -1,4 +1,5 @@
 
+
 # 謎のゴミが表示される問題 ... TERM を変更すると tig がまともに動かない・・
 # https://github.com/fish-shell/fish-shell/issues/789#issuecomment-207898381
 # set TERM cygwin
@@ -115,3 +116,6 @@ if type zoxide >/dev/null 2>&1
   zoxide init fish | source
   alias zz=zi
 end
+
+# gpg
+set -gx GPG_TTY (tty)
