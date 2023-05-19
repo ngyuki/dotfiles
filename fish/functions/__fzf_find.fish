@@ -4,17 +4,22 @@ function __fzf_find
   set -l fzf_query $commandline[2]
 
   if hash fd 2>/dev/null
-    command fd -L . $dir --print0 2> /dev/null
-  else
-    command find -L $dir -mindepth 1 -maxdepth 3 -path '*/\.*' -prune -o -print0 2> /dev/null |\
-      sed -z 's@^\./@@'
-  end |\
-    fzf --read0 --print0 --multi --prompt "$dir/" --query $fzf_query |\
-    while read --null --local result
-      set results $results (builtin string escape $result)
+    command fd -L . $dir --print0 2> /dev/null \
+    | fzf --read0 --print0 --multi --prompt "$dir/" --query $fzf_query \
+    | while read --null --local result
+        set results $results (builtin string escape $result)
     end
+  else
+    command find -L $dir -mindepth 1 \( -path '*/\.*' -o -fstype sysfs -o -fstype devfs -o -fstype devtmpfs \) -prune -o -print0 2> /dev/null \
+    | sed -z 's@^\./@@' \
+    | fzf --read0 --print0 --multi --prompt "$dir/" --query $fzf_query \
+    | while read --null --local result
+        set results $results (builtin string escape $result)
+    end
+  end
 
   if [ -z $results ]
+    commandline -f repaint
     return
   end
 
