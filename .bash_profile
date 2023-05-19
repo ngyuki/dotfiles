@@ -178,6 +178,14 @@ fi
 # https://github.com/microsoft/vscode-remote-release/issues/6111
 if ! [ -v REMOTE_CONTAINERS_IPC -a -v REMOTE_CONTAINERS_SOCKETS ]; then
   if hash fish 2>/dev/null; then
+    SHELL=/bin/fish
+    if hash tmux 2>/dev/null && [ ! -v TMUX ]; then
+      if tmux has-session 2>/dev/null; then
+        exec tmux attach-session
+      else
+        exec tmux new-session
+      fi
+    fi
     exec fish
   fi
 fi
