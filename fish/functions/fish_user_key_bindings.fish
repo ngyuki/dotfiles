@@ -1,7 +1,7 @@
 function fish_user_key_bindings
 
   bind \cr __oreore_fzf_history
-  bind \ct __oreore_fzf_find
+  bind \ct __oreore_fzf_find_file
   bind \ch __oreore_fzf_hostnames
 
   # https://github.com/fish-shell/fish-shell/issues/217
