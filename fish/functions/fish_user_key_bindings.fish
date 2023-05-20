@@ -1,6 +1,6 @@
 function fish_user_key_bindings
 
-  bind \cr __oreore_fzf_history
+  bind \cr __fzf_reverse_isearch
   bind \ct __oreore_fzf_find_file
   bind \ch __oreore_fzf_hostnames
 
