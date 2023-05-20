@@ -19,7 +19,7 @@
 
 
 # modified from https://github.com/junegunn/fzf/wiki/Examples-(fish)#completion
-function __fzf_complete -d 'fzf completion and print selection back to commandline'
+function __oreore_fzf_complete -d 'fzf completion and print selection back to commandline'
 
     commandline --search-mode; and return
     commandline --paging-mode; and return

@@ -1,4 +1,4 @@
-function __fzf_history
+function __oreore_fzf_history
   builtin history merge
   builtin history --null \
   | fzf --no-multi --read0 --tiebreak=index --toggle-sort=ctrl-r --query (commandline) \
