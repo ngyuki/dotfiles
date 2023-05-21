@@ -14,9 +14,11 @@ function fish_user_key_bindings
   bind -k ppage history-search-backward
   bind -k npage history-search-forward
 
-  bind \t complete
-  bind -k btab complete-and-search
+  #bind \t complete
+  bind \t '__fzf_complete'
   #bind \t '__oreore_fzf_complete'
+
+  bind -k btab complete-and-search
 
   bind \cx\ce edit_command_buffer
 

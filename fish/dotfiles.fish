@@ -119,3 +119,9 @@ end
 
 # gpg
 set -gx GPG_TTY (tty)
+
+# jethrokuan/fzf
+set -g FZF_COMPLETE 2
+set -g FZF_COMPLETE_OPTS "--height=40% --bind=esc:print-query --no-reverse --select-1"
+set -g FZF_TMUX 1
+set -g FZF_TMUX_HEIGHT "80% -p 95%,80% -y 50%"
