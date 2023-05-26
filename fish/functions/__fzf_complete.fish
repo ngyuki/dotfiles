@@ -138,6 +138,12 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
     if [ -d $result[-1] ]
         set append_space ''
     end
+    if [ (string sub -l 2 $result[-1]) = '~/' ]
+        set r $HOME/(string sub -s 2 $result[-1])
+        if [ -d $r ]
+            set append_space ''
+        end
+    end
 
     if [ -n $append_space ]
         commandline -i ' '
