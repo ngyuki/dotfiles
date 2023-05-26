@@ -50,6 +50,37 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
     # do nothing if there is nothing to select from
     test -z "$complist"; and return
 
+    # 候補から共通のプレフィックスを抜き出す
+
+    if [ -n $cmd_lastw ]; and [ (count $complist) -gt 1 ]
+        set -l min (string length $cmd_lastw)
+        set -l len (math (string length (string split -f 1 \t $complist[-1])) - 1)
+        while [ $len -gt $min ]
+            set -l ok 1
+            set -l last (string sub -l $len $complist[-1])
+            set -l curr
+            for curr in $complist
+                set curr (string sub -l $len $curr)
+                if [ $curr != $last ]
+                    set ok 0
+                    break
+                end
+            end
+            if [ $ok -eq 1 ]
+                if [ $cmd_lastw != $last ]
+                    commandline -t -- $last
+                    commandline -f repaint
+                    return
+                end
+                break
+            end
+            set len (math $len - 1)
+        end
+    end
+
+    # 末尾にスペースを追加
+    set -l append_space ' '
+
     set -l compwc (echo $complist | wc -w)
     if test $compwc -eq 1
         # if there is only one option dont open fzf
@@ -79,6 +110,7 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
         # if user accepted but no candidate matches, use the input as result
         if test -z "$result"
             set result $query
+            set append_space ''
         end
     end
 
@@ -102,8 +134,12 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
         [ $i -lt (count $result) ]; and commandline -i ' '
     end
 
-    # 最後がディレクトリ以外ならスペースを追加
-    if [ ! -d $result[-1] ]
+    # 最後がディレクトリならスペースは追加しない
+    if [ -d $result[-1] ]
+        set append_space ''
+    end
+
+    if [ -n $append_space ]
         commandline -i ' '
     end
 
