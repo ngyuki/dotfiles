@@ -126,3 +126,9 @@ set -g FZF_COMPLETE_OPTS "--height=40% --bind=esc:print-query --no-reverse --sel
 set -g FZF_FIND_FILE_COMMAND "command fd -L . \$dir 2>/dev/null"
 set -g FZF_TMUX 1
 set -g FZF_TMUX_HEIGHT "80% -p 95%,80% -y 50%"
+
+# tmux の pane_path にカレントディレクトリを反映させる
+function __oreore_pwd_hook --on-variable PWD
+    printf \e]7\;%s\e\\ $PWD
+end
+__oreore_pwd_hook
