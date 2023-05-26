@@ -8,6 +8,9 @@
     checkStat = minimal
     editor = code-git
 
+[init]
+    defaultBranch = main
+
 [log]
     date = iso
 
