@@ -15,6 +15,7 @@
 
 set -eu
 
+self=$0
 TMUX_SESSION_NAME=tmux-cmds-$(date +%s)
 TMUX_LAYOUT=even-vertical
 
@@ -30,6 +31,43 @@ help_exit() {
   sed -r "s/\\\$0/$(basename "$0")/"
   exit 1
 }
+
+# 関数定義からの export -f で出来るかと思ったけれども、
+# 既に tmux が起動している状態からの実行だと環境変数が引き継げない
+if [ "$1" == "__tmux_cmds_spawn" ]; then
+  while :; do
+    shift
+    clear
+    trap true INT
+    printf "> \e[1;33m%s\e[m\n" "$*"
+    "$@"
+    code=$?
+    if [ "$code" -eq 0 ]; then
+      color=32
+    else
+      color=31
+    fi
+    printf "\e[1;%sm%s\e[m" "$color" "Exit code [$code]. Press [Enter] to exit, [r] to restart..."
+
+    while read -r -t 0.1 -N 100; do true; done
+
+    trap exit INT
+    while read -s -N 1 x; do
+      case "$x" in
+        r|R)
+          break
+          ;;
+        $'\n')
+          exit
+          ;;
+        *)
+          continue
+          ;;
+      esac
+    done
+  done
+  exit
+fi
 
 autoclose=
 synchronize=1
@@ -63,45 +101,11 @@ add_tmux_cmd() {
   tmux_cmds+=("$@" \;)
 }
 
-__tmux_cmds_spawn() {
-  while :; do
-    clear
-    trap true INT
-    printf "> \e[1;33m%s\e[m\n" "$*"
-    "$@"
-    code=$?
-    if [ "$code" -eq 0 ]; then
-      color=32
-    else
-      color=31
-    fi
-    printf "\e[1;%sm%s\e[m" "$color" "Exit code [$code]. Press [Enter] to exit, [r] to restart..."
-
-    while read -r -t 0.1 -N 100; do true; done
-
-    trap exit INT
-    while read -s -N 1 x; do
-      case "$x" in
-        r|R)
-          break
-          ;;
-        $'\n')
-          exit
-          ;;
-        *)
-          continue
-          ;;
-      esac
-    done
-  done
-}
-export -f __tmux_cmds_spawn
-
 tmux_session_started=
 add_tmux_spawn() {
   if [ "${#args[@]}" -ne 0 ]; then
     if [ ! "$autoclose" ]; then
-      set -- bash -c '__tmux_cmds_spawn "$@"' -- "$@"
+      set -- bash -c 'self=$1; shift; "$self" __tmux_cmds_spawn "$@"' -- "$self" "$@"
     fi
     if [ -z "$tmux_session_started" ]; then
       add_tmux_cmd new-session -s "${TMUX_SESSION_NAME}" "$@"
