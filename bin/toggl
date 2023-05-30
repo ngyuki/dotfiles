@@ -23,68 +23,6 @@ toggl_new() {
     exit
   fi
 
-  _toggl_start "$description"
-}
-
-toggl_start() {
-  local description
-
-  current="$(toggl_current)"
-  since="$(date +%Y-%m-%d -d "-30 days")"
-  until="$(date +%Y-%m-%d)"
-
-  description="$(
-    current="$(toggl_current)"
-    since="$(date +%Y-%m-%d -d "-30 days")"
-    until="$(date +%Y-%m-%d)"
-    {
-      if [ -n "$current" ]; then
-        printf "%s\n" "$current"
-      fi
-      curl_toggl -f -G "https://api.track.toggl.com/reports/api/v2/details" \
-        -d user_agent="$TOGGL_USERAGENT" \
-        -d workspace_id="$TOGGL_WORKSPACE" \
-        -d since="$since" \
-        -d until="$until" \
-        -d grouping=projects \
-        -d subgrouping=time_entries \
-        -d display_hours=decimal \
-        -d order_field=date \
-        -d order_desc=on \
-        -d distinct_rates=on \
-      | jq -r '.data[].description'
-      curl -fsSL -G "https://api.track.toggl.com/reports/api/v2/summary" \
-        -d user_agent="$TOGGL_USERAGENT" \
-        -d workspace_id="$TOGGL_WORKSPACE" \
-        -d since="$since" \
-        -d until="$until" \
-        -d grouping=projects \
-        -d subgrouping=time_entries \
-        -d display_hours=decimal \
-        -d order_field=duration \
-        -d order_desc=on \
-        -u "$TOGGL_APIKEY":api_token \
-      | jq -r '.data[].items | sort_by(.local_start) | reverse | .[] | .title.time_entry'
-    } \
-    | awk '!a[$0]++{print}' \
-    | (
-        if [ -n "$current" ]; then
-          fzf +m --no-sort --print-query --header-lines=1
-        else
-          fzf +m --no-sort --print-query
-        fi
-    ) | tail -n 1
-  )"
-
-  if [ -z "$description" ]; then
-    return
-  fi
-
-  _toggl_start "$description"
-}
-_toggl_start() {
-  local description=$1
-
   local time="$(date +%s)"
   local start="$(date --utc +%Y-%m-%dT%H:%M:%S.000Z -d "@$time")"
   local duration="-$time"
@@ -111,35 +49,79 @@ _toggl_start() {
   echo "starting: $description"
 }
 
-toggl_rename() {
-  local description
-  description=$*
-  if [ -z "$description" ]; then
-    description="$(
-      current="$(toggl_current)"
-      since="$(date +%Y-%m-%d -d "-30 days")"
-      until="$(date +%Y-%m-%d)"
-      {
-        if [ -n "$current" ]; then
-          printf "%s\n" "$current"
-        fi
-        curl_toggl -f -G "https://api.track.toggl.com/reports/api/v2/details" \
-          -d user_agent="$TOGGL_USERAGENT" \
-          -d workspace_id="$TOGGL_WORKSPACE" \
-          -d since="$since" \
-          -d until="$until" \
-          -d grouping=projects \
-          -d subgrouping=time_entries \
-          -d display_hours=decimal \
-          -d order_field=date \
-          -d order_desc=on \
-        | jq -r '.data[].description'
-      } \
-      | awk '!a[$0]++{print}' \
-      | fzf +m --no-sort --print-query --query="$current" \
-      | tail -n 1
-    )"
+_toggl_history() {
+  local current
+  current="$(toggl_current)"
+
+  local since
+  local until
+  since="$(date +%Y-%m-%d -d "-30 days")"
+  until="$(date +%Y-%m-%d)"
+
+  printf "%s\n" "${current:-none}"
+
+  {
+    curl_toggl -f -G "https://api.track.toggl.com/reports/api/v2/details" \
+      -d user_agent="$TOGGL_USERAGENT" \
+      -d workspace_id="$TOGGL_WORKSPACE" \
+      -d since="$since" \
+      -d until="$until" \
+      -d grouping=projects \
+      -d subgrouping=time_entries \
+      -d display_hours=decimal \
+      -d order_field=date \
+      -d order_desc=on \
+      -d distinct_rates=on \
+    | jq -r '.data[].description'
+
+    curl -fsSL -G "https://api.track.toggl.com/reports/api/v2/summary" \
+      -d user_agent="$TOGGL_USERAGENT" \
+      -d workspace_id="$TOGGL_WORKSPACE" \
+      -d since="$since" \
+      -d until="$until" \
+      -d grouping=projects \
+      -d subgrouping=time_entries \
+      -d display_hours=decimal \
+      -d order_field=duration \
+      -d order_desc=on \
+      -u "$TOGGL_APIKEY":api_token \
+    | jq -r '.data[].items | sort_by(.local_start) | reverse | .[] | .title.time_entry'
+  } \
+  | grep -vxF -- "${current}" \
+  | awk '!a[$0]++{print}'
+}
+
+_toggl_select() {
+  local opts=()
+  if [ -n "${1:-}" ]; then
+    opts+=(--query "$1")
   fi
+  _toggl_history \
+  | fzf \
+    --no-multi \
+    --no-sort \
+    --bind enter:accept-non-empty \
+    --bind alt-enter:print-query \
+    --bind tab:replace-query \
+    --header-lines=1 \
+    "${opts[@]}"
+}
+
+_toggl_interactive() {
+  local description
+  description="$(_toggl_select)"
+
+  if [ -z "$description" ]; then
+    return
+  fi
+
+  toggl_new "$description"
+}
+
+toggl_rename() {
+  local current
+  current="$(toggl_current)"
+  description="$(_toggl_select "$current")"
 
   if [ -z "$description" ]; then
     return
@@ -306,7 +288,8 @@ usage() {
 }
 
 if [ $# -eq 0 ]; then
-  set -- start
+  _toggl_interactive
+  exit
 fi
 
 cmd=toggl_${1:-}
