@@ -13,25 +13,6 @@
 #                     mh    main-horizontal
 #                     mv    main-vertical
 
-set -eu
-
-self=$0
-TMUX_SESSION_NAME=tmux-cmds-$(date +%s)
-TMUX_LAYOUT=even-vertical
-
-usage_exit() {
-  sed -rn '/^# Usage/,${/^#/!q;s/^# ?//;p}' "$0" |
-  sed -r "s/\\\$0/$(basename "$0")/" |
-  head -1
-  exit 1
-}
-
-help_exit() {
-  sed -rn '/^# Usage/,${/^#/!q;s/^# ?//;p}' "$0" |
-  sed -r "s/\\\$0/$(basename "$0")/"
-  exit 1
-}
-
 # 関数定義からの export -f で出来るかと思ったけれども、
 # 既に tmux が起動している状態からの実行だと環境変数が引き継げない
 if [ "$1" == "__tmux_cmds_spawn" ]; then
@@ -69,6 +50,28 @@ if [ "$1" == "__tmux_cmds_spawn" ]; then
   exit
 fi
 
+set -eu
+
+self=$0
+TMUX_SESSION_NAME=
+if [ -z "$TMUX" ]; then
+  TMUX_SESSION_NAME=tmux-cmds-$(date +%s)
+fi
+TMUX_LAYOUT=even-vertical
+
+usage_exit() {
+  sed -rn '/^# Usage/,${/^#/!q;s/^# ?//;p}' "$0" |
+  sed -r "s/\\\$0/$(basename "$0")/" |
+  head -1
+  exit 1
+}
+
+help_exit() {
+  sed -rn '/^# Usage/,${/^#/!q;s/^# ?//;p}' "$0" |
+  sed -r "s/\\\$0/$(basename "$0")/"
+  exit 1
+}
+
 autoclose=
 synchronize=1
 layout=$TMUX_LAYOUT
@@ -105,13 +108,24 @@ tmux_session_started=
 add_tmux_spawn() {
   if [ "${#args[@]}" -ne 0 ]; then
     if [ ! "$autoclose" ]; then
-      set -- bash -c 'self=$1; shift; "$self" __tmux_cmds_spawn "$@"' -- "$self" "$@"
-    fi
-    if [ -z "$tmux_session_started" ]; then
-      add_tmux_cmd new-session -s "${TMUX_SESSION_NAME}" "$@"
-      tmux_session_started=1
+      set -- bash -c 'printf "\e]0;%s\a" " tmux-cmds "; self=$1; shift; exec "$self" __tmux_cmds_spawn "$@"' -- "$self" "$@"
     else
-      add_tmux_cmd split-window -t "${TMUX_SESSION_NAME}" "$@"
+      set -- bash -c 'printf "\e]0;%s\a" " tmux-cmds "; exec "$@"' -- "$@"
+    fi
+    if [ -n "$TMUX_SESSION_NAME" ]; then
+      if [ -z "$tmux_session_started" ]; then
+        add_tmux_cmd new-session -s "${TMUX_SESSION_NAME}" "$@"
+        tmux_session_started=1
+      else
+        add_tmux_cmd split-window -t "${TMUX_SESSION_NAME}" "$@"
+      fi
+    else
+      if [ -z "$tmux_session_started" ]; then
+        add_tmux_cmd new-window -a "$@"
+        tmux_session_started=1
+      else
+        add_tmux_cmd split-window "$@"
+      fi
     fi
   fi
 }
@@ -131,12 +145,17 @@ if [ "${#tmux_cmds[@]}" -eq 0 ]; then
   usage_exit
 fi
 
-add_tmux_cmd select-layout -t "${TMUX_SESSION_NAME}" "${layout}"
-
-if [ "$synchronize" ]; then
-  add_tmux_cmd set-window-option -t "${TMUX_SESSION_NAME}" synchronize-panes on
+if [ -n "$TMUX_SESSION_NAME" ]; then
+  add_tmux_cmd select-layout -t "${TMUX_SESSION_NAME}" "${layout}"
+  if [ "$synchronize" ]; then
+    add_tmux_cmd set-window-option -t "${TMUX_SESSION_NAME}" synchronize-panes on
+  fi
+  add_tmux_cmd select-pane -t "${TMUX_SESSION_NAME}:^.0"
+else
+  add_tmux_cmd select-layout "${layout}"
+  if [ "$synchronize" ]; then
+    add_tmux_cmd set-window-option synchronize-panes on
+  fi
+  add_tmux_cmd select-pane -t ".0"
 fi
-
-add_tmux_cmd select-pane -t "${TMUX_SESSION_NAME}:^.0"
-
 exec tmux "${tmux_cmds[@]}"
