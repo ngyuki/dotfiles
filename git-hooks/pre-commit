@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -e
+git diff --check --cached
+gitleaks protect --verbose --redact --staged --no-banner --log-level=warn
