@@ -118,7 +118,9 @@ if type zoxide >/dev/null 2>&1
 end
 
 # gpg
-set -gx GPG_TTY (tty)
+if status --is-interactive
+    set -gx GPG_TTY (tty)
+end
 
 # jethrokuan/fzf
 set -g FZF_COMPLETE 2
