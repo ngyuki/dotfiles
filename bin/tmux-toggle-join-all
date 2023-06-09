@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# すべてのウィンドウをひとつのウィンドウにペインでまとめたりその逆を行う
+
+window_panes="$(tmux display-message -p '#{window_panes}')"
+
+tmux_cmds=()
+
+if [[ $window_panes -gt 1 ]]; then
+  pane_ids=($(tmux display-message -p '#{P:#{pane_id} }'))
+  curr_id=($(tmux display-message -p '#{pane_id}'))
+  is_alter=
+  alter_ids=()
+  for id in "${pane_ids[@]}"; do
+    if [[ $id == $curr_id ]]; then
+      is_alter=1
+    elif [[ $is_alter ]]; then
+      alter_ids=("$id" "${alter_ids[@]}")
+    else
+      tmux_cmds+=(break-pane -d -s "$id" -b \;)
+    fi
+  done
+  for id in "${alter_ids[@]}"; do
+    tmux_cmds+=(break-pane -d -s "$id" -a \;)
+  done
+else
+  window_ids=($(tmux display-message -p '#{W:#{window_id} }'))
+  curr_id=$(tmux display-message -p '#{window_id}')
+  is_alter=
+  alter_ids=()
+  for id in "${window_ids[@]}"; do
+    if [[ $id == $curr_id ]]; then
+      is_alter=1
+    elif [[ $is_alter ]]; then
+      alter_ids=("$id" "${alter_ids[@]}")
+    else
+      tmux_cmds+=(join-pane -d -s "$id" -b \;)
+      tmux_cmds+=(select-layout even-vertical \;)
+    fi
+  done
+  for id in "${alter_ids[@]}"; do
+    tmux_cmds+=(join-pane -d -s "$id" \;)
+    tmux_cmds+=(select-layout even-vertical \;)
+  done
+fi
+
+if [[ "${#tmux_cmds[@]}" -gt 0 ]]; then
+  tmux "${tmux_cmds[@]}"
+fi
