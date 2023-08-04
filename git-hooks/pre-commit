@@ -1,5 +1,11 @@
 #!/bin/sh
 
 set -e
+
 git diff --check --cached
+
+if type editorconfig-checker 1>/dev/null 2>&1; then
+  git diff -z --cached --name-only --diff-filter=d --no-renames | xargs --null --no-run-if-empty editorconfig-checker
+fi
+
 gitleaks protect --verbose --redact --staged --no-banner --log-level=warn
