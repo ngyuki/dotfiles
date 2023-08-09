@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# aws-vault exec で --server オプションを使うためには terminal 以外のプロンプトが必要
+#   https://github.com/99designs/aws-vault/issues/888
+
+title=
+inputbox=
+
+while [ $# -ne 0 ]; do
+  case "$1" in
+    --inputbox)
+      shift
+      inputbox=$1
+      ;;
+    --title)
+      shift
+      title=$1
+      ;;
+    *)
+      echo "unknown kdialog options [$1]" 1>&2
+      exit 1
+  esac
+  shift
+done
+
+exec </dev/tty 2>/dev/tty
+read -p "[$title] $inputbox" -r input
+echo -n "$input"
