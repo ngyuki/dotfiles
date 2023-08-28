@@ -9,19 +9,6 @@ case ${OSTYPE} in
       # PATH $dotfiles/bin.win
       export PATH=$dotfiles/bin.wsl:$PATH
 
-      # ssh-agent
-      if [ -f ~/.ssh/ssh-agent.env ] ; then
-        source ~/.ssh/ssh-agent.env > /dev/null
-      fi
-      ssh-add -l > /dev/null 2>&1
-      if [ $? -gt 1 ]; then
-        install -m0700 -d ~/.ssh/
-        rm -rf /tmp/ssh-*
-        ssh-agent > ~/.ssh/ssh-agent.env
-        source ~/.ssh/ssh-agent.env > /dev/null
-        ssh-add 2> /dev/null
-      fi
-
       # vagrant
       export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
       export VAGRANT_WSL_DISABLE_VAGRANT_HOME=1
@@ -166,6 +153,9 @@ export LC_ALL=C.UTF-8
 # ssh askpass
 export SSH_ASKPASS=ssh-askpass
 export SSH_ASKPASS_REQUIRE=force
+
+# ssh-agent
+eval "$(keychain --eval --quiet --quick)"
 
 # cleanup
 unset dotfiles
