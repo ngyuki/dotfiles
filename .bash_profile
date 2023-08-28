@@ -3,37 +3,10 @@
 
 dotfiles=${BASH_SOURCE[0]%/*}
 
-case ${OSTYPE} in
-  linux*)
-    if uname -r | grep -i Microsoft >/dev/null 2>&1; then
-      # PATH $dotfiles/bin.win
-      export PATH=$dotfiles/bin.wsl:$PATH
-
-      # vagrant
-      export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
-      export VAGRANT_WSL_DISABLE_VAGRANT_HOME=1
-      export VAGRANT_HOME=$HOME/.vagrant.d
-
-      # editor
-      export EDITOR='code -w'
-
-    elif type temoto >/dev/null 2>&1; then
-      # PATH $dotfiles/bin.temoto
-      export PATH=$dotfiles/bin.temoto:$PATH
-    fi
-    ;;
-
-  msys)
-    if [ -n "$PhpStorm" ]; then
-      export ConEmuANSI=ON
-      export ANSICON=1
-    fi
-    if [ -n "$CONEMUANSI" ]; then
-      export ConEmuANSI=$CONEMUANSI
-      export ANSICON=1
-    fi
-    ;;
-esac
+# PATH $dotfiles/bin.wsl
+if [[ ":$PATH:" != *":$dotfiles/bin.wsl:"* ]]; then
+  export PATH=$dotfiles/bin.wsl:$PATH
+fi
 
 # PATH $dotfiles/bin
 if [[ ":$PATH:" != *":$dotfiles/bin:"* ]]; then
@@ -50,12 +23,12 @@ if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
   export PATH=$HOME/bin:$PATH
 fi
 
-# editor
+# EDITOR
 if [[ -z $EDITOR ]]; then
-  export EDITOR=vim
+  export EDITOR='code -w'
 fi
 
-# editor
+# PAGER
 if [[ -z $PAGER ]]; then
   export PAGER=less
 fi
@@ -82,6 +55,11 @@ export LESS_TERMCAP_us=$(printf "\e[1;32m")
 if type fzf >/dev/null 2>&1; then
   export FZF_DEFAULT_OPTS='--ansi --inline-info --bind ctrl-s:toggle-sort'
 fi
+
+# vagrant
+export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
+export VAGRANT_WSL_DISABLE_VAGRANT_HOME=1
+export VAGRANT_HOME=$HOME/.vagrant.d
 
 # packer
 if [[ -z $PACKER_CACHE_DIR ]]; then
