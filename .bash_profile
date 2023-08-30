@@ -135,6 +135,12 @@ export SSH_ASKPASS_REQUIRE=force
 # ssh-agent
 eval "$(keychain --eval --quiet --quick)"
 
+# aws-vault
+export AWS_VAULT_BACKEND=pass
+export AWS_VAULT_PASS_PREFIX=aws-vault/
+export AWS_SESSION_TOKEN_TTL=12h
+export AWS_FEDERATION_TOKEN_TTL=12h
+
 # cleanup
 unset dotfiles
 
