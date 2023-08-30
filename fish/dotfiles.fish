@@ -39,7 +39,12 @@ function fish_prompt
 
   set git_branch (git branch --no-color 2> /dev/null -a | sed -n -e '/^\*/{s/^[* ]*//;p}')
   if [ $git_branch ]
-    set prompt "$prompt $(set_color magenta)($git_branch)"
+    set git_stash (git stash list | wc -l)
+    if [ $git_stash -gt 0 ]
+        set prompt "$prompt $(set_color magenta)($git_branch $(set_color red)stash#$git_stash$(set_color magenta))"
+    else
+        set prompt "$prompt $(set_color magenta)($git_branch)"
+    end
   end
 
   set append
