@@ -41,6 +41,9 @@ bind status C !git commit -v
 # stage view
 bind stage C !git commit -v
 
+# open
+bind generic <Ctrl-O> +open "%(file)"
+
 ################################################################################
 # Variables
 
