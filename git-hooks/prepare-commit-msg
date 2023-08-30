@@ -41,37 +41,37 @@
 #   merge    ... マージコミットまたは .git/MERGE_MSG が存在する
 #   squash   ... .git/SQUASH_MSG が存在する
 #   commit   ... -c や -C や --amend が指定されている（$3 が元となるコミットを示す）
-
-# リベースで連続して squash したとき両方 message となる
-# メッセージにコメント行が追加されるのは最後の１回のみなので
-# フックでコメント行を追加するとめっさ重複する
-
-# リベースでコミットを入れ替えたときは message になる
-# このときコメント行を追加するとそれもメッセージに含まれてしまうので
-# message ではコメント行を埋めないようにする
+#
+# リベースでコミットを入れ替える入れ替えたそれぞれで message でフックが呼ばれる
+# このときコメント行を追加するとそれもメッセージに含まれてしまうもよう
 #
 # commit -C では # のコメントを含めてはならない
-# 引数で判断することができないのでファイルの中身で判断する
 #
-# コミットメッセージを編集するエディタが起動する直前
-# にフックが差し込めれば良いのだけれども
+# 基本的に $2 が空のときが通常のコミットなので $2 が空のときだけ処理するのが良さそう
+
+openai_commit() {
+  [ -e ~/.secret/openai.sh ] || return
+  source ~/.secret/openai.sh
+  [ -v OPENAI_API_KEY ] || return
+  base=${BASH_SOURCE[0]}
+  script=${base%/*}/../lib/openai-commit.ts
+  echo "generate commit message by openai" >&2
+  git diff --cached --diff-algorithm=minimal | ts-node -T "$script"
+}
 
 apply() {
   {
-      cat "$1" | sed -n -e '/^#/q' -e 'p'
-      git log --graph --date=short --format="%h [%ad]%d %s" -n 10 | sed 's/^/#-> /'
-      echo '#'
-      cat "$1" | sed -n -e '/^#/,$p'
+    cat "$1" | sed -n -e '/^#/q' -e 'p'
+    openai_commit
+    git log --graph --date=short --format="%h [%ad]%d %s" -n 10 | sed 's/^/#-> /'
+    echo '#'
+    cat "$1" | sed -n -e '/^#/,$p'
   } > "$1.tmp"
   mv -f "$1.tmp" "$1"
 }
 
 case "$2" in
-  message)
-    ;;
-  *)
-    if grep -q '^#' "$1" 2>/dev/null; then
-      apply "$1"
-    fi
+  "")
+    apply "$1"
     ;;
 esac

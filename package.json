@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "name": "@ngyuki/dotfiles",
+  "dependencies": {
+    "openai": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3"
+  }
+}
