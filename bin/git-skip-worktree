@@ -11,10 +11,10 @@ files=()
 while [ $# -ne 0 ]; do
   case "$1" in
     -s)
-      opt=--skip-worktree
+      opt=-s
       ;;
     -u)
-      opt=--no-skip-worktree
+      opt=-u
       ;;
     --)
       break
@@ -31,18 +31,25 @@ done
 
 files+=( "$@" )
 
-[ -z "$opt" ] && usage_exit
-
-if [ "${#files[@]}" -eq 0 ]; then
-  if [ "$opt" == "--skip-worktree" ]; then
-    git ls-files -mz | git update-index "$opt" -z --stdin
-    git ls-files -mz | xargs -0 -n1
-  else
-    git ls-files -tz | sed -zn '/^S /{s/^S //;p}' | git update-index "$opt" -z --stdin
-    git ls-files -tz | sed -zn '/^S /{s/^S //;p}' | xargs -0 -n1
-  fi
-else
-  git ls-files -z -- "${files[@]}" | xargs -0 git update-index "$opt" --
-  git ls-files -t -- "${files[@]}"
+if [ -z "$opt" ]; then
+  git ls-files -tz | sed -zn '/^S /p' | xargs -0 -n1
+  exit
 fi
 
+if [ "${#files[@]}" -eq 0 ]; then
+  if [ "$opt" == "-s" ]; then
+    git ls-files -zm | git update-index --skip-worktree -z --stdin
+    git ls-files -zt | sed -zn '/^S /p' | xargs -0 -n1
+  else
+    git ls-files -zt | sed -zn '/^S /{s/^S /- /;p}' | xargs -0 -n1
+    git ls-files -zt | sed -zn '/^S /{s/^S //;p}' | git update-index --no-skip-worktree -z --stdin
+  fi
+else
+  if [ "$opt" == "-s" ]; then
+    git ls-files -z  -- "${files[@]}" | git update-index --skip-worktree -z --stdin
+    git ls-files -zt -- "${files[@]}"
+  else
+    git ls-files -zt -- "${files[@]}" | sed -z 's/^./-/' | xargs -0 -n1
+    git ls-files -z  -- "${files[@]}" | git update-index --no-skip-worktree -z --stdin
+  fi
+fi
