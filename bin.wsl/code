@@ -23,8 +23,32 @@ VSCODE_PATH=
 [ ! -e "$VSCODE_PATH" ] && VSCODE_PATH="$(wslpath -u 'C:\\Program Files\\Microsoft VS Code')"
 
 if [ ! -x "$VSCODE_PATH/bin/code" ]; then
-  printf "%e is not executable" "$VSCODE_PATH/bin/code"
-  exit 1
+    printf "%e is not executable" "$VSCODE_PATH/bin/code"
+    exit 1
 fi
 
-exec "$VSCODE_PATH/bin/code" "$@"
+vscode_exec() {
+    export VSCODE_WSL_DEBUG_INFO=true
+    exec "$VSCODE_PATH/bin/code" "$@"
+}
+
+vscode_exec2() {
+    # .vscode/extensions/ms-vscode-remote.remote-wsl-0.81.0 のようなディレクトリを得るために exe を実行しており
+    # 遅いので起動済の vscode プロセスの環境変数から得る
+
+    pid="$(pgrep -f .vscode/extensions/ms-vscode-remote.remote-wsl)"
+    [ -z "$pid" ] && return 1
+
+    VSCODE_WSL_EXT_LOCATION="$(cat /proc/$pid/environ | grep -z '^VSCODE_WSL_EXT_LOCATION=' | cut -z -d= -f2- | tr -d '\0')"
+    [ -z "$VSCODE_WSL_EXT_LOCATION" ] && return 1
+
+    eval "$(grep '^COMMIT=' < "$VSCODE_PATH/bin/code")"
+    # COMMIT="$(cat /proc/$pid/cmdline | cut -d $'\0' -f 3)"
+    [ -z "$COMMIT" ] && return 1
+
+    export WSLENV="ELECTRON_RUN_AS_NODE/w:$WSLENV"
+    #export VSCODE_WSL_DEBUG_INFO=true
+    exec "$VSCODE_WSL_EXT_LOCATION/scripts/wslCode.sh" "$COMMIT" stable "$VSCODE_PATH/Code.exe" code .vscode-server "$@"
+}
+
+vscode_exec2 "$@" || vscode_exec "$@"
