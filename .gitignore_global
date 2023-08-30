@@ -1,5 +1,6 @@
 
 .local/
+.trash/
 z.*
 
 # git-svn
