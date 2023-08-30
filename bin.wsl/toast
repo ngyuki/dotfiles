@@ -34,10 +34,12 @@ done
 
 shift $((OPTIND - 1))
 
-if [[ $# -eq 0 ]]; then
-  message="$(cat -)"
-else
+if [[ $# -ne 0 ]]; then
   message="$*"
+elif [ -t 0 ]; then
+  message=done
+else
+  message="$(cat -)"
 fi
 
 dir=${BASH_SOURCE[0]}
