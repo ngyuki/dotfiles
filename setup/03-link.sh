@@ -13,7 +13,7 @@ if [ -n "${WINDIR-}" ]; then
 fi
 
 files=(
-  .gitignore
+  .gitignore_global
   .inputrc
   .tigrc
 )
