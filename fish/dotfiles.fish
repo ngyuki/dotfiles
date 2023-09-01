@@ -127,6 +127,15 @@ if status --is-interactive
     set -gx GPG_TTY (tty)
 end
 
+# aws complete ... https://dev.classmethod.jp/articles/fish-shell-aws-cli-complete/
+complete -c aws -f -a '(
+    begin
+        set -lx COMP_SHELL fish
+        set -lx COMP_LINE (commandline)
+        aws_completer
+    end
+)'
+
 # jethrokuan/fzf
 set -g FZF_COMPLETE 2
 set -g FZF_COMPLETE_OPTS "--height=40% --bind=esc:print-query --no-reverse --select-1"
