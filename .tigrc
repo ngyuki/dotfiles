@@ -73,6 +73,10 @@ set focus-child = yes
 # マウスを有効化
 set mouse = yes
 
+# メインビューに Untracked changes と Unstaged changes を表示
+set show-changes = yes
+set show-untracked = yes
+
 ################################################################################
 # View settings
 
