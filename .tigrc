@@ -70,6 +70,9 @@ set refresh-mode = auto
 
 set focus-child = yes
 
+# マウスを有効化
+set mouse = yes
+
 ################################################################################
 # View settings
 
