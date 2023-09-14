@@ -62,7 +62,7 @@ openai_commit() {
 apply() {
   {
     cat "$1" | sed -n -e '/^#/q' -e 'p'
-    openai_commit
+    # openai_commit
     git log --graph --date=short --format="%h [%ad]%d %s" -n 10 | sed 's/^/#-> /'
     echo '#'
     cat "$1" | sed -n -e '/^#/,$p'
