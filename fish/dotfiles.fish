@@ -154,3 +154,6 @@ end
 # 失敗したコマンドを履歴に残さないやつ
 # プロンプト表示時や exit 時にものすごいもっさりするので削除
 # fisher remove meaningful-ooo/sponge
+
+# starship
+starship init fish | source

@@ -16,6 +16,7 @@ files=(
   .gitignore_global
   .inputrc
   .tigrc
+  .config/starship.toml
 )
 
 for fn in "${files[@]}"; do
