@@ -1,0 +1,99 @@
+#!/bin/bash
+
+set -eu
+
+: ${TOGGL_PROFILE_FILE:?}
+
+source "$TOGGL_PROFILE_FILE"
+
+: ${TOGGL_APIKEY:?}
+: ${TOGGL_USERAGENT:?}
+: ${TOGGL_WORKSPACE:?}
+
+###
+
+curl_toggl() {
+  curl -sSL -H "Content-Type: application/json" -u "$TOGGL_APIKEY":api_token "$@"
+}
+
+toggl_get() {
+  since="$(date -d "$1" +%Y-%m-%d)"
+  curl_toggl -fsSL -G "https://api.track.toggl.com/reports/api/v2/summary" \
+    -d user_agent="$TOGGL_USERAGENT" \
+    -d workspace_id="$TOGGL_WORKSPACE" \
+    -d since="$since" \
+    -d grouping=projects \
+    -d subgrouping=time_entries \
+    -d subgrouping_ids=true \
+    -d display_hours=decimal \
+    -d order_desc=on \
+  | jq '.data[] | .items | sort_by(.title.time_entry)[] | [.title.time_entry,.ids] | @tsv' -r | sort | cat -n
+}
+
+toggl_bulk() {
+  time_entry_ids=$1
+  description=$2
+  json="$(jq -n -c --arg description "$description" '[{"op":"replace","path":"/description","value":$description}]')"
+  curl_toggl -X PATCH "https://api.track.toggl.com/api/v9/workspaces/$TOGGL_WORKSPACE/time_entries/$time_entry_ids" -d "$json"
+}
+
+yesno() {
+  prompt="$(printf "\e[1;33mReally (yes/no): \e[m")"
+  while read -p "$prompt" yn; do
+    case $yn in
+      [Yy]*) return 0;;
+      [Nn]*) return 1;;
+    esac
+  done
+  return 1
+}
+
+main() {
+  since=${1:-3 month ago}
+
+  tmp="$(mktemp -t toggl-bulk-XXXXXXXX.txt)"
+  trap 'rm -f -- "$tmp"' EXIT
+
+  toggl_get "$since" > "$tmp"
+
+  declare -A ids=()
+  declare -A orig=()
+  declare -A next=()
+
+  while IFS=$'\t' read -r no title id; do
+    no=${no// /}
+    ids[$no]=$id
+    orig[$no]=$title
+  done < "$tmp"
+
+  cut -d$'\t' -f1-2 < "$tmp" | sponge "$tmp"
+  code -w "$tmp"
+
+  while IFS=$'\t' read -r no title; do
+    no=${no// /}
+    if [[ "$no" =~ ^[0-9]+$ ]]; then
+      if [ "${orig[$no]}" != "$title" ]; then
+        next[$no]=$title
+      fi
+    fi
+  done < "$tmp"
+
+  if [ "${#next[@]}" -eq 0 ]; then
+    exit
+  fi
+
+  echo
+  for no in "${!next[@]}"; do
+    printf '\t%s\t->\t%s \e[1;30m(%s)\e[m\n' "${orig[$no]}" "${next[$no]}" "${ids[$no]}"
+  done | column -t -s $'\t'
+  echo
+
+  yesno
+
+  echo
+  for no in "${!next[@]}"; do
+    toggl_bulk "${ids[$no]}" "${next[$no]}" | awk 1
+  done
+}
+
+main "$@"
