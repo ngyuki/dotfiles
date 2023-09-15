@@ -134,6 +134,7 @@ export SSH_ASKPASS_REQUIRE=force
 
 # ssh-agent
 eval "$(keychain --eval --quiet --quick)"
+ssh-add 2>/dev/null
 
 # aws-vault
 export AWS_VAULT_BACKEND=pass
