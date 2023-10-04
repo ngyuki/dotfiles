@@ -17,6 +17,7 @@ files=(
   .inputrc
   .tigrc
   .config/starship.toml
+  .config/ripgreprc
 )
 
 for fn in "${files[@]}"; do
