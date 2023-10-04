@@ -136,6 +136,10 @@ complete -c aws -f -a '(
     end
 )'
 
+# pass otp
+complete -c pass -f -n '__fish_pass_needs_command' -a otp
+complete -c pass -f -n '__fish_pass_uses_command otp' -a "(__fish_pass_print_entries)"
+
 # jethrokuan/fzf
 set -g FZF_COMPLETE 2
 set -g FZF_COMPLETE_OPTS "--height=40% --bind=esc:print-query --no-reverse --select-1"
