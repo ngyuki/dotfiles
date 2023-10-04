@@ -23,7 +23,7 @@ VSCODE_PATH=
 [ ! -e "$VSCODE_PATH" ] && VSCODE_PATH="$(wslpath -u 'C:\\Program Files\\Microsoft VS Code')"
 
 if [ ! -x "$VSCODE_PATH/bin/code" ]; then
-    printf "%e is not executable" "$VSCODE_PATH/bin/code"
+    printf "\"%s\" is not executable" "$VSCODE_PATH/bin/code"
     exit 1
 fi
 
