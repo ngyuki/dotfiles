@@ -1,0 +1,3 @@
+#!/bin/bash
+
+powershell.exe -NoProfile -ExecutionPolicy unrestricted -Command Start-Process notepad 'C:\Windows\system32\drivers\etc\hosts' -Verb runas
