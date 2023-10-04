@@ -11,6 +11,8 @@ docker_volume_clean_fzf_preview() {
   docker volume inspect -- "$1" | jq . -C
   echo '---'
   dir="$(docker volume inspect -- "$1" | jq '.[].Mountpoint' -r)"
+  docker exec "$cid" du -sh -- "$dir"
+  echo '---'
   docker exec "$cid" ls --color=always -AFx -- "$dir" | {
     if read -r x; then
       printf "%s" "$x"
@@ -23,7 +25,7 @@ docker_volume_clean_fzf_preview() {
 }
 
 export -f docker_volume_clean_fzf_preview
-
+export SHELL=/bin/bash
 docker volume ls |
   tail -n +2 |
   fzf -m --preview='docker_volume_clean_fzf_preview {2}' |
