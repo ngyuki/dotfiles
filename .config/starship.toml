@@ -16,13 +16,13 @@ style = 'yellow'
 [git_branch]
 symbol = ''
 style = 'purple'
-format = '[\($symbol$branch\)]($style)'
+format = '[\($symbol$branch\)]($style) '
 # format = '[\($symbol$branch -> $remote_name/$remote_branch\)]($style)'
 # always_show_remote = true
 # only_attached = false
 
 [git_commit]
-style = 'purple'
+style = 'red bold'
 format = '[\(detached:$hash$tag\)]($style) '
 tag_disabled = false
 tag_symbol = ':'
@@ -34,6 +34,10 @@ ahead = '' # push.default=current だと期待した表示にならない
 symbol = 'AWS='
 format = '[$symbol($profile)]($style)'
 style =	'green'
+
+[terraform]
+symbol = 'TF='
+format = '[$symbol$workspace]($style) '
 
 [cmd_duration]
 disabled = true
