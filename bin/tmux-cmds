@@ -16,8 +16,8 @@
 # 関数定義からの export -f で出来るかと思ったけれども、
 # 既に tmux が起動している状態からの実行だと環境変数が引き継げない
 if [ "$1" == "__tmux_cmds_spawn" ]; then
+  shift
   while :; do
-    shift
     clear
     trap true INT
     printf "> \e[1;33m%s\e[m\n" "$*"
