@@ -60,6 +60,10 @@ _toggl_history() {
 
   printf "%s\n" "${current:-none}"
 
+  if [ -n "$current" ]; then
+    printf "%s\n" "${current}"
+  fi
+
   {
     curl_toggl -f -G "https://api.track.toggl.com/reports/api/v2/details" \
       -d user_agent="$TOGGL_USERAGENT" \
