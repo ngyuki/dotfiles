@@ -128,10 +128,6 @@ fi
 # LC_ALL for nix ... https://github.com/NixOS/nix/issues/4829
 export LC_ALL=C.UTF-8
 
-# ssh askpass
-export SSH_ASKPASS=ssh-askpass
-export SSH_ASKPASS_REQUIRE=force
-
 # ssh-agent
 eval "$(keychain --eval --quiet --quick)"
 ssh-add 2>/dev/null
