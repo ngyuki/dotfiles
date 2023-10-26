@@ -32,7 +32,7 @@ ahead = '' # push.default=current だと期待した表示にならない
 
 [aws]
 symbol = 'AWS='
-format = '[$symbol($profile)]($style)'
+format = '[$symbol($profile)]($style) '
 style =	'green'
 
 [terraform]
@@ -50,3 +50,8 @@ disabled = true
 
 [nodejs]
 disabled = true
+
+[env_var.ANSIBLE_INVENTORY]
+symbol = 'ANSIBLE_INVENTORY='
+format = "[$symbol$env_value]($style) "
+style =	'green'
