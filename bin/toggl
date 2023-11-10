@@ -16,6 +16,16 @@ curl_toggl() {
   curl -sSL -H "Content-Type: application/json" -u "$TOGGL_APIKEY":api_token "$@"
 }
 
+# @command
+# toggl
+#   start new entry (interactive mode).
+
+# @command
+# toggl new <description>...
+#   start new entry.
+#
+#   example)
+#     toggl new "description"
 toggl_new() {
   local description="$*"
   if [ -z "$description" ]; then
@@ -122,6 +132,9 @@ _toggl_interactive() {
   toggl_new "$description"
 }
 
+# @command
+# toggl rename
+#   rename entry (interactive mode).
 toggl_rename() {
   local current
   current="$(toggl_current)"
@@ -150,6 +163,9 @@ toggl_rename() {
   echo "rename: $description"
 }
 
+# @command
+# toggl stop
+#   stop entry.
 toggl_stop() {
   now="$(date +%s)"
 
@@ -183,10 +199,22 @@ toggl_stop() {
   echo "stopped: $description"
 }
 
+# @command
+# toggl current
+#   show current entry.
 toggl_current() {
   curl_toggl "https://api.track.toggl.com/api/v9/me/time_entries/current" | jq '.description // ""' -r
 }
 
+# @command
+# toggl today [date]
+#   show today entries.
+#
+#   example)
+#     toggl today -1day
+#
+#   default)
+#     date: now
 toggl_today() {
   today="$(date +%Y-%m-%d -d "${1:-}")"
 
@@ -209,6 +237,16 @@ toggl_today() {
   '
 }
 
+# @command
+# toggl weelky [since] [until]
+#   show weelky entries.
+#
+#   example)
+#     toggl weelky -7day -1day
+#
+#   default)
+#     since: -7 days
+#     until: -0 days
 toggl_weelky() {
   since="${1:--7 days}"
   until="${2:--0 days}"
@@ -257,6 +295,12 @@ toggl_weelky() {
   | awk -F"\t" '{printf "%s (%02d:%02d:%02d)\n",$1,$2,$3,$4}'
 }
 
+# @command
+# toggl monthly
+#   show monthly entries.
+#
+#     example)
+#       toggl monthly
 toggl_monthly() {
   cur="$(date -d "-1 month" +%Y-%m-01)"
   end="$(date +%Y-%m-01)"
@@ -284,11 +328,16 @@ toggl_monthly() {
 }
 
 usage() {
-  echo 'Usage:'
-  declare -f | grep -P '^toggl_[a-z]+\s+\(\)\s*$' | grep -Po '(?<=^toggl_)[a-z]+(?=\s)' | sed 's/^/  toggl /'
-  echo
-  echo 'Current:'
-  toggl_current | jq .description -r | sed 's/^/  /'
+  echo "Usage:"
+  cat "${BASH_SOURCE[0]}" | sed -nr '
+    /^# @command/ {
+      s/^# @command//p
+      :loop
+      n
+      s/^#/ /p
+      t loop
+    }
+  '
 }
 
 if [ $# -eq 0 ]; then
@@ -296,11 +345,16 @@ if [ $# -eq 0 ]; then
   exit
 fi
 
-cmd=toggl_${1:-}
+cmd=${1:-}
 shift || true
 
-if [ "$(type -t "$cmd")" == "function" ]; then
-  "$cmd" "$@"
-else
-  usage
-fi
+case "$cmd" in
+  current)   toggl_current "$@" ;;
+  monthly)   toggl_monthly "$@" ;;
+  new)       toggl_new     "$@" ;;
+  rename)    toggl_rename  "$@" ;;
+  stop)      toggl_stop    "$@" ;;
+  today)     toggl_today   "$@" ;;
+  weelky)    toggl_weelky  "$@" ;;
+  *)         usage ;;
+esac
