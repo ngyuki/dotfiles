@@ -1,0 +1,6 @@
+#!/bin/bash
+
+while :; do
+  printf '.\a'
+  sleep 3
+done
