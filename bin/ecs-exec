@@ -1,0 +1,70 @@
+#!/bin/bash
+
+set -eu
+
+fish_complete_list() {
+  clusters=($(
+    aws ecs list-clusters | jq '.clusterArns[] | split("/")[-1]' -r
+  ))
+
+  for cluster in "${clusters[@]}"; do
+    (
+      tasks=($(
+        aws ecs list-tasks --cluster "$cluster" \
+        | jq '.taskArns[] | split("/")[-1]' -r
+      ))
+
+      aws ecs describe-tasks --cluster "$cluster" --tasks "${tasks[@]}" \
+      | jq '
+        .tasks[]
+        | select(.lastStatus == "RUNNING")
+        | (.clusterArn | split("/")[-1]) as $cluster
+        | (.taskDefinitionArn | split("/")[-1]) as $definition
+        | (.taskArn | split("/")[-1]) as $task
+        | (.createdAt | split(".")[0] ) as $createdAt
+        | .containers[]
+        | ["\($cluster):\($task):\(.name)", "\($definition) createdAt:\($createdAt)"] | @tsv' -r
+    ) &
+  done
+  wait
+}
+
+execute() {
+  IFS=: eval 'arr=($1)'
+  shift
+
+  cluster=${arr[0]}
+  task=${arr[1]}
+  container=${arr[2]}
+
+  if [ $# -eq 0 ]; then
+    set -- /bin/sh
+  fi
+
+  set -x
+  aws ecs execute-command \
+    --cluster "$cluster" \
+    --task "$task" \
+    --container "$container" \
+    --command "$*" \
+    --interactive
+}
+
+
+if [ $# -eq 0 ]; then
+  execute "$(fish_complete_list | column -t | fzf | cut -d' ' -f1)"
+  exit
+fi
+
+if [ "$1" == "--fish-complete" ]; then
+  echo 'complete -c ecs-exec -e'
+  echo 'complete -c ecs-exec -x -a "(ecs-exec --fish-complete-list)"'
+  exit 0
+fi
+
+if [ "$1" == "--fish-complete-list" ]; then
+  fish_complete_list
+  exit 0
+fi
+
+execute "$1"

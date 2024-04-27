@@ -165,3 +165,6 @@ end
 
 # starship
 starship init fish | source
+
+# ecs-exec
+ecs-exec --fish-complete | source
