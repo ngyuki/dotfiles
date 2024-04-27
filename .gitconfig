@@ -48,6 +48,7 @@
 
 [rebase]
     autosquash = true
+    instructionFormat = "[%as] %s @%an %d"
 
 [merge]
     ff = false
