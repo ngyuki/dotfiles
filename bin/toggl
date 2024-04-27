@@ -65,7 +65,7 @@ _toggl_history() {
 
   local since
   local until
-  since="$(date +%Y-%m-%d -d "-30 days")"
+  since="$(date +%Y-%m-%d -d "-90 days")"
   until="$(date +%Y-%m-%d)"
 
   printf "%s\n" "${current:-none}"
@@ -327,6 +327,36 @@ toggl_monthly() {
   done
 }
 
+# @command
+# toggl raw  [since] [until]
+#   show raw data.
+#
+#   example)
+#     toggl weelky -7day -1day
+#
+#   default)
+#     since: -7 days
+#     until: -0 days
+toggl_raw() {
+  since="${1:--365 days}"
+  until="${2:--0 days}"
+
+  since="$(date +%Y-%m-%d -d "$since")"
+  until="$(date +%Y-%m-%d -d "$until")"
+
+  curl_toggl -fsSL -G "https://api.track.toggl.com/reports/api/v2/summary" \
+    -d user_agent="$TOGGL_USERAGENT" \
+    -d workspace_id="$TOGGL_WORKSPACE" \
+    -d since="$since" \
+    -d until="$until" \
+    -d grouping=projects \
+    -d subgrouping=time_entries \
+    -d display_hours=decimal \
+    -d order_field=title \
+    -d order_desc=off \
+    | jq '.data[].items[] | [.title.time_entry, .time, .local_start] | @tsv' -r
+}
+
 usage() {
   echo "Usage:"
   cat "${BASH_SOURCE[0]}" | sed -nr '
@@ -356,5 +386,6 @@ case "$cmd" in
   stop)      toggl_stop    "$@" ;;
   today)     toggl_today   "$@" ;;
   weelky)    toggl_weelky  "$@" ;;
+  raw)       toggl_raw     "$@" ;;
   *)         usage ;;
 esac
