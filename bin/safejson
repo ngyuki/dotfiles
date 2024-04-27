@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# https://stackoverflow.com/questions/41599314/ignore-unparseable-json-with-jq
+exec jq --unbuffered -c -R '. as $line | try fromjson catch $line'
