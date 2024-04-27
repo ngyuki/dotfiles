@@ -8,7 +8,7 @@ if git diff --cached --quiet; then
     ret=1
 else
     commits=$(
-      git log -n "$MAX_LOG_COUNT" --date=short --color=always --format="%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)" "$@"
+      git log -n "$MAX_LOG_COUNT" --date=short --color=always --format="%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)"
     )
     ret=$?
 fi
@@ -24,4 +24,4 @@ fi
 line=$("$FILTER" <<< "$commits")
 [[ "$?" = 0 && "$line" != "" ]] || exit "$?"
 
-git commit --fixup "$(awk '{print $1}' <<< "$line")"
+git commit --fixup "$(awk '{print $1}' <<< "$line")" "$@"
