@@ -4,7 +4,7 @@
 bind generic H        :set diff-highlight = yes
 bind generic <Ctrl-h> :set diff-highlight = no
 
-bind generic I <git rebase -i -r %(commit)
+bind generic I <git rebase -i -r %(commit)^
 
 bind generic F ?git commit --fixup %(commit)
 bind main    F ?git commit --fixup %(commit)
@@ -19,8 +19,8 @@ bind main <Ctrl-o> :toggle commit-order
 bind generic <Ctrl-C> none
 bind main    <Ctrl-C> +tig-clip --commit  "%(commit)"
 bind log     <Ctrl-C> +tig-clip --commit  "%(commit)"
-bind diff    <Ctrl-C> +tig-clip --file    "%(file)" "%(lineno)"
 bind stage   <Ctrl-C> +tig-clip --file    "%(file)" "%(lineno)"
+bind diff    <Ctrl-C> +tig-clip --diff    "commit=%(commit) file=%(file) lineno=%(lineno) lineno_old=%(lineno_old)"
 bind refs    <Ctrl-C> +tig-clip --refname "%(refname)"
 bind status  <Ctrl-C> +tig-clip --file    "%(file)"
 bind reflog  <Ctrl-C> none
@@ -34,6 +34,12 @@ bind grep    <Ctrl-C> none
 
 # main view
 bind main ! ?git revert --no-edit %(commit)
+
+# マージコミットで親1との差分を表示
+bind main <Ctrl-D> ?git diff %(commit)^ %(commit)
+
+# git switch --detach
+bind main * ?>git switch --detach %(commit)
 
 # status view
 bind status C !git commit -v

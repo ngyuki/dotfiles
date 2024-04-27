@@ -9,6 +9,21 @@ case "$1" in
       set -- "$1"
     fi
     ;;
+  
+  --diff)
+    shift
+    eval "$1"
+    set -- "commit=$commit file=$file lineno=$lineno lineno_old=$lineno_old"
+    if [ -z "$file" ]; then
+      set -- "$commit"
+    elif [ -n "$lineno" -a "$lineno" -ne "0" ]; then
+      set -- "$commit" "$file:$lineno"
+    elif [ -n "$lineno_old" -a "$lineno_old" -ne "0" ]; then
+      set -- "$commit" "$file:$lineno_old"
+    else
+      set -- "$commit" "$file"
+    fi
+    ;;
 
   --*)
     shift
