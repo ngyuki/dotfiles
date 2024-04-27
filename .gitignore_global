@@ -1,6 +1,9 @@
+.git/
 
 .local/
+.locals/
 .trash/
+.gomi/
 z.*
 
 # git-svn
@@ -21,6 +24,7 @@ sys$command
 .sublime/
 
 # vscode
+.vscode/
 * copy.*
 *.code-workspace
 
@@ -36,6 +40,9 @@ sys$command
 # Excel
 ~$*.xlsx
 ~$*.xlsm
+
+# Windows NTFS
+*:Zone.Identifier
 
 # Mac
 .DS_Store
