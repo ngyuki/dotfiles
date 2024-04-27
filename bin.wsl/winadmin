@@ -4,4 +4,4 @@ if [ $# -eq 0 ]; then
     set -- cmd.exe
 fi
 
-exec powershell.exe start-process -verb runas "$@"
+powershell.exe start-process -verb runas "$*"
