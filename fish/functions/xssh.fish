@@ -4,7 +4,13 @@ function xssh
     set fzf_opts "-m"
   end
 
-  set hosts (__fish_print_hostnames | fzf $fzf_opts)
+  set hosts (
+    __fish_print_hostnames \
+    | grep -v -E '^[0-9\.]+$' \
+    | grep -v -E '^i-' \
+    | sort -ru \
+    | fzf $fzf_opts
+  )
 
   if test (count $hosts) -eq 1
     set cmd ssh $hosts $argv
