@@ -159,5 +159,9 @@ end
 # プロンプト表示時や exit 時にものすごいもっさりするので削除
 # fisher remove meaningful-ooo/sponge
 
+# プロンプト表示を非表示にするやつ
+# /tmp にファイルがまき散らされるので削除
+# fisher remove acomagu/fish-async-prompt
+
 # starship
 starship init fish | source
