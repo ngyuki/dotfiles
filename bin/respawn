@@ -1,0 +1,38 @@
+#!/bin/bash
+
+exit=0
+pid=
+
+sigtrap() {
+  sig=$1
+  if [ -n "$pid" ]; then
+    if [ "$exit" -eq 0 ]; then
+      kill "-$sig" "$pid"
+    else
+      kill -KILL "$pid"
+    fi
+  fi
+  exit=1
+}
+
+trap 'sigtrap INT'  INT
+trap 'sigtrap HUP'  HUP
+trap 'sigtrap TERM' TERM
+
+while :; do
+  "$@" &
+  pid=$!
+  while :; do
+    done=
+    wait -p wait "$pid"
+    if [ "$pid" == "$wait" ]; then
+      break
+    fi
+  done
+  pid=
+  if [ "$exit" -ne 0 ]; then
+    exit
+  fi
+  echo "Respawn: $@"
+  sleep 1
+done
