@@ -27,7 +27,7 @@ toggl_get() {
     -d subgrouping_ids=true \
     -d display_hours=decimal \
     -d order_desc=on \
-  | jq '.data[] | .items | sort_by(.title.time_entry)[] | [.title.time_entry,.ids] | @tsv' -r | sort | cat -n
+  | jq '.data[] | .items | sort_by(.title.time_entry)[] | [.title.time_entry,.ids] | @tsv' -r | sort -f | cat -n
 }
 
 toggl_bulk() {
