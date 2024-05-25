@@ -1,11 +1,27 @@
 #!/bin/sh
 
-set -e
+err=
 
-git diff --check --cached
-
-if type editorconfig-checker 1>/dev/null 2>&1; then
-  git diff -z --cached --name-only --diff-filter=d --no-renames | xargs --null --no-run-if-empty editorconfig-checker
+if [ "$(git config --bool hooks.pre-commit.no-gitcheck)" != true ]; then
+  if ! git diff --check --cached; then
+    err=1
+  fi
 fi
 
-gitleaks protect --verbose --redact --staged --no-banner --log-level=warn
+if [ "$(git config --bool hooks.pre-commit.no-editorconfig)" != true ]; then
+  if type editorconfig-checker 1>/dev/null 2>&1; then
+    if ! git diff -z --cached --name-only --diff-filter=d --no-renames | xargs --null --no-run-if-empty editorconfig-checker; then
+      err=1
+    fi
+  fi
+fi
+
+if [ "$(git config --bool hooks.pre-commit.no-gitleaks)" != true ]; then
+  if ! gitleaks protect --verbose --redact --staged --no-banner --log-level=warn; then
+    err=1
+  fi
+fi
+
+if [ $err ]; then
+  exit 1
+fi
