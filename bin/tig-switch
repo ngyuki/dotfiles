@@ -1,0 +1,16 @@
+#!/bin/bash
+
+commit=$1
+arr=( $(git branch --format "%(refname:lstrip=2)" --points-at "$commit") )
+
+if [ ${#arr[@]} -eq 0 ]; then
+  select="$(echo "$commit" | fzf)"
+  if [ -n "$select" ]; then
+    git switch --detach "$select"
+  fi
+else
+  select=$(IFS=$'\n'; echo "${arr[*]}" | fzf --select-1)
+  if [ -n "$select" ]; then
+    git switch "$select"
+  fi
+fi

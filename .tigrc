@@ -38,8 +38,8 @@ bind main ! ?git revert --no-edit %(commit)
 # マージコミットで親1との差分を表示
 bind main <Ctrl-D> ?git diff %(commit)^ %(commit)
 
-# git switch --detach
-bind main * ?>git switch --detach %(commit)
+# git switch
+bind main * >tig-switch %(commit)
 
 # status view
 bind status C !git commit -v
