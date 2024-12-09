@@ -65,11 +65,11 @@ set horizontal-scroll = 4
 # [<bool>|<string>]
 set diff-highlight = no
 
-# [no|all|some|at−eol|<bool>]
-set ignore-space = all
+# [no|all|some|at-eol|<bool>]
+set ignore-space = no
 
 # [auto|default|topo|date|author-date|reverse]
-set commit-order = default
+set commit-order = auto
 
 # [manual|auto|after−command|periodic|<bool>]
 set refresh-mode = auto
