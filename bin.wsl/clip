@@ -2,8 +2,8 @@
 
 if [ $# -eq 0 ]; then
   exec 2>&1
-  exec tee /dev/stderr | nkf -Ws | /c/Windows/System32/clip.exe
+  exec tee /dev/stderr | { iconv -t UTF-16LE; } | /c/Windows/System32/clip.exe
 else
   echo "$*"
-  echo -n "$*" | nkf -Ws | /c/Windows/System32/clip.exe
+  echo -n "$*" | { iconv -t UTF-16LE; } | /c/Windows/System32/clip.exe
 fi
