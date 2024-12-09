@@ -17,17 +17,19 @@ curl_toggl() {
 }
 
 toggl_get() {
-  since="$(date -d "$1" +%Y-%m-%d)"
-  curl_toggl -fsSL -G "https://api.track.toggl.com/reports/api/v2/summary" \
-    -d user_agent="$TOGGL_USERAGENT" \
-    -d workspace_id="$TOGGL_WORKSPACE" \
-    -d since="$since" \
-    -d grouping=projects \
-    -d subgrouping=time_entries \
-    -d subgrouping_ids=true \
-    -d display_hours=decimal \
-    -d order_desc=on \
-  | jq '.data[] | .items | sort_by(.title.time_entry)[] | [.title.time_entry,.ids] | @tsv' -r | sort -f | cat -n
+  start="$(date -d "$1" +%Y-%m-%d)"
+  end="$(date -d "$2" +%Y-%m-%d)"
+
+  json="$(jq --arg start "$start" --arg end "$end" -n '{
+      "start_date":$start,
+      "end_date":$end,
+      "grouping": "projects",
+      "subgrouping": "time_entries",
+      "include_time_entry_ids": true,
+  }')"
+  curl_toggl -X POST https://api.track.toggl.com/reports/api/v3/workspace/$TOGGL_WORKSPACE/summary/time_entries \
+  -H "Content-Type: application/json" -d "$json" \
+  | jq '[.groups[].sub_groups[]] | sort_by(.title)[] | [(.ids|@csv),.seconds,.title] | @tsv' -r | cat -n
 }
 
 toggl_bulk() {
@@ -49,27 +51,28 @@ yesno() {
 }
 
 main() {
-  since=${1:-3 month ago}
+  start=${1:-1 month ago}
+  end=${2:-now}
 
   tmp="$(mktemp -t toggl-bulk-XXXXXXXX.txt)"
   trap 'rm -f -- "$tmp"' EXIT
 
-  toggl_get "$since" > "$tmp"
+  toggl_get "$start" "$end" > "$tmp"
 
   declare -A ids=()
   declare -A orig=()
   declare -A next=()
 
-  while IFS=$'\t' read -r no title id; do
+  while IFS=$'\t' read -r no ids seconds title; do
     no=${no// /}
-    ids[$no]=$id
+    ids[$no]=$ids
     orig[$no]=$title
   done < "$tmp"
 
-  cut -d$'\t' -f1-2 < "$tmp" | sponge "$tmp"
+  cut -d$'\t' -f1,3-4 < "$tmp" | column -t -s $'\t' | sponge "$tmp"
   code -w "$tmp"
 
-  while IFS=$'\t' read -r no title; do
+  while read -r no seconds title; do
     no=${no// /}
     if [[ "$no" =~ ^[0-9]+$ ]]; then
       if [ "${orig[$no]}" != "$title" ]; then
