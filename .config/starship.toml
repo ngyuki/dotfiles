@@ -51,7 +51,14 @@ disabled = true
 [nodejs]
 disabled = true
 
+[battery]
+disabled = true
+
 [env_var.ANSIBLE_INVENTORY]
 symbol = 'ANSIBLE_INVENTORY='
 format = "[$symbol$env_value]($style) "
 style =	'green'
+
+[env_var.NOTICE]
+format = "[$env_value]($style) "
+style =	'red'
