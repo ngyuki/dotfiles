@@ -1,4 +1,6 @@
 
+# https://fishshell.com/docs/3.4/language.html#featureflags
+set -U fish_features all
 
 # 謎のゴミが表示される問題 ... TERM を変更すると tig がまともに動かない・・
 # https://github.com/fish-shell/fish-shell/issues/789#issuecomment-207898381
