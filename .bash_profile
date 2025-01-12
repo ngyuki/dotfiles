@@ -158,7 +158,7 @@ fi
 if ! [ -v REMOTE_CONTAINERS_IPC -a -v REMOTE_CONTAINERS_SOCKETS ]; then
   if [ "$0" == "-bash" ]; then
     if hash fish 2>/dev/null; then
-      if hash tmux 2>/dev/null && [ ! -v TMUX ]; then
+      if hash tmux 2>/dev/null && [ ! -v TMUX ] && [ ! -v SSH_TTY ]; then
         if tmux has-session 2>/dev/null; then
           exec tmux attach-session
         else
