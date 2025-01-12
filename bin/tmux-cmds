@@ -134,6 +134,7 @@ args=()
 for x in "$@"; do
   if [ "$x" == "::" ]; then
     add_tmux_spawn "${args[@]}"
+    add_tmux_cmd select-layout -t "${TMUX_SESSION_NAME}" "${layout}"
     args=()
   else
     args+=("$x")
