@@ -38,10 +38,21 @@
 
 [diff]
     algorithm = histogram
-    tool = vscode
+    #tool = vscode
+    #tool = difftastic
 
 [difftool "vscode"]
     cmd = git-difftool-vscode $LOCAL $REMOTE
+
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+
+[difftool "gron"]
+  #cmd = sh -c 'colordiff -U 3 <(gron "$1" | sed -r "s/\\[[0-9]\\]/[]/") <(gron "$2" | sed -r "s/\\[[0-9]\\]/[]/")' -- "$LOCAL" "$REMOTE"
+  cmd = sh -c 'diff -U 0 <(gron "$1") <(gron "$2")' -- "$LOCAL" "$REMOTE"
+
+# [pager]
+#   difftool = true
 
 [fetch]
     prune = true
