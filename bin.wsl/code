@@ -36,7 +36,7 @@ vscode_exec2() {
     # .vscode/extensions/ms-vscode-remote.remote-wsl-0.81.0 のようなディレクトリを得るために exe を実行しており
     # 遅いので起動済の vscode プロセスの環境変数から得る
 
-    pid="$(pgrep -f .vscode/extensions/ms-vscode-remote.remote-wsl)"
+    pid="$(pgrep -f '.vscode/extensions/ms-vscode-remote.remote-wsl-.*/scripts/wslServer.sh')"
     [ -z "$pid" ] && return 1
 
     VSCODE_WSL_EXT_LOCATION="$(cat /proc/$pid/environ | grep -z '^VSCODE_WSL_EXT_LOCATION=' | cut -z -d= -f2- | tr -d '\0')"
