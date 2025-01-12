@@ -12,3 +12,5 @@ for path in "$src_dir"/*; do
     fi
     ln -vsfn "$path" "$dst_dir"
 done
+
+git config --local core.hookspath .git/hooks
