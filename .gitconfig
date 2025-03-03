@@ -17,6 +17,15 @@
 [color]
     ui = auto
 
+[column]
+    ui = auto
+
+[branch]
+    sort = -committerdate
+
+[tag]
+    sort = version:refname
+
 [alias]
     sw = switch
     re = restore
@@ -38,6 +47,9 @@
 
 [diff]
     algorithm = histogram
+    colorMoved = plain
+    mnemonicPrefix = true
+    renames = true
     #tool = vscode
     #tool = difftastic
 
@@ -45,7 +57,7 @@
     cmd = git-difftool-vscode $LOCAL $REMOTE
 
 [difftool "difftastic"]
-  cmd = difft "$LOCAL" "$REMOTE"
+    cmd = difft "$LOCAL" "$REMOTE"
 
 [difftool "gron"]
   #cmd = sh -c 'colordiff -U 3 <(gron "$1" | sed -r "s/\\[[0-9]\\]/[]/") <(gron "$2" | sed -r "s/\\[[0-9]\\]/[]/")' -- "$LOCAL" "$REMOTE"
@@ -56,6 +68,10 @@
 
 [fetch]
     prune = true
+    all = true
+
+[commit]
+    verbose = true
 
 [rebase]
     autosquash = true
@@ -64,6 +80,7 @@
 [merge]
     ff = false
     tool = WinMerge
+    conflictstyle = zdiff3
 
 [mergetool]
     prompt = false
@@ -78,10 +95,12 @@
     rebase = preserve
 
 [push]
-    # for 1.8 nothing matching upstream current simple
-    # for 1.7 nothing matching tracking current
     default = current
     useForceIfIncludes = true
+
+[rerere]
+    enabled = true
+    autoupdate = true
 
 ################################################################################
 # diff-highlight
