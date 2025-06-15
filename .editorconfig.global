@@ -1,0 +1,32 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[{Makefile,*.mk}]
+indent_style = tab
+indent_size = 8
+
+[*.{json,yml,yaml,yaml.example,html,tpl,ejs,blade.php,sh,tf,tfvars,hcl,sql,conf}]
+indent_size = 2
+
+[*.go]
+indent_style = tab
+indent_size = 4
+
+[composer.json]
+indent_size = 4
+
+[*.bat]
+end_of_line = crlf
+
+[*.md]
+indent_size = unset
+
+[{.terraform.lock.hcl,Gemfile.lock,.gitmodules}]
+indent_size = unset
