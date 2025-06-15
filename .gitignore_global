@@ -59,3 +59,12 @@ sys$command
 
 # terraform
 tfplan
+
+# ai
+.github/copilot-instructions.md
+CLAUDE.md
+CLAUDE.local.md
+.claude/
+.amazonq/
+AmazonQ.md
+_todo.md
