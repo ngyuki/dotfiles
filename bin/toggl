@@ -229,12 +229,7 @@ toggl_today() {
     -d order_field=duration \
     -d order_desc=on \
     -u "$TOGGL_APIKEY":api_token |
-    jq -r '
-      .data[]
-      | (if .title.project != null then "[\(.title.project)] " else "" end) as $project
-      | .items[]
-      | "- \($project)\(.title.time_entry)"
-  '
+    jq -r '.data[] | .items[] | "- \(.title.time_entry)"'
 }
 
 # @command
