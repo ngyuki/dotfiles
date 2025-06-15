@@ -58,4 +58,4 @@ sys$command
 *.unison.tmp
 
 # terraform
-.terraform-version
+tfplan
