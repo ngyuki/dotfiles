@@ -20,8 +20,11 @@ files=(
   .config/ripgreprc
 )
 
-for fn in "${files[@]}"; do
-  src="$PWD/${fn}"
-  dst="$HOME/${fn}"
-  ln -vsf "$src" "$dst"
-done | pcat
+(
+  for fn in "${files[@]}"; do
+    src="$PWD/${fn}"
+    dst="$HOME/${fn}"
+    ln -vsf "$src" "$dst"
+  done
+  ln -vsfn "$PWD/.editorconfig.global" "$HOME/.editorconfig"
+) | pcat
