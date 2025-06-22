@@ -1,6 +1,7 @@
-# powershell.exe -Sta -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File toast.ps1 -title "title" -message "message" -url "https://example.com"
+# powershell.exe -Sta -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File toast.ps1 -app "app name" -title "title" -message "message" -url "https://example.com"
 
 param(
+    [string]$app     = 'no app',
     [string]$title   = 'no title',
     [string]$message = 'no message',
     [string]$url     = ''
@@ -15,5 +16,4 @@ $template.GetElementsByTagName('toast').Item(0).SetAttribute('launch', $url)
 $template.GetElementsByTagName('text').Item(0).InnerText = $title;
 $template.GetElementsByTagName('text').Item(1).InnerText = $message;
 
-$appId = 'WSLToastNotification'
-[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($appId).Show($template);
+[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($app).Show($template);

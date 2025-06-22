@@ -14,11 +14,15 @@
 #   title="$*"
 # fi
 
+app="no app"
 title="no title"
 url=""
 
-while getopts :t:u: opt; do
+while getopts :a:t:u: opt; do
   case "$opt" in
+    a)
+      app=$OPTARG
+      ;;
     t)
       title=$OPTARG
       ;;
@@ -46,4 +50,4 @@ dir=${BASH_SOURCE[0]}
 dir=${dir%/*}
 cd -- "$dir"
 
-powershell.exe -Sta -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File toast.ps1 -title "$title" -message "$message" -url "$url"
+powershell.exe -Sta -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File toast.ps1 -app "$app" -title "$title" -message "$message" -url "$url"
