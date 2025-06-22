@@ -5,6 +5,7 @@
     preloadindex = true
     fscache = true
     trustctime = true
+    untrackedcache = true
     checkStat = minimal
     editor = code-git
 
@@ -17,11 +18,8 @@
 [color]
     ui = auto
 
-[column]
-    ui = auto
-
 [branch]
-    sort = -committerdate
+    sort = committerdate
 
 [tag]
     sort = version:refname
