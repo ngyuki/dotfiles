@@ -154,22 +154,26 @@ fi
 
 # fish ... vscode で remote container で docker-compose を使うときに fish だとダメっぽいので
 # https://github.com/microsoft/vscode-remote-release/issues/6111
-
-if ! [ -v REMOTE_CONTAINERS_IPC -a -v REMOTE_CONTAINERS_SOCKETS ]; then
-  if [ "$0" == "-bash" ]; then
-    if hash fish 2>/dev/null; then
-      if hash tmux 2>/dev/null && [ ! -v TMUX ] && [ ! -v SSH_TTY ]; then
-        if tmux has-session 2>/dev/null; then
-          exec tmux attach-session
-        else
-          # SHELL 環境変数を設定すれば tmux の new-window で fish が直接起動する
-          # .bash_profile は tmux サーバ起動時の初回のみロードされるため
-          # 変更時は tmux サーバのリスタートが必要です
-          export SHELL=/bin/fish
-          exec tmux new-session
-        fi
-      fi
-      exec fish
-    fi
-  fi
+if [ -v REMOTE_CONTAINERS_IPC -a -v REMOTE_CONTAINERS_SOCKETS ]; then
+  return
 fi
+
+if [ "$0" == "-bash" ]; then
+  return
+fi
+
+case "$BASH_EXECUTION_STRING" in
+  fish)
+    exec fish
+    ;;
+  tmux)
+    if tmux has-session 2>/dev/null; then
+      exec tmux attach-session
+    else
+      # SHELL 環境変数を設定すれば tmux の new-window で fish が直接起動する
+      # .bash_profile は tmux サーバ起動時の初回のみロードされるため変更時は tmux サーバのリスタートが必要です
+      export SHELL=/bin/fish
+      exec tmux new-session
+    fi
+    ;;
+esac
