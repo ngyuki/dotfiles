@@ -15,4 +15,5 @@ $template.GetElementsByTagName('toast').Item(0).SetAttribute('launch', $url)
 $template.GetElementsByTagName('text').Item(0).InnerText = $title;
 $template.GetElementsByTagName('text').Item(1).InnerText = $message;
 
-[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier().Show($template);
+$appId = 'WSLToastNotification'
+[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($appId).Show($template);
