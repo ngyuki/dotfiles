@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # git/tig から `+123 file` の形式で呼ばれたときに `-w -g file:123:1` で code を実行する
-
 line=1
 if [[ $1 =~ ^\+[0-9]+$ ]]; then
   line=${1#+}
@@ -9,5 +8,9 @@ if [[ $1 =~ ^\+[0-9]+$ ]]; then
 fi
 file=$1
 
-#file="$(wslpath -wa -- "$file")"
-exec code -w -g "$file:$line:1"
+#exec code -w -g "$file:$line:1"
+
+# REST API を使って直接ファイルを開く
+file="$(realpath -- "$file")"
+win-activate-process.exe Code.exe
+exec curl -fsS http://localhost:37100 -d "{\"command\":\"ore.wait\",\"args\":[\"$file\",$line]}" >/dev/null
