@@ -1,0 +1,44 @@
+{
+  "includeCoAuthoredBy": false,
+  "env": {
+    "DISABLE_BUG_COMMAND": 1,
+    "DISABLE_ERROR_REPORTING": 1,
+    "DISABLE_TELEMETRY": 1
+  },
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(fd:*)",
+      "Bash(find:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue status:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr status:*)",
+      "Bash(gh pr view:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git status:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(npx ccusage@latest:*)",
+      "Bash(rg:*)",
+      "Bash(terraform fmt:*)",
+      "Bash(terraform validate:*)",
+      "Bash(toast:*)",
+      "mcp__mcp-toast__show",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebFetch(domain:github.com)"
+    ],
+    "deny": [
+      "Bash(git push:*)",
+      "Bash(rm:*)",
+      "Bash(sudo:*)",
+      "Read(**/.gomi/**)"
+    ]
+  }
+}

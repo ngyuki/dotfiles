@@ -27,4 +27,5 @@ files=(
     ln -vsf "$src" "$dst"
   done
   ln -vsfn "$PWD/.editorconfig.global" "$HOME/.editorconfig"
+  ln -vsfn "$PWD/claude/settings.json" "$HOME/.claude/settings.json"
 ) | pcat
