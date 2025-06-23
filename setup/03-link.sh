@@ -12,20 +12,9 @@ if [ -n "${WINDIR-}" ]; then
   exit 0
 fi
 
-files=(
-  .gitignore_global
-  .inputrc
-  .tigrc
-  .config/starship.toml
-  .config/ripgreprc
-)
-
 (
-  for fn in "${files[@]}"; do
-    src="$PWD/${fn}"
-    dst="$HOME/${fn}"
-    ln -vsf "$src" "$dst"
+  cd -- "$PWD/home/link"
+  find -type f | while read -r f; do
+    ln -vsfn "$PWD/$f"     "$HOME/$f"
   done
-  ln -vsfn "$PWD/.editorconfig.global" "$HOME/.editorconfig"
-  ln -vsfn "$PWD/claude/settings.json" "$HOME/.claude/settings.json"
 ) | pcat

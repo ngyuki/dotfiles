@@ -30,3 +30,6 @@ indent_size = unset
 
 [{.terraform.lock.hcl,Gemfile.lock,.gitmodules}]
 indent_size = unset
+
+[.bash*]
+indent_size = 2

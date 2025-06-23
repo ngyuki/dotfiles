@@ -1,7 +1,13 @@
 ################################################################################
 ### .bash_profile
 
-dotfiles=${BASH_SOURCE[0]%/*}
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+fi
+
+dotfiles="$(realpath -- "${BASH_SOURCE[0]}")"
+dotfiles="$(realpath -- ${dotfiles%/*}/../../)"
 
 # PATH $dotfiles/bin.wsl
 if [[ ":$PATH:" != *":$dotfiles/bin.wsl:"* ]]; then
@@ -21,6 +27,11 @@ fi
 # PATH ~/bin
 if [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
   export PATH=$HOME/bin:$PATH
+fi
+
+# PATH ~/.local/bin
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+  export PATH=$HOME/.local/bin:$PATH
 fi
 
 # EDITOR
@@ -140,6 +151,11 @@ export AWS_FEDERATION_TOKEN_TTL=12h
 
 # ripgrep
 export RIPGREP_CONFIG_PATH=~/.config/ripgreprc
+
+# nix
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
+  . ~/.nix-profile/etc/profile.d/nix.sh
+fi
 
 # cleanup
 unset dotfiles

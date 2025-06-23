@@ -65,6 +65,7 @@ tfplan
 CLAUDE.md
 CLAUDE.local.md
 .claude/
+.claude/settings.local.json
 .amazonq/
 AmazonQ.md
 _todo.md

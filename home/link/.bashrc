@@ -1,6 +1,11 @@
 ################################################################################
 ### .bashrc
 
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+  . /etc/bashrc
+fi
+
 # 非対話モードではスキップ (ssh <host> <command> など)
 if [[ ! $- =~ i ]]; then
   return

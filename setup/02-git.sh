@@ -7,7 +7,7 @@ pp "git config"
 PATH=/usr/bin:/bin:$PATH
 
 (
-  cmd=(git config --global include.path "$PWD/.gitconfig")
+  cmd=(git config --global include.path "$PWD/home/files/.gitconfig")
   echo "${cmd[@]}"
   "${cmd[@]}"
 

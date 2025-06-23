@@ -28,21 +28,21 @@ while [ $# -gt 0 ]; do
 done
 
 if [ $# -gt 0 ]; then
-	shift
+  shift
 fi
 
 files=()
 while [ $# -gt 0 ]; do
-	files+=( "$1" )
-	shift
+  files+=( "$1" )
+  shift
 done
 
 : ${hosts?}
 : ${files?}
 
 kill_children() {
-	pkill -P $$
-	wait
+  pkill -P $$
+  wait
 }
 
 trap "kill_children" EXIT
@@ -62,7 +62,7 @@ else
   ((m++))
   for h in "${hosts[@]}"; do
       (
-      	ssh -tt "$h" tail -Fq "$files" 2>/dev/null | while read -r x; do
+        ssh -tt "$h" tail -Fq "$files" 2>/dev/null | while read -r x; do
           printf "%s%-${m}s%s %s\n" "$(tput setaf $c)" "$h:" "$(tput sgr0)" "$x"
         done
       ) &

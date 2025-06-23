@@ -44,7 +44,7 @@ EOS
 # https://www.osstech.co.jp/cgi-bin/echo-sd
 printf "\e[1;31m %s \e[m\n" '
   ＿人人人人人人人人人人人人人人人人人人人人人＿
- ＞                                            ＜
-＞   git switch とか git restore とかを使えよ   ＜
- ＞                                            ＜
+  ＞                                            ＜
+  ＞   git switch とか git restore とかを使えよ ＜
+  ＞                                            ＜
   ￣Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^Y^￣'
