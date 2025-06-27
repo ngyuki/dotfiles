@@ -60,7 +60,7 @@ sys$command
 # terraform
 tfplan
 
-# ai
+# ai coding
 .github/copilot-instructions.md
 CLAUDE.md
 CLAUDE.local.md
@@ -68,4 +68,7 @@ CLAUDE.local.md
 .claude/settings.local.json
 .amazonq/
 AmazonQ.md
+GEMINI.md
+CODEX.md
 _todo.md
+_plan.md
