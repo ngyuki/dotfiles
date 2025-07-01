@@ -18,6 +18,10 @@ indent_size = 4
 [*.{sh,html,ejs,tpl,blade.php,json,yml,yaml,sql}]
 indent_size = 2
 
+[*.go]
+indent_style = tab
+indent_size = 4
+
 [composer.json]
 indent_size = 4
 
