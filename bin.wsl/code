@@ -3,7 +3,7 @@
 # vscode の統合ターミナル内だと爆速で開くのでそれを模倣する
 # ただし vscode のウィンドウがフォアグラウンドにならないので別コマンドで対応
 vscode_ipc_exec() {
-  VSCODE_IPC_HOOK_CLI="$(ls /run/user/1000/vscode-ipc-*.sock -t | head -1)"
+  VSCODE_IPC_HOOK_CLI="$(ss -lxp | grep -F "${XDG_RUNTIME_DIR%/}/vscode-ipc" | head -1 | awk '{print $5}')"
   if [ ! -S "$VSCODE_IPC_HOOK_CLI" ]; then
     return
   fi
@@ -37,18 +37,19 @@ vscode_exec() {
 # .vscode/extensions/ms-vscode-remote.remote-wsl-0.81.0 のようなディレクトリを得るために Code.exe を実行している
 # 遅いので別の方法で得ることで改善する
 vscode_exec2() {
-    # pid="$(pgrep -f '.vscode/extensions/ms-vscode-remote.remote-wsl-.*/scripts/wslServer.sh')"
-    # [ -z "$pid" ] && return 1
-    # VSCODE_WSL_EXT_LOCATION="$(cat /proc/$pid/environ | grep -z '^VSCODE_WSL_EXT_LOCATION=' | cut -z -d= -f2- | tr -d '\0')"
-    # [ -z "$VSCODE_WSL_EXT_LOCATION" ] && return 1
-    # COMMIT="$(cat /proc/$pid/cmdline | cut -d $'\0' -f 3)"
-    # [ -z "$COMMIT" ] && return 1
-
-    [ -f /tmp/remote-wsl-loc.txt ] || return 1
-    VSCODE_WSL_EXT_LOCATION="$(wslpath -u "$(cat /tmp/remote-wsl-loc.txt)")"
+    pid="$(pgrep -f '.vscode/extensions/ms-vscode-remote.remote-wsl-.*/scripts/wslServer.sh')"
+    [ -z "$pid" ] && return 1
+    VSCODE_WSL_EXT_LOCATION="$(cat /proc/$pid/environ | grep -z '^VSCODE_WSL_EXT_LOCATION=' | cut -z -d= -f2- | tr -d '\0')"
     [ -z "$VSCODE_WSL_EXT_LOCATION" ] && return 1
-    eval "$(grep '^COMMIT=' < "$VSCODE_PATH/bin/code")"
+    COMMIT="$(cat /proc/$pid/cmdline | cut -d $'\0' -f 3)"
     [ -z "$COMMIT" ] && return 1
+
+    # 最後に起動した vscode になるためそれが終了していると他の vscode が残っていても ECONNREFUSED になってしまう
+    # [ -f /tmp/remote-wsl-loc.txt ] || return 1
+    # VSCODE_WSL_EXT_LOCATION="$(wslpath -u "$(cat /tmp/remote-wsl-loc.txt)")"
+    # [ -z "$VSCODE_WSL_EXT_LOCATION" ] && return 1
+    # eval "$(grep '^COMMIT=' < "$VSCODE_PATH/bin/code")"
+    # [ -z "$COMMIT" ] && return 1
 
     export VSCODE_WSL_DEBUG_INFO=true
     export WSLENV="ELECTRON_RUN_AS_NODE/w:$WSLENV"
