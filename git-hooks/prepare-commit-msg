@@ -49,20 +49,9 @@
 #
 # 基本的に $2 が空のときが通常のコミットなので $2 が空のときだけ処理するのが良さそう
 
-openai_commit() {
-  [ -e ~/.secret/openai.sh ] || return
-  source ~/.secret/openai.sh
-  [ -v OPENAI_API_KEY ] || return
-  base=${BASH_SOURCE[0]}
-  script=${base%/*}/../lib/openai-commit.ts
-  echo "generate commit message by openai" >&2
-  git diff --cached --diff-algorithm=minimal | ts-node -T "$script"
-}
-
 apply() {
   {
     cat "$1" | sed -n -e '/^#/q' -e 'p'
-    # openai_commit
     git log --graph --date=short --format="%h [%ad]%d %s" -n 10 | sed 's/^/#-> /'
     echo '#'
     cat "$1" | sed -n -e '/^#/,$p'
