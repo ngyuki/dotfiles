@@ -1,0 +1,17 @@
+[Unit]
+Description = wsl-toast notification daemon
+
+[Service]
+Type = simple
+ExecStart = %h/bin/wsl-toast -socket %t/wsl-toast.sock
+Restart = always
+RestartSec = 10
+
+UMask = 0077
+
+PrivateTmp = true
+ProtectSystem = strict
+NoNewPrivileges = true
+
+[Install]
+WantedBy = default.target
