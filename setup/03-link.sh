@@ -15,6 +15,6 @@ fi
 (
   cd -- "$PWD/home/link"
   find -type f | while read -r f; do
-    ln -vsfn "$PWD/$f"     "$HOME/$f"
+    ln -vsfn "$PWD/${f#./}"  "$HOME/${f#./}"
   done
 ) | pcat
