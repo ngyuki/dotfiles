@@ -15,7 +15,7 @@ indent_size = 2
 [*.{php.js}]
 indent_size = 4
 
-[*.{sh,html,ejs,tpl,blade.php,json,yml,yaml,sql}]
+[*.{sh,fish,html,ejs,tpl,blade.php,json,yml,yaml,sql}]
 indent_size = 2
 
 [*.go]
