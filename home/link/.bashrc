@@ -152,7 +152,10 @@ PROMPT_COMMAND="__bash_delay;$PROMPT_COMMAND";__bash_delay(){ __bash_delay(){ :;
   fi
 
   # bash.d
-  for fn in "${BASH_SOURCE[0]%/*}"/bash.d/*.sh; do
+  local dotfiles fn
+  dotfiles="$(realpath -- "${BASH_SOURCE[0]}")"
+  dotfiles="$(realpath -- ${dotfiles%/*}/../../)"
+  for fn in "$dotfiles"/bash.d/*.sh; do
     source "$fn"
   done
 }
