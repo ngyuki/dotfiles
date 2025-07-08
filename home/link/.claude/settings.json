@@ -1,12 +1,13 @@
 {
-  "includeCoAuthoredBy": false,
   "env": {
-    "DISABLE_BUG_COMMAND": 1,
-    "DISABLE_ERROR_REPORTING": 1,
-    "DISABLE_TELEMETRY": 1
+    "DISABLE_BUG_COMMAND": "1",
+    "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_TELEMETRY": "1"
   },
+  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
+      "Bash(~/.claude/wsl-toast.sh:*)",
       "Bash(cat:*)",
       "Bash(fd:*)",
       "Bash(find:*)",
@@ -39,6 +40,38 @@
       "Bash(rm:*)",
       "Bash(sudo:*)",
       "Read(**/.gomi/**)"
+    ]
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c >> ~/.claude/notification.log"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hook-notification.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -c >> ~/.claude/stop.log"
+          },
+          {
+            "type": "command",
+            "command": "jq --arg app \"Claude Code (Stop)\" '{app:$app,title,message}' -c | nc -U \"$XDG_RUNTIME_DIR/wsl-toast.sock\""
+          }
+        ]
+      }
     ]
   }
 }
