@@ -13,7 +13,7 @@ if [ -n "${WINDIR-}" ]; then
 fi
 
 (
-  cd -- "$PWD/home/link"
+  cd -- "$PWD/home"
   find -type f | while read -r f; do
     ln -vsfn "$PWD/${f#./}"  "$HOME/${f#./}"
   done

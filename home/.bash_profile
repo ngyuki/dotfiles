@@ -7,7 +7,7 @@ if [ -f ~/.bashrc ]; then
 fi
 
 dotfiles="$(realpath -- "${BASH_SOURCE[0]}")"
-dotfiles="$(realpath -- ${dotfiles%/*}/../../)"
+dotfiles="$(realpath -- ${dotfiles%/*}/../)"
 
 # PATH $dotfiles/bin.wsl
 if [[ ":$PATH:" != *":$dotfiles/bin.wsl:"* ]]; then
