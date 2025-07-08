@@ -136,9 +136,6 @@ if [ -d "$HOME/.deno/bin" ]; then
   export PATH=$HOME/.deno/bin:$PATH
 fi
 
-# LC_ALL for nix ... https://github.com/NixOS/nix/issues/4829
-export LC_ALL=C.UTF-8
-
 # ssh-agent
 eval "$(keychain --eval --quiet --quick)"
 ssh-add 2>/dev/null
@@ -151,11 +148,6 @@ export AWS_FEDERATION_TOKEN_TTL=12h
 
 # ripgrep
 export RIPGREP_CONFIG_PATH=~/.config/ripgreprc
-
-# nix
-if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then
-  . ~/.nix-profile/etc/profile.d/nix.sh
-fi
 
 # cleanup
 unset dotfiles
