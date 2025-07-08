@@ -87,6 +87,11 @@ function fish_title
   end
 end
 
+# mise
+if type mise >/dev/null 2>&1
+  mise activate fish | source
+end
+
 # direnv
 if type direnv >/dev/null 2>&1
   eval (direnv hook fish)
