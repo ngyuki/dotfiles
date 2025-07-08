@@ -40,6 +40,7 @@ bind main <Ctrl-D> ?git diff %(commit)^ %(commit)
 
 # git switch
 bind main * >tig-switch %(commit)
+bind refs * ?git checkout %(branch)
 
 # status view
 bind status C !git commit -v
