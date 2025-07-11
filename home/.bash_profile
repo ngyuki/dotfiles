@@ -1,6 +1,10 @@
 ################################################################################
 ### .bash_profile
 
+if [ $CLAUDECODE ]; then
+  return
+fi
+
 # Get the aliases and functions
 if [ -f ~/.bashrc ]; then
   . ~/.bashrc
