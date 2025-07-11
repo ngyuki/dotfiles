@@ -137,7 +137,7 @@ if [ -d "$HOME/.deno/bin" ]; then
 fi
 
 # ssh-agent
-eval "$(keychain --eval --quiet --quick)"
+eval "$(SHELL=/bin/bash keychain --eval --quiet --quick)"
 ssh-add 2>/dev/null
 
 # aws-vault
