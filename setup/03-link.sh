@@ -15,6 +15,10 @@ fi
 (
   cd -- "$PWD/home"
   find -type f | while read -r f; do
-    ln -vsfn "$PWD/${f#./}"  "$HOME/${f#./}"
+    src="$PWD/${f#./}"
+    dst="$HOME/${f#./}"
+    dir="${dst%/*}"
+    mkdir -pv "$dir"
+    ln -vsfn "$src"  "$dst"
   done
 ) | pcat

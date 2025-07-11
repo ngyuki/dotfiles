@@ -53,7 +53,7 @@
           },
           {
             "type": "command",
-            "command": "~/.claude/hook-notification.sh"
+            "command": "~/.claude/hooks/notification.sh"
           }
         ]
       }
@@ -68,7 +68,7 @@
           },
           {
             "type": "command",
-            "command": "jq --arg app \"Claude Code (Stop)\" '{app:$app,title,message}' -c | nc -U \"$XDG_RUNTIME_DIR/wsl-toast.sock\""
+            "command": "~/.claude/hooks/stop.sh"
           }
         ]
       }
