@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ $# -ne 0 ]; then
+  exec difit "$@"
+fi
+
+select="$(
+  git log -n 100 --date=short --color=always --format="%C(yellow)%h %C(magenta)[%ad]%C(auto)%d %s %C(cyan)@%an%C(reset)" \
+  | fzf --accept-nth=1 --ansi --no-sort --multi=2 --bind 'enter:select+accept'
+)"
+
+if [ -z "$select" ]; then
+  exit
+fi
+
+commit=($select)
+
+reversed=()
+for ((i=${#commit[@]}-1; i>=0; i--)); do
+  reversed+=("${commit[i]}")
+done
+
+exec difit "${reversed[@]}"
