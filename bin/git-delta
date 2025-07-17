@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ $# -ne 0 ]; then
+  git diff --color=always "$@" | delta
+  exit
+fi
+
+select="$(
+  git log -n 100 --date=short --color=always --format="%C(yellow)%h %C(magenta)[%ad]%C(auto)%d %s %C(cyan)@%an%C(reset)" \
+  | fzf --accept-nth=1 --ansi --no-sort --multi=2 --bind 'enter:select+accept'
+)"
+
+if [ -z "$select" ]; then
+  exit
+fi
+
+commit=($select)
+
+git_delta() {
+  git diff --color=always "${commit[@]}" -- "$@"
+}
+
+export dump="$(declare -p commit;declare -f git_delta;)"
+
+git diff "${commit[@]}" --name-status \
+| SHELL=/bin/bash fzf --preview 'eval "$dump"; git_delta {2..} | delta --paging never' \
+  --bind 'enter:execute(eval "$dump"; git_delta {2..} | delta --paging always)'
