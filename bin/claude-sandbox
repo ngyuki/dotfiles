@@ -1,0 +1,86 @@
+#!/bin/bash
+
+allows=(
+  "$HOME/.claude/"
+  "$HOME/.claude.json"
+  "$PWD"
+)
+
+denies=(
+  "$HOME/.ssh/"
+)
+
+if [ -f .claude/sandbox ]; then
+  paths=()
+  file="$(cat .claude/sandbox | grep -Pv '^\s*#' | grep -v '^$')"
+  if [ -n "$file" ]; then
+    IFS=$'\n' eval paths=( \$file )
+  fi
+  for path in "${paths[@]}"; do
+    deny=
+    if [[ "$path" == '!'* ]]; then
+      deny=1
+      path="${path#!}"
+    fi
+    realpath="$(printf "%s" "$path" | envsubst)"
+    realpath="$(realpath -- "$realpath")"
+    if ! [ -n "$realpath" -a -e "$realpath" ]; then
+      echo "Error: Invalid path '$realpath' in .claude/sandbox" >&2
+      exit 1
+    fi
+    if [ "$deny" ]; then
+      denies+=("$realpath")
+    else
+      allows+=("$realpath")
+    fi
+  done
+fi
+
+printf "[sandbox] allowed paths:\n"
+for allow in "${allows[@]}"; do
+  printf "  %s\n" "$allow"
+  opts+=(--property=ReadWritePaths="$allow")
+done
+
+printf "[sandbox] denied paths:\n"
+for deny in "${denies[@]}"; do
+  printf "  %s\n" "$deny"
+  opts+=(--property=InaccessiblePaths="$deny")
+done
+
+printf "\n"
+
+if [ $# -eq 0 ]; then
+  opts+=(claude)
+else
+  case "$1" in
+    --yoro)
+      opts+=(claude --dangerously-skip-permissions)
+      shift
+      ;;
+    -*)
+      opts+=(claude)
+      ;;
+  esac
+fi
+
+exec systemd-run \
+  --quiet \
+  --user \
+  --pty \
+  --same-dir \
+  --wait \
+  --collect \
+  --setenv=PATH="$PATH" \
+  --expand-environment=yes \
+  --property=CapabilityBoundingSet= \
+  --property=NoNewPrivileges=yes \
+  --property=ProtectSystem=full  \
+  --property=ProtectHome=read-only \
+  --property=ProtectProc=invisible \
+  --property=PrivateTmp=yes \
+  --property=PrivateDevices=yes \
+  --property=PrivateIPC=yes \
+  --property=PrivateUsers=yes \
+  "${opts[@]}" \
+  "$@"
