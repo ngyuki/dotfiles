@@ -57,7 +57,8 @@ export MANPAGER='less -MR'
 # ignore dll for WSL
 export FIGNORE=".dll:.DLL"
 
-# less colors
+# less
+export LESS="-#4 -FXMR"
 export LESS_TERMCAP_mb=$(printf "\e[1;31m")
 export LESS_TERMCAP_md=$(printf "\e[1;31m")
 export LESS_TERMCAP_me=$(printf "\e[0m")
