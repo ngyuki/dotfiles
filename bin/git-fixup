@@ -1,27 +1,17 @@
 #!/bin/bash
 
-FILTER=${FILTER:-fzf}
-MAX_LOG_COUNT=${MAX_LOG_COUNT:-30}
-
 if git diff --cached --quiet; then
-    commits="No staged changes. Use git add -p to add them."
-    ret=1
-else
-    commits=$(
-      git log -n "$MAX_LOG_COUNT" --date=short --color=always --format="%C(yellow)%h%C(reset) %C(magenta)[%ad]%C(reset)%C(auto)%d%C(reset) %s %C(cyan)@%an%C(reset)"
-    )
-    ret=$?
+  echo "No staged changes. Use git add -p to add them." >&2
+  exit 1
 fi
 
-if [[ "$ret" != 0 ]]; then
-    headline=$(head -n1 <<< "$commits")
-    if [[ "$headline" = "No staged changes. Use git add -p to add them." ]]; then
-        echo "$headline" >&2
-    fi
-    exit "$ret"
+commit="$(
+  git log -n 100 --date=short --color=always --format="%C(yellow)%h %C(magenta)[%ad]%C(auto)%d %s %C(cyan)@%an%C(reset)" \
+  | fzf --accept-nth=1 --ansi --no-sort
+)"
+
+if [ -z "$commit" ]; then
+  exit
 fi
 
-line=$("$FILTER" <<< "$commits")
-[[ "$?" = 0 && "$line" != "" ]] || exit "$?"
-
-git commit --fixup "$(awk '{print $1}' <<< "$line")" "$@"
+exec git commit --fixup "$commit" "$@"
