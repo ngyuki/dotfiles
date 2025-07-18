@@ -9,6 +9,9 @@ indent_style = space
 [bin/*]
 indent_size = 2
 
+[bin.wsl/*]
+indent_size = 2
+
 [*.bashrc]
 indent_size = 2
 

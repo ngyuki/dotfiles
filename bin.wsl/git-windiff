@@ -1,4 +1,17 @@
 #!/bin/bash
 
-export TMPDIR=$(realpath "$USERPROFILE/AppData/Local/Temp")
-git difftool -y -d --no-symlinks -x git-difftool-winmerge "$@"
+if [ $# -ne 0 ]; then
+  git difftool -y -d --no-symlinks -x winmerge "$@"
+fi
+
+select="$(
+  git log -n 100 --date=short --color=always --format="%C(yellow)%h %C(magenta)[%ad]%C(auto)%d %s %C(cyan)@%an%C(reset)" \
+  | fzf --accept-nth=1 --ansi --no-sort --multi=2 --bind 'enter:select+accept'
+)"
+
+if [ -z "$select" ]; then
+  exit
+fi
+
+commit=($select)
+git difftool -y -d --no-symlinks -x winmerge "${commit[@]}"

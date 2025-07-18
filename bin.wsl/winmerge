@@ -6,10 +6,12 @@ arr=(
   '/c/Program Files/WinMerge/WinMergeU.exe'
 )
 
+export TMPDIR=$(realpath "$USERPROFILE/AppData/Local/Temp")
+
 for prog in "${arr[@]}"; do
   if [ -e "$prog" ]; then
     prog=$(wslpath -wa "$prog")
-    exec wslexec "$prog" /r /e /u /f '*.*' "$@"
+    exec wslexec "$prog" -e -u -r -x -f '*.*' "$@"
   fi
 done
 
