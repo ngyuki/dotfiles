@@ -11,7 +11,11 @@ export TMPDIR=$(realpath "$USERPROFILE/AppData/Local/Temp")
 for prog in "${arr[@]}"; do
   if [ -e "$prog" ]; then
     prog=$(wslpath -wa "$prog")
-    exec wslexec "$prog" -e -u -r -x -f '*.*' "$@"
+    # -e Escキーで閉じる
+    # -u MRU にパスを追加しない
+    # -r 再帰比較
+    # -x 差異の無いファイルではすぐに閉じる
+    exec wslexec "$prog" -e -u -r -x "$@"
   fi
 done
 
