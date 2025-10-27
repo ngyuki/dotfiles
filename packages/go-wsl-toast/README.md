@@ -1,23 +1,39 @@
-# go-wsl-toast
+# wsl-toast
 
 WSL から Windows のトースト通知を表示する Go プログラムです。
+
+## ビルドとインストール
+
+```sh
+make
+make install
+```
 
 ## 使い方
 
 ```bash
 # 基本的な使い方
-go-wsl-toast -app "MyApp" -title "Hello" -message "This is a test notification"
+wsl-toast -app "MyApp" -title "Hello" -message "This is a test notification"
 
 # URL を指定して、クリック時にブラウザを開く
-go-wsl-toast -app "MyApp" -title "GitHub" -message "Click to open GitHub" -url "https://github.com"
+wsl-toast -app "MyApp" -title "GitHub" -message "Click to open GitHub" -url "https://github.com"
 ```
 
 ## コマンドライン引数
 
-- `-app`: アプリケーション名（デフォルト: "go-wsl-toast"）
-- `-title`: 通知のタイトル（デフォルト: "no title"）
-- `-message`: 通知のメッセージ（デフォルト: "no message"）
-- `-url`: クリック時に開く URL（デフォルト: ""）
+```
+Usage of ./wsl-toast:
+  -app string
+        Application name (default "go-win-toast")
+  -message string
+        Notification message (default "no message")
+  -socket string
+        Unix domain socket path to listen on
+  -title string
+        Notification title (default "no title")
+  -url string
+        URL to open when clicked
+```
 
 ## ソケットモード
 
@@ -25,10 +41,10 @@ go-wsl-toast -app "MyApp" -title "GitHub" -message "Click to open GitHub" -url "
 
 ```bash
 # サーバーモードで起動
-go-wsl-toast -socket /tmp/go-wsl-toast.sock
+wsl-toast -socket /tmp/wsl-toast.sock
 
 # 別のターミナルから通知を送信
-echo '{"app":"MyApp","title":"Test","message":"Socket notification"}' | nc -U /tmp/go-wsl-toast.sock
+echo '{"app":"MyApp","title":"Test","message":"Socket notification"}' | nc -U /tmp/wsl-toast.sock
 ```
 
 ソケットモードでは、JSON 形式でリクエストを送信します：

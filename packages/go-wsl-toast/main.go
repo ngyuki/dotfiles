@@ -182,6 +182,5 @@ func getPowerShellPath() string {
 	if err != nil {
 		return "/c/Windows/system32/WindowsPowerShell/v1.0/powershell.exe"
 	}
-	1
 	return string(bytes.TrimSpace(output))
 }
