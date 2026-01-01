@@ -1,4 +1,25 @@
 {
-  "theme": "Default",
-  "selectedAuthType": "oauth-personal"
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    }
+  },
+  "ui": {
+    "theme": "Default"
+  },
+  "context": {
+    "fileName": [
+      "AGENTS.md",
+      "GEMINI.md"
+    ]
+  },
+  "tools": {
+    "allowed": [
+      "run_shell_command(ls)",
+      "run_shell_command(grep)",
+      "run_shell_command(git status)",
+      "run_shell_command(gh issue view)",
+      "web_fetch"
+    ]
+  }
 }
