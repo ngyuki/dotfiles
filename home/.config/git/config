@@ -74,6 +74,7 @@
 [rebase]
     autosquash = true
     instructionFormat = "[%as] %s @%an %d"
+    abbreviateCommands = true
 
 [merge]
     ff = false
@@ -108,3 +109,9 @@
 
 [interactive]
     diffFilter = diff-highlight
+
+################################################################################
+# delta
+
+[delta]
+    true-color = never
