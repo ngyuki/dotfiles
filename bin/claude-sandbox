@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# アクセストークンのローテート時に下記のファイルへの書き込みが発生する
+#
+#   $HOME/.claude.json.lock
+#   $HOME/.claude.json.tmp.*
+#
+# これを通すために $HOME を書き込みかにするのは範囲が無駄に広すぎる
+
 allows=(
   "$HOME/.claude/"
   "$HOME/.claude.json"
