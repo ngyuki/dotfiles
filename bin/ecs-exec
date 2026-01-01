@@ -52,7 +52,7 @@ execute() {
 
 
 if [ $# -eq 0 ]; then
-  execute "$(fish_complete_list | column -t | fzf | cut -d' ' -f1)"
+  execute "$(fish_complete_list | column -t | fzf --sync | cut -d' ' -f1)"
   exit
 fi
 
