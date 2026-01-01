@@ -171,3 +171,37 @@ starship init fish | source
 
 # ecs-exec
 ecs-exec --fish-complete | source
+
+# wtp
+if type wtp >/dev/null 2>&1
+  wtp shell-init fish | source
+
+  function wtp
+    for arg in $argv
+      if test "$arg" = "--generate-shell-completion"
+        command wtp $argv
+        return $status
+      end
+    end
+    if test "$argv[1]" = "cd"
+      set -l target_dir
+      if test -z "$argv[2]"
+        set target_dir (command wtp cd 2>/dev/null)
+      else
+        set target_dir (command wtp cd $argv[2] 2>/dev/null)
+      end
+      if test $status -eq 0 -a -n "$target_dir"
+        cd "$target_dir"
+      else
+        if test -z "$argv[2]"
+          command wtp cd
+        else
+          command wtp cd $argv[2]
+        end
+      end
+    else
+      command wtp $argv
+    end
+  end
+
+end
