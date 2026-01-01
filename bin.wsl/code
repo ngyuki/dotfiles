@@ -2,8 +2,12 @@
 
 # vscode の統合ターミナル内だと爆速で開くのでそれを模倣する
 # ただし vscode のウィンドウがフォアグラウンドにならないので別コマンドで対応
+#
 vscode_ipc_exec() {
-  VSCODE_IPC_HOOK_CLI="$(ss -lxp | grep -F "${XDG_RUNTIME_DIR%/}/vscode-ipc" | head -1 | awk '{print $5}')"
+  # /run/user/1000/vscode-ipc-*.sock を探すだけだと kiro とかも見つけてしまうので vscode-server の pid でフィルタする
+  cmd="$(ls ~/.vscode-server/bin/*/node -t | head -1)"
+  pattern="$(pidof "$cmd" | sed -e 's/ /,|,pid=/g' -e 's/^/,pid=/' -e 's/$/,/')"
+  VSCODE_IPC_HOOK_CLI="$(ss -lxp | grep -F "${XDG_RUNTIME_DIR%/}/vscode-ipc" | grep -E "($pattern)" | head -1 | awk '{print $5}')"
   if [ ! -S "$VSCODE_IPC_HOOK_CLI" ]; then
     return
   fi
@@ -11,9 +15,22 @@ vscode_ipc_exec() {
   if [ ! -x "$VSCODE_BIN" ]; then
     return
   fi
-  win-activate-process.exe "Code.exe"
+  # この方法だとウィンドウがフォアグラウンドにならないため、フォアグラウンド化のためのコマンドを別途実行
+  "$USERPROFILE/bin/win-activate-process.exe" "Visual Studio Code"
   export VSCODE_IPC_HOOK_CLI
   exec "$VSCODE_BIN" "$@"
+
+  # VSCODE_IPC_HOOK_CLI="$(ss -lxp | grep -F "${XDG_RUNTIME_DIR%/}/vscode-ipc" | head -1 | awk '{print $5}')"
+  # if [ ! -S "$VSCODE_IPC_HOOK_CLI" ]; then
+  #   return
+  # fi
+  # VSCODE_BIN="$(ls ~/.vscode-server/bin/*/bin/remote-cli/code -t | head -1)"
+  # if [ ! -x "$VSCODE_BIN" ]; then
+  #   return
+  # fi
+  # win-activate-process.exe "Code.exe"
+  # export VSCODE_IPC_HOOK_CLI
+  # exec "$VSCODE_BIN" "$@"
 }
 
 vscode_path_detect() {
@@ -30,7 +47,7 @@ vscode_path_detect() {
 }
 
 vscode_exec() {
-    export VSCODE_WSL_DEBUG_INFO=true
+    #export VSCODE_WSL_DEBUG_INFO=true
     exec "$VSCODE_PATH/bin/code" "$@"
 }
 
@@ -44,19 +61,24 @@ vscode_exec2() {
     COMMIT="$(cat /proc/$pid/cmdline | cut -d $'\0' -f 3)"
     [ -z "$COMMIT" ] && return 1
 
-    # 最後に起動した vscode になるためそれが終了していると他の vscode が残っていても ECONNREFUSED になってしまう
-    # [ -f /tmp/remote-wsl-loc.txt ] || return 1
-    # VSCODE_WSL_EXT_LOCATION="$(wslpath -u "$(cat /tmp/remote-wsl-loc.txt)")"
-    # [ -z "$VSCODE_WSL_EXT_LOCATION" ] && return 1
-    # eval "$(grep '^COMMIT=' < "$VSCODE_PATH/bin/code")"
-    # [ -z "$COMMIT" ] && return 1
-
-    export VSCODE_WSL_DEBUG_INFO=true
+    #export VSCODE_WSL_DEBUG_INFO=true
     export WSLENV="ELECTRON_RUN_AS_NODE/w:$WSLENV"
     exec "$VSCODE_WSL_EXT_LOCATION/scripts/wslCode.sh" "$COMMIT" stable "$VSCODE_PATH/Code.exe" code .vscode-server "$@"
 }
 
-vscode_ipc_exec "$@"
+stdin=
+for opt in "$@"; do
+  case "$opt" in
+    -)
+      stdin=1
+      ;;
+  esac
+done
+
+# パイプとかで stdin から読むときは ipc だと動きがおかしい
+if [ -z "$stdin" ]; then
+  vscode_ipc_exec "$@"
+fi
 vscode_path_detect
 vscode_exec2 "$@"
 vscode_exec "$@"
