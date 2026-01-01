@@ -61,15 +61,19 @@ sys$command
 tfplan
 
 # ai coding
+AGENTS.md
 .github/copilot-instructions.md
 CLAUDE.md
 CLAUDE.local.md
-.claude/
+.claude
 .claude/settings.local.json
-.amazonq/
+.amazonq
 AmazonQ.md
 GEMINI.md
+.gemini
 CODEX.md
-.kiro/
+.kiro
 _todo.md
 _plan.md
+plan.md
+.wtp.yml
