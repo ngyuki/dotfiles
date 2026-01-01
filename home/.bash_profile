@@ -13,6 +13,11 @@ fi
 dotfiles="$(realpath -- "${BASH_SOURCE[0]}")"
 dotfiles="$(realpath -- ${dotfiles%/*}/../)"
 
+# mise
+if type mise >/dev/null 2>&1; then
+  eval "$(mise activate bash)"
+fi
+
 # PATH $dotfiles/bin.wsl
 if [[ ":$PATH:" != *":$dotfiles/bin.wsl:"* ]]; then
   export PATH=$dotfiles/bin.wsl:$PATH
