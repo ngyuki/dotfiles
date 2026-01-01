@@ -51,6 +51,9 @@ bind stage C !git commit -v
 # open
 bind generic <Ctrl-O> +open "%(file)"
 
+# reword
+bind main <Ctrl-R> >git reword %(commit)
+
 ################################################################################
 # Variables
 
