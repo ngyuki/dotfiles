@@ -14,11 +14,14 @@ fi
 
 (
   cd -- "$PWD/home"
-  find -type f | while read -r f; do
+
+  find -type d -name '*.symlink' -prune -print -o -type f -print \
+  | while read -r f; do
     src="$PWD/${f#./}"
     dst="$HOME/${f#./}"
     dir="${dst%/*}"
     mkdir -pv "$dir"
-    ln -vsfn "$src"  "$dst"
+    dst="${dst%.symlink}"
+    ln -vsfnr "$src"  "$dst"
   done
 ) | pcat
