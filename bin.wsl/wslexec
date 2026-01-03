@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# wsl のパスを windows のパスに変換しつつ winexec.exe ラッパーで Win32 exe を実行
-# https://twitter.com/ngyuki/status/1113618529197019141 で解決させたので winexec.exe は使わない
+# wsl のパスを windows のパスに変換しつつ Win32 exe を実行
 
 cmd=$1
 shift
@@ -18,34 +17,3 @@ for x in "$@"; do
 done
 
 exec "$cmd" "${args[@]}"
-
-################################################################################
-
-set -eu
-
-wincopy=/c/app/winexec.exe
-
-if [[ ! -x "$winexec" ]]; then
-  echo "download winexec.exe ..."
-
-  url="https://github.com/ngyuki/go-winexec/releases/latest"
-  latest=$(curl -fSIL "$url" | tr -d '\r' | awk -F'/' 'BEGIN{IGNORECASE=1}/^Location:/{print $NF}')
-  url="https://github.com/ngyuki/go-winexec/releases/download/${latest}/winexec.exe"
-  curl -fSL "$url" -o "$winexec"
-  chmod +x "$winexec"
-
-  echo
-  echo "installed $winexec"
-fi
-
-args=()
-
-for x in "$@"; do
-  if [ -e "$x" ]; then
-    args+=( "$(wslpath -wa -- "$x")" )
-  else
-    args+=( "$x" )
-  fi
-done
-
-exec "$winexec" "${args[@]}"
