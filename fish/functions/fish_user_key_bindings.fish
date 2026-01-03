@@ -3,6 +3,8 @@ function fish_user_key_bindings
   bind \cr __fzf_reverse_isearch
   bind \ct __fzf_find_file
   bind \ch __oreore_fzf_hostnames
+  bind \cg '__fzf_open'
+  bind \co '__fzf_open --editor'
 
   # https://github.com/fish-shell/fish-shell/issues/217
   # ctrl+m == CR == enter
