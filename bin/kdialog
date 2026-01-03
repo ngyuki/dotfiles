@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # aws-vault exec で --server オプションを使うためには terminal 以外のプロンプトが必要
-#   https://github.com/99designs/aws-vault/issues/888
+# https://github.com/99designs/aws-vault/issues/888
+# https://github.com/99designs/aws-vault/issues/1227
 
 title=
 inputbox=
