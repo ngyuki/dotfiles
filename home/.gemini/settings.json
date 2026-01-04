@@ -21,5 +21,10 @@
       "run_shell_command(gh issue view)",
       "web_fetch"
     ]
+  },
+  "mcpServers": {
+    "aws-knowledge-mcp-server": {
+      "httpUrl": "https://knowledge-mcp.global.api.aws"
+    }
   }
 }
