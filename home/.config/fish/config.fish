@@ -15,62 +15,6 @@ end
 function fish_greeting
 end
 
-set distribution_prompt " "(set_color cyan)"["(sh -c '. /etc/os-release; echo $NAME')"]"
-
-function fish_prompt
-  # 一定以上の時間を要したら自動で通知する
-  # if test $CMD_DURATION
-  #   if test $CMD_DURATION -gt (math "1000 * 30")
-  #     set secs (math "$CMD_DURATION / 1000")
-  #     echo "returned $status, $secs seconds" | toast "$history[1]" 1> /dev/null 2>&1
-  #     set CMD_DURATION 0
-  #   end
-  # end
-
-  set status_save $status
-
-  if [ $status_save -ne 0 ]
-    set status_prompt " "(set_color red)"[status=$status_save]"
-    set status_color (set_color red)
-  else
-    set status_prompt ""
-    set status_color (set_color green)
-  end
-
-  set prompt \n(set_color yellow)(__fish_pwd)
-
-  set git_branch (git branch --no-color 2> /dev/null -a | sed -n -e '/^\*/{s/^[* ]*//;p}')
-  if [ $git_branch ]
-    set git_stash (git stash list | wc -l)
-    if [ $git_stash -gt 0 ]
-        set prompt "$prompt $(set_color magenta)($git_branch $(set_color red)stash#$git_stash$(set_color magenta))"
-    else
-        set prompt "$prompt $(set_color magenta)($git_branch)"
-    end
-  end
-
-  set append
-  if [ $AWS_VAULT ]
-    set append $append AWS_VAULT=$AWS_VAULT
-  end
-  if [ $TF_WORKSPACE ]
-    set append $append TF_WORKSPACE=$TF_WORKSPACE
-  end
-  if [ $ANSIBLE_INVENTORY ]
-    set append $append ANSIBLE_INVENTORY=$ANSIBLE_INVENTORY
-  end
-  if [ (count $append) -ne 0 ]
-    set prompt "$prompt $(set_color green)($append)"
-  end
-
-  set prompt $prompt$status_prompt\n$status_color"\$ "(set_color $fish_color_normal)
-
-  echo $prompt
-end
-
-function fish_right_prompt
-end
-
 # ターミナルのタイトル
 # https://fishshell.com/docs/current/cmds/fish_title.html
 function fish_title
