@@ -4,7 +4,12 @@ root = true
 charset = utf-8
 end_of_line = lf
 insert_final_newline = true
+trim_trailing_whitespace = true
 indent_style = space
+indent_size = 4
+
+[*.{sh,fish,html,ejs,tpl,blade.php,json,yml,yaml,sql}]
+indent_size = 2
 
 [bin/*]
 indent_size = 2
@@ -15,15 +20,8 @@ indent_size = 2
 [*.bashrc]
 indent_size = 2
 
-[*.{php.js}]
-indent_size = 4
-
-[*.{sh,fish,html,ejs,tpl,blade.php,json,yml,yaml,sql}]
-indent_size = 2
-
 [*.go]
 indent_style = tab
-indent_size = 4
 
 [composer.json]
 indent_size = 4
@@ -32,5 +30,5 @@ indent_size = 4
 indent_style = tab
 indent_size = 8
 
-[*.{bat,btf}]
+[*.bat]
 end_of_line = crlf
