@@ -8,7 +8,7 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
-[*.{sh,fish,html,ejs,tpl,blade.php,json,yml,yaml,sql}]
+[*.{sh,fish,html,ejs,tpl,blade.php,json,jsonnet,yml,yaml,sql}]
 indent_size = 2
 
 [bin/*]
