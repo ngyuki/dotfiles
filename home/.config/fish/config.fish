@@ -116,6 +116,13 @@ starship init fish | source
 # ecs-exec
 ecs-exec --fish-complete | source
 
+# gtrash
+if type -fq gtrash
+  alias trash='gtrash'
+  alias rm='gtrash put'
+  gtrash completion fish | source
+end
+
 # wtp
 if type wtp >/dev/null 2>&1
   wtp shell-init fish | source
