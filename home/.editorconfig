@@ -12,7 +12,7 @@ indent_size = 4
 indent_style = tab
 indent_size = 8
 
-[*.{json,jsonc,yml,yaml,yaml.example,html,tpl,ejs,blade.php,sh,fish,tf,tfvars,tfvars.example,hcl,sql,conf}]
+[*.{json,jsonc,jsonnet,yml,yaml,yaml.example,html,tpl,ejs,blade.php,sh,fish,tf,tfvars,tfvars.example,hcl,sql,conf}]
 indent_size = 2
 
 [*.go]
