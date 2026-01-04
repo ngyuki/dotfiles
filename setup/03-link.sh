@@ -22,6 +22,6 @@ fi
     dir="${dst%/*}"
     mkdir -pv "$dir"
     dst="${dst%.symlink}"
-    ln -vsfnr "$src"  "$dst"
+    ln -vsfn "$src"  "$dst"
   done
 ) | pcat
