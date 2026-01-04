@@ -49,9 +49,9 @@ if status --is-interactive
   if type -fq exa
     export EXA_COLORS="reset"
     #alias ls='exa --color=auto --time-style=long-iso' # オプションが違いすぎてわかりにくい
-    alias ls='ls --color=auto'
-    alias la='ls -a'
-    alias ll='ls -alF'
+    #alias ls='ls --color=auto' # fish 組み込みで十分
+    #alias la='ls -a'
+    #alias ll='ls -alF'
   end
   if type -fq bat
     #alias cat='bat --paging=never' # でかいファイルでおもすぎるので無効
