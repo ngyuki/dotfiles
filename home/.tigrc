@@ -54,6 +54,13 @@ bind generic <Ctrl-O> +open "%(file)"
 # reword
 bind main <Ctrl-R> >git reword %(commit)
 
+# https://github.com/jonas/tig/blob/a7d0b68d3ed658220550221d913fc01f64e38703/src/display.c#L121
+# 素の edit だと git core.editor を元に --wait で終了待機され、それを Ctrl+C で中断すると editor-line-number が無効にされる
+# のでキーバインドを差し替えて直接 code --goto で開くように変更（元のキーバインドも Shift+E で残す）
+# TIG_EDITOR でも差し替えられるものの、この方法の方が無駄な再表示が発生しないのでよさそう（再表示は Shift+R で明示的にやる）
+bind generic e @code --goto "%(file):%(lineno):1"
+bind generic E edit
+
 ################################################################################
 # Variables
 
