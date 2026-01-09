@@ -72,13 +72,14 @@ if status --is-interactive
 end
 
 # aws complete ... https://dev.classmethod.jp/articles/fish-shell-aws-cli-complete/
-complete -c aws -f -a '(
-    begin
-        set -lx COMP_SHELL fish
-        set -lx COMP_LINE (commandline)
-        aws_completer
-    end
-)'
+# carapace を使うのでコメントアウト
+# complete -c aws -f -a '(
+#     begin
+#         set -lx COMP_SHELL fish
+#         set -lx COMP_LINE (commandline)
+#         aws_completer
+#     end
+# )'
 
 # pass otp
 complete -c pass -f -n '__fish_pass_needs_command' -a otp
@@ -109,6 +110,11 @@ end
 
 # starship
 starship init fish | source
+
+# carapace
+set -gx CARAPACE_BRIDGES "zsh,fish,bash,inshellisense"
+set -gx CARAPACE_EXCLUDES "pass"
+carapace _carapace | source
 
 # ecs-exec
 ecs-exec --fish-complete | source
