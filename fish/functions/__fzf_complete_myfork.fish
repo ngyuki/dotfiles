@@ -19,7 +19,7 @@
 
 
 # modified from https://github.com/junegunn/fzf/wiki/Examples-(fish)#completion
-function __fzf_complete -d 'fzf completion and print selection back to commandline'
+function __fzf_complete_myfork -d 'fzf completion and print selection back to commandline'
     # As of 2.6, fish's "complete" function does not understand
     # subcommands. Instead, we use the same hack as __fish_complete_subcommand and
     # extract the subcommand manually.
@@ -53,14 +53,14 @@ function __fzf_complete -d 'fzf completion and print selection back to commandli
     # 候補から共通のプレフィックスを抜き出す
 
     if [ -n $cmd_lastw ]; and [ (count $complist) -gt 1 ]
-        set -l min (string length $cmd_lastw)
-        set -l len (math (string length (string split -f 1 \t $complist[-1])) - 1)
+        set -l min (string length -- $cmd_lastw)
+        set -l len (math (string length -- (string split -f 1 \t -- $complist[-1])) - 1)
         while [ $len -gt $min ]
             set -l ok 1
-            set -l last (string sub -l $len $complist[-1])
+            set -l last (string sub -l $len -- $complist[-1])
             set -l curr
             for curr in $complist
-                set curr (string sub -l $len $curr)
+                set curr (string sub -l $len -- $curr)
                 if [ $curr != $last ]
                     set ok 0
                     break
