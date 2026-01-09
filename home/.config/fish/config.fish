@@ -41,9 +41,6 @@ if type direnv >/dev/null 2>&1
   eval (direnv hook fish)
 end
 
-# complete
-complete -c tmux-cssh -w ssh
-
 # alias
 if status --is-interactive
   if type -fq exa
