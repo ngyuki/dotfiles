@@ -15,10 +15,14 @@
   },
   "tools": {
     "allowed": [
-      "run_shell_command(ls)",
-      "run_shell_command(grep)",
-      "run_shell_command(git status)",
+      "run_shell_command(~/.claude/wsl-toast.sh)",
       "run_shell_command(gh issue view)",
+      "run_shell_command(git diff)",
+      "run_shell_command(git log)",
+      "run_shell_command(git show)",
+      "run_shell_command(git status)",
+      "run_shell_command(grep)",
+      "run_shell_command(ls)",
       "web_fetch"
     ]
   },
