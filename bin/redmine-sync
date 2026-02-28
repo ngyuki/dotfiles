@@ -1,0 +1,154 @@
+#!/bin/bash
+
+set -eu
+
+declare -A issues
+
+usage() {
+  printf "Usage: %s [--pull|--push] <files...>\n\n" "${0##*/}"
+  cat <<'EOF'
+カレントディレクトリの `issues.txt` ファイルに記述された Redmine の issue とローカルの Markdown ファイルを同期します。
+
+issues.txt の書式は以下の通りです。
+
+  <Redmine の issue の URL>  <対応するローカルファイルパス>
+
+例:
+  https://redmine.example.com/issues/12345  issue-12345.md
+  https://redmine.example.com/issues/67890  issue-67890.md
+
+Redmine API との連携のため、環境変数 `REDMINE_APIKEY` に Redmine の API キーを設定する必要があります。
+
+オプション:
+  --pull  指定されたファイルに対応する Redmine の issue の description を取得してローカルの Markdown ファイルに書き込みます。
+          既存のファイルは警告無しに上書きされます。
+
+  --push  ローカルの Markdown ファイルから Redmine の issue に description をプッシュします。
+          オプションを省略してファイル引数だけ指定した場合はこちらのモードがデフォルトになります。
+
+          プッシュ時には、まず `diff` で既存の内容との差分が表示されます。
+          その後、変更を確定するかどうかを `(y/n/q)` で尋ねられます。
+          'y' を選択すると、エディタが起動し、その変更に対するコメント（notes）を記述できます。
+            - デフォルトでは差分の内容がコメントに入るので、必要に応じて編集、不要なら全文削除してください。
+            - コメントを保存してエディタを閉じると、変更が Redmine にプッシュされます。
+          'n' を選択すると、プッシュをスキップします。
+          'q' を選択すると、スクリプトを終了します。
+EOF
+  exit 1
+}
+
+load() {
+  while read -r url file; do
+    if [[ ${url} =~ ^\# ]]; then
+      continue
+    fi
+    issues[$file]=$url
+  done < issues.txt
+  for f in "$@"; do
+    if [ -z "${issues[$f]:-}" ]; then
+      printf "Error: issue not found for '%s' in issues.txt\n" "$f" >&2
+      exit 1
+    fi
+  done
+}
+
+redmine_get() {
+  : "${REDMINE_APIKEY?}"
+  curl -fsSL -H "X-Redmine-API-Key:$REDMINE_APIKEY" "$1.json"
+}
+
+redmine_put() {
+  : "${REDMINE_APIKEY?}"
+  curl -fsSL -H "Content-Type: application/json" -H "X-Redmine-API-Key:$REDMINE_APIKEY" "$url.json" -X PUT -d @-
+}
+
+pull() {
+  file=$1
+  url=${issues[$file]}
+  echo "pull: $url -> $file"
+  redmine_get "$url" | jq .issue.description -j > "$file"
+  dos2unix --quiet "$file"
+}
+
+prompt() {
+  while read -p '(y/n/q): ' yesno; do
+    case "$yesno" in
+      y*|n*|q*) echo "$yesno"; return;;
+    esac
+  done
+}
+
+input() {
+  tmpfile=$(mktemp -t redmine-sync-XXXXXXX.md)
+  cat > "$tmpfile"
+  ${EDITOR:-vi} "$tmpfile"
+  cat -- "$tmpfile"
+  rm -f "$tmpfile"
+}
+
+push() {
+  file=$1
+  url=${issues[$file]}
+
+  # @todo jq で末尾に無駄な改行がつく
+  echo "diff: $url <- $file"
+  redmine_get "$url" | jq .issue.description -j | colordiff -bu - "$file" &&:
+
+  if [ $? -eq 0 ]; then
+    return
+  fi
+
+  case "$(prompt)" in
+    y*)
+      echo "push: $url <- $file"
+
+      notes="$(redmine_get "$url" | jq .issue.description -r | diff -ubw - "$file" | input)"
+
+      if [ -z "$notes" ]; then
+        json="$(jq -n --rawfile description "$file" '{"issue": {"description": $description}}')"
+      else
+        json="$(jq -n --rawfile description "$file" --arg notes "$notes" '{"issue": {"description": $description,"notes": $notes}}')"
+      fi
+      redmine_put <<<"$json"
+      ;;
+    n*)
+      return ;;
+    q*)
+      exit ;;
+  esac
+}
+
+mode=push
+files=()
+for f in "$@"; do
+  case "$f" in
+    --pull)
+      mode=pull
+      ;;
+    --push)
+      mode=push
+      ;;
+    -*)
+      printf "illegal option %s\n" "$f"
+      usage
+      exit 1
+      ;;
+    *)
+      files+=("$f")
+      ;;
+  esac
+done
+
+if [ "${#files[@]}" -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+load "${files[@]}"
+
+for f in "${files[@]}"; do
+  case "$mode" in
+    push) push "$f";;
+    pull) pull "$f";;
+  esac
+done
