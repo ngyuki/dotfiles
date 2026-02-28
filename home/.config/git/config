@@ -5,7 +5,7 @@
     preloadindex = true
     fscache = true
     trustctime = true
-    untrackedcache = true
+    untrackedCache = true
     checkStat = minimal
     editor = code-git
 
@@ -66,20 +66,23 @@
 
 [fetch]
     prune = true
+    # pruneTags = true # リモートが複数あるときに滅茶苦茶になる
     all = true
 
 [commit]
     verbose = true
 
 [rebase]
-    autosquash = true
-    instructionFormat = "[%as] %s @%an %d"
+    autoSquash = true
+    autoStash = true
+    updateRefs = true
+    instructionFormat = "[%as] %s @%an"
     abbreviateCommands = true
 
 [merge]
     ff = false
     tool = WinMerge
-    conflictstyle = zdiff3
+    conflictStyle = zdiff3
 
 [mergetool]
     prompt = false
@@ -96,6 +99,7 @@
 [push]
     default = current
     useForceIfIncludes = true
+    autoSetupRemote = true # push で自動で追跡設定
 
 [rerere]
     enabled = true
