@@ -54,6 +54,9 @@ disabled = true
 [battery]
 disabled = true
 
+[gcloud]
+disabled = true
+
 [env_var.ANSIBLE_INVENTORY]
 symbol = 'ANSIBLE_INVENTORY='
 format = "[$symbol$env_value]($style) "
