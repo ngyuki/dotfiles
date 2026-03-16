@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -eu
+
+op="$1"
+shift
+
+
+rebase-one() {
+  local op="$1"
+  local commit="$2"
+  export GIT_SHA="$(git show --format=format:%h --no-patch "$commit")"
+  export GIT_SEQUENCE_EDITOR="sed -i -r '/^p(ick)? $GIT_SHA/s/^p(ick)? /$op /'"
+  exec git rebase --interactive --rebase-merges --no-autosquash --autostash "${GIT_SHA}^"
+}
+
+edit-file() {
+  local commit="$1"
+  local file="$2"
+  local lineno="$3"
+
+  export GIT_SHA="$(git show --format=format:%h --no-patch "$commit")"
+  export GIT_SEQUENCE_EDITOR="sed -i -r '/^p(ick)? $GIT_SHA/s/^p(ick)? /edit /'"
+  git rebase --interactive --rebase-merges --no-autosquash --autostash "${GIT_SHA}^"
+  code --goto "$file:$lineno"
+}
+
+case "$op" in
+  edit|reword)
+    rebase-one "$op" "$@"
+    ;;
+  edit-file)
+    edit-file "$@"
+    ;;
+  *)
+    echo "Unknown operation: $op" >&2
+    exit 1
+    ;;
+esac
