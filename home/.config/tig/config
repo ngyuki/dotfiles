@@ -52,7 +52,11 @@ bind stage C !git commit -v
 bind generic <Ctrl-O> +open "%(file)"
 
 # reword
-bind main <Ctrl-R> >git reword %(commit)
+bind main <Ctrl-R> >git-rebase-one reword %(commit)
+
+# edit
+bind main <Ctrl-E> <git-rebase-one edit %(commit)
+bind diff <Ctrl-E> <git-rebase-one edit-file %(commit) %(file) %(lineno)
 
 # https://github.com/jonas/tig/blob/a7d0b68d3ed658220550221d913fc01f64e38703/src/display.c#L121
 # 素の edit だと git core.editor を元に --wait で終了待機され、それを Ctrl+C で中断すると editor-line-number が無効にされる
