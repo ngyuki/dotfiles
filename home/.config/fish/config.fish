@@ -59,9 +59,17 @@ if status --is-interactive
   # end
 end
 
+# jethrokuan/fzf
+set -g FZF_DEFAULT_OPTS "--ansi --color=dark --style=full --tmux center,98%,95%"
+set -g FZF_COMPLETE 2
+set -g FZF_COMPLETE_OPTS "--bind=esc:print-query --no-reverse --select-1"
+set -g FZF_FIND_FILE_COMMAND "command fd -L . \$dir 2>/dev/null"
+set -g FZF_TMUX 0
+# set -g FZF_TMUX_HEIGHT "80% -p 95%,90%"
+
 # zoxide
 if type zoxide >/dev/null 2>&1
-  export _ZO_FZF_OPTS="--ansi --color=16 --info=inline --scheme=path --keep-right --no-sort --preview 'ls -alF --color=always {2..}'"
+  export _ZO_FZF_OPTS="$FZF_DEFAULT_OPTS --info=inline --scheme=path --keep-right --no-sort --preview 'ls -alF --color=always {2..}'"
   zoxide init fish | source
   alias zz=zi
 end
@@ -84,13 +92,6 @@ end
 # pass otp
 complete -c pass -f -n '__fish_pass_needs_command' -a otp
 complete -c pass -f -n '__fish_pass_uses_command otp' -a "(__fish_pass_print_entries)"
-
-# jethrokuan/fzf
-set -g FZF_COMPLETE 2
-set -g FZF_COMPLETE_OPTS "--height=40% --bind=esc:print-query --no-reverse --select-1"
-set -g FZF_FIND_FILE_COMMAND "command fd -L . \$dir 2>/dev/null"
-set -g FZF_TMUX 1
-set -g FZF_TMUX_HEIGHT "80% -p 95%,80% -y 50%"
 
 if status --is-interactive
     # tmux の pane_path にカレントディレクトリを反映させる
