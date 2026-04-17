@@ -148,7 +148,6 @@ fi
 
 # ssh-agent
 eval "$(SHELL=/bin/bash keychain --eval --quiet --quick)"
-ssh-add 2>/dev/null
 
 # aws-vault
 export AWS_VAULT_BACKEND=pass
