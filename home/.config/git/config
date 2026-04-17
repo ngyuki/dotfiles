@@ -82,7 +82,6 @@
 [merge]
     ff = false
     tool = WinMerge
-    conflictStyle = zdiff3
 
 [mergetool]
     prompt = false
