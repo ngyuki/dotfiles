@@ -5,7 +5,14 @@
     }
   },
   "ui": {
-    "theme": "Default"
+    "theme": "Default",
+    "hideTips": true,
+    "showShortcutsHint": false,
+    "compactToolOutput": false,
+    "hideBanner": true,
+    "footer": {
+      "hideContextPercentage": false
+    }
   },
   "privacy": {
     "usageStatisticsEnabled": false
@@ -20,5 +27,12 @@
     "aws-knowledge-mcp-server": {
       "httpUrl": "https://knowledge-mcp.global.api.aws"
     }
-  }
+  },
+  "general": {
+    "preferredEditor": "vscode"
+  },
+  "policyPaths": [
+    "~/.gemini/policies/",
+    ".gemini/policies/"
+  ]
 }
