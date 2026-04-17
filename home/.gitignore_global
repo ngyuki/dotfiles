@@ -1,27 +1,16 @@
 .git/
 
+# my rules
 .local/
 .locals/
 .trash/
 .gomi/
 z.*
-
-# git-svn
-sys$command
-
-# eclipse
-.settings
-.buildpath
-.project
-.externalToolBuilders
+_todo.md
+_plan.md
 
 # phpstorm
 .idea/
-
-# sublime text
-*.sublime-project
-*.sublime-workspace
-.sublime/
 
 # vscode
 .vscode/
@@ -47,9 +36,6 @@ sys$command
 # Mac
 .DS_Store
 
-# vagrant
-.vagrant-*/
-
 # dotenv
 .envrc
 
@@ -57,23 +43,20 @@ sys$command
 *.unison/
 *.unison.tmp
 
-# terraform
-tfplan
-
 # ai coding
 AGENTS.md
 .github/copilot-instructions.md
 CLAUDE.md
 CLAUDE.local.md
-.claude
-.claude/settings.local.json
-.amazonq
+.claude/
+.amazonq/
 AmazonQ.md
 GEMINI.md
-.gemini
+.gemini/
 CODEX.md
-.kiro
-_todo.md
-_plan.md
-plan.md
+.kiro/
+
+# other tools
+_typos.toml
 .wtp.yml
+fence.json
