@@ -13,6 +13,9 @@ fi
 dotfiles="$(realpath -- "${BASH_SOURCE[0]}")"
 dotfiles="$(realpath -- ${dotfiles%/*}/../)"
 
+# https://donottrack.sh/
+export DO_NOT_TRACK=1
+
 # mise
 if type mise >/dev/null 2>&1; then
   eval "$(mise activate bash)"
