@@ -22,7 +22,10 @@ edit-file() {
   export GIT_SHA="$(git show --format=format:%h --no-patch "$commit")"
   export GIT_SEQUENCE_EDITOR="sed -i -r '/^p(ick)? $GIT_SHA/s/^p(ick)? /edit /'"
   git rebase --interactive --rebase-merges --no-autosquash --autostash "${GIT_SHA}^"
-  code --goto "$file:$lineno"
+  code --wait --goto "$file:$lineno"
+  git add -- "$file"
+  git commit --amend --no-edit
+  git rebase --continue
 }
 
 case "$op" in
