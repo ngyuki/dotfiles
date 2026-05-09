@@ -10,3 +10,5 @@ pager:
 # Aliases allow you to create nicknames for gh commands
 aliases:
     patch: api -H accept:application/vnd.github.v3.patch repos/:owner/:repo/pulls/$1
+# https://docs.github.com/en/github-cli/github-cli/github-cli-telemetry
+telemetry: disabled
