@@ -5,4 +5,5 @@ source "$(dirname "$0")/functions.sh"
 set -eu
 
 pp "winhome"
-unison -batch -auto "$USERPROFILE/dotfiles/winhome/" "$PWD/winhome/" 2>&1 | pcat
+args="$(find "$PWD/winhome" -type f -printf " -path %P")"
+unison -batch -auto -root "$USERPROFILE" -root "$PWD/winhome" $args 2>&1 | pcat
