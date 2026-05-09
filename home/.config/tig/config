@@ -52,7 +52,7 @@ bind stage C !git commit -v
 bind generic <Ctrl-O> +open "%(file)"
 
 # reword
-bind main <Ctrl-R> >git-rebase-one reword %(commit)
+bind main <Ctrl-R> >git history reword %(commit)
 
 # edit
 bind main <Ctrl-E> <git-rebase-one edit %(commit)
