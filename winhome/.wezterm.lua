@@ -8,7 +8,7 @@ local config = {}
 -- general
 ------------------------------------------------------------
 
--- config.color_scheme = 'Campbell'
+config.color_scheme = 'Campbell'
 config.font = wezterm.font_with_fallback { 'HackGen Console', 'HackGen' }
 config.font_size = 12.0
 
