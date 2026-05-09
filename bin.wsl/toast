@@ -1,19 +1,5 @@
 #!/bin/bash
 
-#if [[ $# -eq 0 ]]; then
-#  message="$(cat -)"
-#  title="$*"
-#else
-#  message="$*"
-#fi
-
-# if [[ -t 0 ]]; then
-#   message="$*"
-# else
-#   message="$(tee /dev/stderr)"
-#   title="$*"
-# fi
-
 app="no app"
 title="no title"
 url=""
@@ -46,8 +32,38 @@ else
   message="$(cat -)"
 fi
 
-dir=${BASH_SOURCE[0]}
-dir=${dir%/*}
-cd -- "$dir"
+notify_powershell() {
+  dir=${BASH_SOURCE[0]}
+  dir=${dir%/*}
+  (
+    cd -- "$dir"
+    powershell.exe -Sta -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File toast.ps1 -app "$app" -title "$title" -message "$message" -url "$url"
+  )
+}
 
-powershell.exe -Sta -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File toast.ps1 -app "$app" -title "$title" -message "$message" -url "$url"
+notify_osc() {
+  if [ $TMUX ]; then
+    eval "$(tmux show-environment -gs TERM_PROGRAM 2>/dev/null)"
+    if [ "$TERM_PROGRAM" == "WezTerm" ]; then
+      printf "\ePtmux;\e\e]777;notify;$title;$message\a\e\\"
+      exit
+    fi
+  else
+    if [ "$TERM_PROGRAM" == "WezTerm" ]; then
+      printf "\e]777;notify;$title;$message\a\e"
+      exit
+    fi
+  fi
+}
+
+notify_svc() {
+  if [ -S "$XDG_RUNTIME_DIR/wsl-toast.sock" ]; then
+    jq -n --arg app "$app" --arg title "$title" --arg message "$message" '{app:$app,title:$title,message:$message}' -c \
+    | nc -U "$XDG_RUNTIME_DIR/wsl-toast.sock"
+    exit 0
+  fi
+}
+
+notify_svc
+notify_osc
+notify_powershell
