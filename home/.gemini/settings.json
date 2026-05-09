@@ -1,7 +1,8 @@
 {
+  "$schema": "https://raw.githubusercontent.com/google-gemini/gemini-cli/main/schemas/settings.schema.json",
   "security": {
     "auth": {
-      "selectedType": "oauth-personal"
+      "selectedType": "gemini-api-key"
     }
   },
   "ui": {
@@ -10,9 +11,12 @@
     "showShortcutsHint": false,
     "compactToolOutput": false,
     "hideBanner": true,
+    "hideContextSummary": true,
     "footer": {
       "hideContextPercentage": false
-    }
+    },
+    "terminalBuffer": true,
+    "useAlternateBuffer": true
   },
   "privacy": {
     "usageStatisticsEnabled": false
@@ -29,10 +33,29 @@
     }
   },
   "general": {
-    "preferredEditor": "vscode"
+    "preferredEditor": "vscode",
+    "enableNotifications": true
   },
   "policyPaths": [
     "~/.gemini/policies/",
     ".gemini/policies/"
-  ]
+  ],
+  "experimental": {
+    "autoMemory": true
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "name": "notification",
+            "type": "command",
+            "command": "~/.gemini/scripts/notification.sh",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
 }
