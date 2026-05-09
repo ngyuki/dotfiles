@@ -48,13 +48,14 @@ AGENTS.md
 .github/copilot-instructions.md
 CLAUDE.md
 CLAUDE.local.md
-.claude/
-.amazonq/
+.claude
+.amazonq
 AmazonQ.md
 GEMINI.md
-.gemini/
+.gemini
+.geminiignore
 CODEX.md
-.kiro/
+.kiro
 
 # other tools
 _typos.toml
