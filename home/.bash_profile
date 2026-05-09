@@ -51,6 +51,11 @@ if [[ -z $EDITOR ]]; then
   export EDITOR='code -w'
 fi
 
+# BROWSER
+if [ -z "$BROWSER" -a -e "$(wslpath -u 'c:\\Windows\\System32\\rundll32.exe')" ]; then
+  export BROWSER="$(wslpath -u 'c:\\Windows\\System32\\rundll32.exe') url.dll,FileProtocolHandler"
+fi
+
 # PAGER
 if [[ -z $PAGER ]]; then
   export PAGER=less
