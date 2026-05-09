@@ -105,6 +105,25 @@
     autoupdate = true
 
 ################################################################################
+# hooks
+
+[hook "gitcheck"]
+    event = pre-commit
+    command = ~/.config/git/hooks/pre-commit.gitcheck.sh
+
+[hook "editorconfig"]
+    event = pre-commit
+    command = ~/.config/git/hooks/pre-commit.editorconfig.sh
+
+[hook "gitleaks"]
+    event = pre-commit
+    command = ~/.config/git/hooks/pre-commit.gitleaks.sh
+
+[hook "typos"]
+    event = pre-commit
+    command = ~/.config/git/hooks/pre-commit.typos.sh
+
+################################################################################
 # diff-highlight
 
 [core]
