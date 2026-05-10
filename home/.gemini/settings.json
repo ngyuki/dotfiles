@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/google-gemini/gemini-cli/main/schemas/settings.schema.json",
   "security": {
     "auth": {
-      "selectedType": "gemini-api-key"
+      "selectedType": "oauth-personal"
     }
   },
   "ui": {
@@ -34,7 +34,7 @@
   },
   "general": {
     "preferredEditor": "vscode",
-    "enableNotifications": true
+    "enableNotifications": false
   },
   "policyPaths": [
     "~/.gemini/policies/",
