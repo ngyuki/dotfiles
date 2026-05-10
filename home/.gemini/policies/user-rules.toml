@@ -1,8 +1,11 @@
 [[rule]]
 toolName = "run_shell_command"
+decision = "allow"
+priority = 100
 commandPrefix = [
     "~/.claude/wsl-toast.sh",
     "gh issue view",
+    "git branch --list",
     "git diff",
     "git log",
     "git show",
@@ -10,8 +13,6 @@ commandPrefix = [
     "grep",
     "ls",
 ]
-decision = "allow"
-priority = 100
 
 [[rule]]
 toolName = "web_fetch"
@@ -20,6 +21,6 @@ priority = 100
 
 [[rule]]
 toolName = "activate_skill"
-argsPattern = '"name":"code-review"'
 decision = "allow"
 priority = 100
+argsPattern = '"name":"code-review"'
