@@ -4,13 +4,20 @@ decision = "allow"
 priority = 100
 commandPrefix = [
     "~/.claude/wsl-toast.sh",
+    "code --wait",
+    "docker compose down",
+    "docker compose run",
     "gh issue view",
     "git branch --list",
+    "git branch --show-current",
     "git diff",
+    "git fetch",
     "git log",
+    "git rev-parse",
     "git show",
     "git status",
     "grep",
+    "id",
     "ls",
 ]
 
