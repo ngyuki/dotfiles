@@ -1,9 +1,9 @@
 ---
-name: code-review
-description: Git の変更履歴をレビューします。git log と git diff を使用して、変更の概要と詳細を分析し、総評を生成します。
+name: make-pr
+description: プルリクエストを作成するために upstream ブランチとの差分をレビューし、その内容を元にプルリクエストを作成します。
 ---
 
-# コードレビュー スキル
+# プルリクエストを作成 スキル
 
 このスキルは、Git の変更履歴をレビューするための手順を定義します。
 
@@ -76,9 +76,8 @@ description: Git の変更履歴をレビューします。git log と git diff 
         *   URL に `github` が含まれる場合は GitHub と判定します。
         *   URL に `gitlab` が含まれる場合は GitLab と判定します。
     *   判定結果に基づいて、使用するコマンドを選択します。
-        *   **GitHub の場合:** `gh pr create --draft --assignee @me --title "<title>" --body-file "<file_path>"`
-        *   **GitLab の場合:** `glab mr create --draft --assignee @me --title "<title>" --description-file "<file_path>"`
-        *   **それ以外の場合:** ユーザーにどちらのコマンドを使用するか（あるいは手動で作成するか）を問い合わせます。
+        *   **GitHub の場合:** `gh pr create --draft --assignee @me --title "<title>" --body-file "<file_path>" --web `
+        *   **GitLab の場合:** `glab mr create --push --web --title "<title>"` を実行し、ブラウザでマージリクエスト作成ページを開きます。同時に `code --wait <file_path>` を実行して一時ファイルを開き、ユーザーに本文をコピー＆ペーストしてもらいます。
 12. **プルリクエスト（マージリクエスト）の作成**
     *   ユーザーが同意した場合、選択したコマンドを実行してプルリクエストまたはマージリクエストを作成します。
     *   `<title>` には、ブランチ名などから推測した適切なタイトルを設定します。
