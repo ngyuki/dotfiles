@@ -1,3 +1,8 @@
 #!/bin/bash
 
-git revert --no-edit HEAD && git revert --no-edit HEAD && git reset HEAD^
+set -eu
+
+git revert --no-commit HEAD
+git commit --fixup HEAD -n
+git revert --no-edit HEAD
+git reset HEAD^
