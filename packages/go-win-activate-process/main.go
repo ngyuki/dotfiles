@@ -98,8 +98,7 @@ func main() {
 // https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-setforegroundwindow
 // 呼び出し元プロセスが、フォアグラウンドプロセスから起動されたプロセスにならないため
 //
-// PowerShell の Start-Process を挟むとこの制限が突破できる
-// これは内部で ShellExecuteEx を使っていて Windows Shell を通じてプロセスが起動されるため
+// ShellExecuteEx を挟むとこの制限が突破できる。これは Windows Shell を通じてプロセスが起動されるため
 // （具体的な理由は不明）
 func relaunchAsChild() error {
 	// 自分自身の実行ファイルパスを取得
