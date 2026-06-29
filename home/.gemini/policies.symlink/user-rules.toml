@@ -6,6 +6,7 @@ commandPrefix = [
     "~/.claude/wsl-toast.sh",
     "code --wait",
     "docker compose down",
+    "docker compose ps",
     "docker compose run",
     "gh issue view",
     "git branch --list",
@@ -30,4 +31,3 @@ priority = 100
 toolName = "activate_skill"
 decision = "allow"
 priority = 100
-argsPattern = '"name":"code-review"'
