@@ -1,9 +1,12 @@
 {
   "$schema": "https://raw.githubusercontent.com/google-gemini/gemini-cli/main/schemas/settings.schema.json",
-  "security": {
-    "auth": {
-      "selectedType": "oauth-personal"
-    }
+  "privacy": {
+    "usageStatisticsEnabled": false
+  },
+  "general": {
+    "preferredEditor": "vscode",
+    "enableNotifications": false,
+    "enableAutoUpdate": false
   },
   "ui": {
     "theme": "Default",
@@ -18,32 +21,73 @@
     "terminalBuffer": true,
     "useAlternateBuffer": true
   },
-  "privacy": {
-    "usageStatisticsEnabled": false
-  },
   "context": {
+    "fileFiltering": {
+      "enableFuzzySearch": false
+    },
     "fileName": [
       "AGENTS.md",
       "GEMINI.md"
     ]
   },
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    },
+    "toolSandboxing": false,
+    "enablePermanentToolApproval": true,
+    "autoAddToPolicyByDefault": false,
+    "environmentVariableRedaction": {
+      "enabled": false
+    },
+    "enableConseca": false
+  },
+  "advanced": {
+    "ignoreLocalEnv": true
+  },
+  "experimental": {
+    "autoMemory": true
+  },
   "mcpServers": {
     "aws-knowledge-mcp-server": {
       "httpUrl": "https://knowledge-mcp.global.api.aws"
+    },
+    "context7": {
+      "command": "context7-mcp"
+    },
+    "context-mode": {
+      "command": "context-mode"
     }
-  },
-  "general": {
-    "preferredEditor": "vscode",
-    "enableNotifications": false
   },
   "policyPaths": [
     "~/.gemini/policies/",
     ".gemini/policies/"
   ],
-  "experimental": {
-    "autoMemory": true
-  },
   "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "run_shell_command|read_file|read_many_files|grep_search|search_file_content|web_fetch|activate_skill|mcp__plugin_context-mode|mcp__context-mode|mcp__(?!.*context-mode)",
+        "hooks": [{ "type": "command", "command": "context-mode hook gemini-cli beforetool" }]
+      }
+    ],
+    "AfterTool": [
+      {
+        "matcher": "",
+        "hooks": [{ "type": "command", "command": "context-mode hook gemini-cli aftertool" }]
+      }
+    ],
+    "PreCompress": [
+      {
+        "matcher": "",
+        "hooks": [{ "type": "command", "command": "context-mode hook gemini-cli precompress" }]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [{ "type": "command", "command": "context-mode hook gemini-cli sessionstart" }]
+      }
+    ],
     "Notification": [
       {
         "matcher": "*",
