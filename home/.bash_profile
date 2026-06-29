@@ -52,8 +52,8 @@ if [[ -z $EDITOR ]]; then
 fi
 
 # BROWSER
-if [ -z "$BROWSER" -a -e "$(wslpath -u 'c:\\Windows\\System32\\rundll32.exe')" ]; then
-  export BROWSER="$(wslpath -u 'c:\\Windows\\System32\\rundll32.exe') url.dll,FileProtocolHandler"
+if wsl-browser; then
+  export BROWSER=wsl-browser
 fi
 
 # PAGER

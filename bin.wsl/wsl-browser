@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# vitest などが BROWSER 環境変数をシェル経由せず扱うためラッパーを設ける
+
+if [ "$#" -eq 0 ]; then
+  if [ -e /c/Windows/System32/rundll32.exe ]; then
+    exit 0
+  fi
+  exit 1
+fi
+
+exec /c/Windows/System32/rundll32.exe url.dll,FileProtocolHandler "$@"
