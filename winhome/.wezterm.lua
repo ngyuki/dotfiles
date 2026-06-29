@@ -10,7 +10,7 @@ local config = {}
 
 config.color_scheme = 'Campbell'
 config.font = wezterm.font_with_fallback { 'HackGen Console', 'HackGen' }
-config.font_size = 12.0
+config.font_size = 14
 
 -- カーソルのスタイル
 config.default_cursor_style = 'BlinkingBlock'
