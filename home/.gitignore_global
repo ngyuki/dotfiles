@@ -17,6 +17,9 @@ _plan.md
 * copy.*
 *.code-workspace
 
+# zed
+.zed/
+
 # windows shortcut
 *.lnk
 
@@ -53,7 +56,6 @@ CLAUDE.local.md
 AmazonQ.md
 GEMINI.md
 .gemini
-.geminiignore
 CODEX.md
 .kiro
 
