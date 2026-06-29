@@ -1,0 +1,18 @@
+#!/bin/bash
+
+zed="$USERPROFILE/AppData/Local/Programs/Zed/bin/zed"
+
+for x in "$@"; do
+  # https://x.com/ngyuki/status/2055485090579587330
+  if [ "$x" == "--wait" -o "$x" == "-w" ]; then
+    zed="$zed.exe"
+    break
+  fi
+done
+
+if [ ! -x "$zed" ]; then
+  echo "zed notfound" 1>&2
+  exit 1
+fi
+
+exec "$zed" "$@"
