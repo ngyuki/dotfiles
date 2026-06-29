@@ -76,7 +76,7 @@ description: プルリクエストを作成するために upstream ブランチ
         *   URL に `github` が含まれる場合は GitHub と判定します。
         *   URL に `gitlab` が含まれる場合は GitLab と判定します。
     *   判定結果に基づいて、使用するコマンドを選択します。
-        *   **GitHub の場合:** `gh pr create --draft --assignee @me --title "<title>" --body-file "<file_path>" --web `
+        *   **GitHub の場合:** `gh pr create --web --assignee @me --title "<title>" --body-file "<file_path>"`
         *   **GitLab の場合:** `glab mr create --push --web --title "<title>"` を実行し、ブラウザでマージリクエスト作成ページを開きます。同時に `code --wait <file_path>` を実行して一時ファイルを開き、ユーザーに本文をコピー＆ペーストしてもらいます。
 12. **プルリクエスト（マージリクエスト）の作成**
     *   ユーザーが同意した場合、選択したコマンドを実行してプルリクエストまたはマージリクエストを作成します。
