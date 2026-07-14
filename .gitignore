@@ -1,2 +1,4 @@
 /node_modules/
 !/home/*
+/home/.gemini/policies.symlink/auto-saved.toml
+/home/.gemini/policies.symlink/local-rules.toml
