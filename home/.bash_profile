@@ -169,6 +169,9 @@ export AWS_FEDERATION_TOKEN_TTL=12h
 # ripgrep
 export RIPGREP_CONFIG_PATH=~/.config/ripgreprc
 
+# fpp
+export FPP_EDITOR=code
+
 # cleanup
 unset dotfiles
 
