@@ -61,6 +61,9 @@ if [[ -z $PAGER ]]; then
   export PAGER=less
 fi
 
+# date "+%Y-%m-%dT%H:%M:%S %Z"
+export LC_TIME=en_DK.UTF-8
+
 # ls time-style
 export TIME_STYLE=long-iso
 
