@@ -48,6 +48,7 @@ _plan.md
 
 # ai coding
 AGENTS.md
+.agent
 .github/copilot-instructions.md
 CLAUDE.md
 CLAUDE.local.md
