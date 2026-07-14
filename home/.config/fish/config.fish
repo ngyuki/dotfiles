@@ -60,7 +60,11 @@ if status --is-interactive
 end
 
 # jethrokuan/fzf
-set -g FZF_DEFAULT_OPTS "--ansi --color=dark --style=full --tmux center,98%,95%"
+if set -q TMUX
+  set -g FZF_DEFAULT_OPTS "--ansi --color=dark --style=full --tmux center,98%,95%"
+else
+  set -g FZF_DEFAULT_OPTS "--ansi --color=dark --style=full"
+end
 set -g FZF_COMPLETE 2
 set -g FZF_COMPLETE_OPTS "--bind=esc:print-query --no-reverse --select-1"
 set -g FZF_FIND_FILE_COMMAND "command fd -L . \$dir 2>/dev/null"
