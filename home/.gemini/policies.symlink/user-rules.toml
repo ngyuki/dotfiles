@@ -5,10 +5,12 @@ priority = 100
 commandPrefix = [
     "~/.claude/wsl-toast.sh",
     "code --wait",
+    "code -w",
     "docker compose down",
     "docker compose ps",
     "docker compose run",
     "gh issue view",
+    "gh pr diff",
     "git branch --list",
     "git branch --show-current",
     "git diff",
