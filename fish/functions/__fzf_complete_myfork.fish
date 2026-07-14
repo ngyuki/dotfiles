@@ -17,6 +17,23 @@
 # If you prefer to set more advanced options, take a look at the
 # `__fzf_complete_opts` function and override that in your environment.
 
+#
+# オリジナルとの差分比較
+#
+#   diff -u ~/.config/fish/functions/__fzf_complete.fish __fzf_complete_myfork.fish
+#
+# 変更内容の概要
+#
+# - 補完後のカーソル位置
+#     - 標準だとディレクトリ以外では補完後にスペースが追加され  る → そのままタブで次の引数が補完できる
+#     - fzf_complete だとスペースが追加されない → 次の引数を補完するためにスペースを入力する必要がある
+#     - → 補完後の末尾がディレクトリ以外ならスペースを追加する
+# - 補完候補が複数で共通のプレフィックスがあるとき
+#     - 例えば `ansibl` で補完したとき、候補は `ansible` から始まるコマンドのみ
+#     - 標準だと最初のタブで `ansible` まで即時補完され、次のタブで補完候補が表示される
+#     - fzf_complete だと最初のタブで補完候補が表示される
+#     - → 補完候補が共通プレフィックスを持つならそこまでを自動補完
+#
 
 # modified from https://github.com/junegunn/fzf/wiki/Examples-(fish)#completion
 function __fzf_complete_myfork -d 'fzf completion and print selection back to commandline'
