@@ -192,6 +192,7 @@ fi
 
 case "$BASH_EXECUTION_STRING" in
   fish)
+    export SHELL=/bin/fish
     exec fish
     ;;
   tmux)
