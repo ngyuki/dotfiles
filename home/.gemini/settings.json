@@ -15,8 +15,14 @@
     "compactToolOutput": false,
     "hideBanner": true,
     "hideContextSummary": true,
+    "showModelInfoInChat": true,
     "footer": {
       "hideContextPercentage": false
+    }
+  },
+  "tools": {
+    "shell": {
+      "inactivityTimeout": 0
     }
   },
   "context": {
@@ -92,7 +98,7 @@
     ],
     "Notification": [
       {
-        "matcher": "*",
+        "matcher": "",
         "hooks": [
           {
             "name": "notification",
