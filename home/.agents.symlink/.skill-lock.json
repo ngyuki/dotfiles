@@ -1,0 +1,41 @@
+{
+  "version": 3,
+  "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
+      "installedAt": "2026-06-28T14:54:15.973Z",
+      "updatedAt": "2026-07-19T03:24:52.926Z"
+    },
+    "humanizer-ja": {
+      "source": "gonta223/humanizer-ja",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/gonta223/humanizer-ja.git",
+      "skillPath": "SKILL.md",
+      "skillFolderHash": "a1e343696e43aa50e7218891f3319ab22cde3464",
+      "installedAt": "2026-07-19T05:07:35.498Z",
+      "updatedAt": "2026-07-19T05:08:11.313Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "antigravity",
+    "antigravity-cli",
+    "cline",
+    "codex",
+    "cursor",
+    "deepagents",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-code-cli",
+    "opencode",
+    "warp",
+    "zed"
+  ]
+}
