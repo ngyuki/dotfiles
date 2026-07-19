@@ -7,13 +7,10 @@ build: ${target}.exe
 ${target}.exe: main.go
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "-s -w -H windowsgui" -o $@ .
 
-install: ${wslhome}/bin/${target}.exe ${HOME}/bin/${target}
+install: ${wslhome}/bin/${target}.exe
 
 ${wslhome}/bin/${target}.exe: ${target}.exe
 	install -m755 -D -s $< $@
-
-${HOME}/bin/${target}: ${target}.sh
-	install -m755 -D $< $@
 
 clean:
 	rm -fv ${target}
