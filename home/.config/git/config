@@ -123,6 +123,10 @@
     event = pre-commit
     command = ~/.config/git/hooks/pre-commit.typos.sh
 
+[hook "inject-commit-logs"]
+    event = prepare-commit-msg
+    command = ~/.config/git/hooks/prepare-commit-msg.sh
+
 ################################################################################
 # diff-highlight
 
