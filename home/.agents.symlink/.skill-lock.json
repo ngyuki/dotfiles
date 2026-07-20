@@ -8,7 +8,7 @@
       "skillPath": "skills/find-skills/SKILL.md",
       "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
       "installedAt": "2026-06-28T14:54:15.973Z",
-      "updatedAt": "2026-07-19T03:24:52.926Z"
+      "updatedAt": "2026-07-20T03:52:33.490Z"
     },
     "humanizer-ja": {
       "source": "gonta223/humanizer-ja",
@@ -24,12 +24,27 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/modem-dev/hunk.git",
       "skillPath": "skills/hunk-review/SKILL.md",
-      "skillFolderHash": "dcdffe55e1a26317d4639174fe2b66ae71686b6c",
-      "installedAt": "2026-07-19T05:11:35Z",
-      "updatedAt": "2026-07-19T05:12:06Z"
+      "skillFolderHash": "f955a7b7c2808b57cb72c5facd3fa9579af1ca1c",
+      "installedAt": "2026-07-20T03:53:55.778Z",
+      "updatedAt": "2026-07-20T03:53:55.778Z"
     }
   },
   "dismissed": {
     "findSkillsPrompt": true
-  }
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "antigravity",
+    "antigravity-cli",
+    "cline",
+    "codex",
+    "cursor",
+    "deepagents",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-code-cli",
+    "opencode",
+    "warp",
+    "zed"
+  ]
 }
