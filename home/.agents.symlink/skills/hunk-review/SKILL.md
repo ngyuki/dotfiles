@@ -1,12 +1,8 @@
 ---
-description: Interacts with live Hunk diff review sessions via CLI. Inspects review focus, navigates files and hunks, reloads session contents, and adds inline review comments. Use when the user has a Hunk session running or wants to review diffs interactively.
-metadata:
-    github-path: skills/hunk-review
-    github-ref: refs/tags/v0.17.2
-    github-repo: https://github.com/modem-dev/hunk
-    github-tree-sha: dcdffe55e1a26317d4639174fe2b66ae71686b6c
 name: hunk-review
+description: Interacts with live Hunk diff review sessions via CLI. Inspects review focus, navigates files and hunks, reloads session contents, and adds inline review comments. Use when the user has a Hunk session running or wants to review diffs interactively.
 ---
+
 # Hunk Review
 
 Hunk is an interactive terminal diff viewer. The TUI is for the user -- do NOT run `hunk diff`, `hunk show`, or other interactive commands directly. Use `hunk session *` CLI commands to inspect and control live sessions through the local daemon.
@@ -100,7 +96,7 @@ hunk session reload --session-path /path/to/live-window --source /path/to/other-
 ### Comments
 
 ```bash
-hunk session comment add --repo . --file README.md --new-line 103 --summary "Tighten this wording" [--rationale "..."] [--author "agent"] [--focus]
+hunk session comment add --repo . --file README.md --new-line 103 --summary "Tighten this wording" [--rationale "..."] [--markup "<stml>"] [--author "agent"] [--focus]
 printf '%s\n' '{"comments":[{"filePath":"README.md","newLine":103,"summary":"Tighten this wording"}]}' | hunk session comment apply --repo . --stdin [--focus]
 hunk session comment list --repo . [--file README.md] [--type live|all|ai|agent|user]
 hunk session comment rm --repo . <comment-id>
@@ -115,6 +111,12 @@ hunk session comment clear --repo . --yes [--file README.md]
 - Pass `--focus` when you want to jump to the new note or the first note in a batch
 - `comment list` and `comment clear` accept optional `--file`
 - Quote `--summary` and `--rationale` defensively in the shell
+
+### Rich markup notes (STML)
+
+`--markup` (or a `markup` field on apply items) renders the note body as STML — a small HTML-like markup for terminal UI (boxes, rows, gauges, badges, lists, code). Keep `--summary` a real sentence: it is the fallback and the `comment list` text.
+
+Before writing markup, run `hunk markup guide` once — it has copy-paste patterns and the width rules. `hunk session context --json` reports `noteMarkupWidth` (the live render width); preview with `hunk markup render - --width <that>`. Comment responses echo `markupWidth` and return `markupNotes` when markup degraded — fix what they flag.
 
 ## New files in working-tree reviews
 
