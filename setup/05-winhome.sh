@@ -4,6 +4,13 @@ source "$(dirname "$0")/functions.sh"
 
 set -eu
 
-pp "winhome"
 args="$(find "$PWD/winhome" -type f -printf " -path %P")"
-unison -batch -auto -root "$USERPROFILE" -root "$PWD/winhome" $args 2>&1 | pcat
+
+if [ $# -eq 0 ]; then
+  set -- -batch -auto
+  pp "winhome"
+  unison "$@" -root "$PWD/winhome" -root "$USERPROFILE" $args 2>&1 | pcat
+else
+  args="$(find "$PWD/winhome" -type f -printf " -path %P")"
+  unison "$@" -root "$PWD/winhome" -root "$USERPROFILE" $args
+fi
