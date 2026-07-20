@@ -57,6 +57,9 @@ if status --is-interactive
   # if type -fq rg
   #   alias grep='rg' # 明示的に呼べばよいと思う
   # end
+  if type -fq codex
+    alias codex='codex -p local'
+  end
 end
 
 # jethrokuan/fzf
