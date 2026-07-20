@@ -169,6 +169,10 @@ export AWS_FEDERATION_TOKEN_TTL=12h
 # ripgrep
 export RIPGREP_CONFIG_PATH=~/.config/ripgreprc
 
+# pass ... -c オプションでクリップボードに貼り付けるための仕込み
+export WAYLAND_DISPLAY=x
+export PASSWORD_STORE_CLIP_TIME=30
+
 # fpp
 export FPP_EDITOR=code
 

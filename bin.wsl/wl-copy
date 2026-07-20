@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# pass の -c コマンドを活かすためのラッパー
+exec /c/Windows/System32/clip.exe >/dev/null
