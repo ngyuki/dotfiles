@@ -1,0 +1,19 @@
+model = "gpt-5.6-sol"
+model_reasoning_effort = "low"
+check_for_update_on_startup = false
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+notify = ["logger"]
+
+[sandbox_workspace_write]
+network_access = false
+
+[shell_environment_policy]
+inherit = "core"
+exclude = ["AWS_*", "*_SECRET"]
+
+[tui]
+notifications = false
+
+[features]
+memories = true
