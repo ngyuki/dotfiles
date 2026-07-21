@@ -3,7 +3,6 @@ toolName = "run_shell_command"
 decision = "allow"
 priority = 100
 commandPrefix = [
-    "~/.claude/wsl-toast.sh",
     "code --wait",
     "code -w",
     "docker compose down",
@@ -22,6 +21,7 @@ commandPrefix = [
     "grep",
     "id",
     "ls",
+    "toast",
 ]
 
 [[rule]]
