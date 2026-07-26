@@ -20,14 +20,18 @@ end
 function fish_title
   if set -q argv[1]
     string split -f 1 " " $argv[1]
+    return
+  end
+  set abs (__fish_pwd)
+  if test "$abs" = "$HOME"
+    echo "~/"
+    return
+  end
+  set base (path basename $abs)
+  if [ (string length -- $base) -lt (string length -- $abs) ]
+    echo $base
   else
-    set abs (__fish_pwd)
-    set rel (string replace -ra '^.*/' './' $abs)
-    if [ (string length -- $rel) -lt (string length -- $abs) ]
-      echo $rel
-    else
-      echo $abs
-    end
+    echo $abs
   end
 end
 
