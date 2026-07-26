@@ -202,7 +202,7 @@ case "$BASH_EXECUTION_STRING" in
     export SHELL=/bin/fish
     exec fish
     ;;
-  tmux)
+  tmux-attach)
     if tmux has-session 2>/dev/null; then
       exec tmux attach-session
     fi
@@ -211,7 +211,7 @@ case "$BASH_EXECUTION_STRING" in
     export SHELL=/bin/fish
     exec tmux new-session
     ;;
-  tmux-new)
+  tmux)
     # SHELL 環境変数を設定すれば tmux の new-window で fish が直接起動する
     # .bash_profile は tmux サーバ起動時の初回のみロードされるため変更時は tmux サーバのリスタートが必要です
     export SHELL=/bin/fish
