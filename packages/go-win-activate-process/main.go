@@ -17,6 +17,7 @@ var (
 	modUser32   = windows.NewLazySystemDLL("user32.dll")
 	modKernel32 = windows.NewLazySystemDLL("kernel32.dll")
 	modShell32  = windows.NewLazySystemDLL("shell32.dll")
+	modOle32    = windows.NewLazySystemDLL("ole32.dll")
 
 	procEnumWindows          = modUser32.NewProc("EnumWindows")
 	procGetWindowTextW       = modUser32.NewProc("GetWindowTextW")
@@ -24,9 +25,40 @@ var (
 	procSetForegroundWindow  = modUser32.NewProc("SetForegroundWindow")
 	procGetWindowPlacement   = modUser32.NewProc("GetWindowPlacement")
 	procShowWindow           = modUser32.NewProc("ShowWindow")
+	procIsWindowVisible      = modUser32.NewProc("IsWindowVisible")
 	procGetModuleFileNameW   = modKernel32.NewProc("GetModuleFileNameW")
 	procShellExecuteExW      = modShell32.NewProc("ShellExecuteExW")
+	procCoInitialize         = modOle32.NewProc("CoInitialize")
+	procCoCreateInstance     = modOle32.NewProc("CoCreateInstance")
+	procCoUninitialize       = modOle32.NewProc("CoUninitialize")
 )
+
+var (
+	CLSID_VirtualDesktopManager = newGUID("{aa509086-5ca9-4c25-8f95-589d3c07b48a}")
+	IID_IVirtualDesktopManager  = newGUID("{a5cd92ff-29be-454c-8d04-d82879fb3f1b}")
+)
+
+// newGUID は文字列から GUID 構造体に変換します。
+func newGUID(s string) *windows.GUID {
+	guid, err := windows.GUIDFromString(s)
+	if err != nil {
+		panic(fmt.Sprintf("GUIDFromString failed: %v", err))
+	}
+	return &guid
+}
+
+type IVirtualDesktopManagerVtbl struct {
+	QueryInterface                  uintptr
+	AddRef                          uintptr
+	Release                         uintptr
+	IsWindowOnCurrentVirtualDesktop uintptr
+	GetWindowDesktopId              uintptr
+	MoveWindowToDesktop             uintptr
+}
+
+type IVirtualDesktopManager struct {
+	LpVtbl *IVirtualDesktopManagerVtbl
+}
 
 type windowPlacement struct {
 	Length   uint32
@@ -80,8 +112,29 @@ func main() {
 		return
 	}
 
-	// 子プロセス: ウィンドウをアクティブ化
-	hwnd := findWindowByTitle(searchTitle)
+	hr, _, _ := procCoInitialize.Call(0)
+	if hr != 0 && hr != 0x00000001 { // S_OK or S_FALSE(already initialized)
+		fmt.Fprintf(os.Stderr, "CoInitialize failed: 0x%x\n", hr)
+		os.Exit(1)
+	}
+	defer procCoUninitialize.Call()
+
+	var vdm *IVirtualDesktopManager
+	hr, _, _ = procCoCreateInstance.Call(
+		uintptr(unsafe.Pointer(CLSID_VirtualDesktopManager)),
+		0,
+		1, // CLSCTX_INPROC_SERVER
+		uintptr(unsafe.Pointer(IID_IVirtualDesktopManager)),
+		uintptr(unsafe.Pointer(&vdm)),
+	)
+	if hr == 0 && vdm != nil { // S_OK
+		defer syscall.Syscall(vdm.LpVtbl.Release, 1, uintptr(unsafe.Pointer(vdm)), 0, 0)
+	} else {
+		// IVirtualDesktopManager が取得できなくても、フォールバックして動作するようにする
+		vdm = nil
+	}
+
+	hwnd := findWindowByTitle(searchTitle, vdm)
 	if hwnd == 0 {
 		fmt.Fprintf(os.Stderr, "window not found: %s\n", searchTitle)
 		os.Exit(1)
@@ -150,25 +203,62 @@ func getModuleFileName() (string, error) {
 }
 
 // タイトルの部分一致でウィンドウを検索する
-func findWindowByTitle(searchTitle string) uintptr {
-	var found uintptr
+func findWindowByTitle(searchTitle string, vdm *IVirtualDesktopManager) uintptr {
+	var currentDesktopHwnd uintptr
+	var otherDesktopHwnd uintptr
 	searchLower := strings.ToLower(searchTitle)
 
 	cb := syscall.NewCallback(func(hwnd uintptr, _ uintptr) uintptr {
-		title := getWindowText(hwnd)
-		if title == "" {
+		if !isWindowVisible(hwnd) {
 			return 1 // continue
 		}
 
-		if strings.Contains(strings.ToLower(title), searchLower) {
-			found = hwnd
+		title := getWindowText(hwnd)
+		if !strings.Contains(strings.ToLower(title), searchLower) {
+			return 1 // continue
+		}
+
+		if vdm != nil {
+			var isOnCurrent int32
+			hr, _, _ := syscall.Syscall(vdm.LpVtbl.IsWindowOnCurrentVirtualDesktop, 3, uintptr(unsafe.Pointer(vdm)), hwnd, uintptr(unsafe.Pointer(&isOnCurrent)))
+
+			if hr == 0 { // S_OK
+				if isOnCurrent != 0 {
+					// 現在のデスクトップで見つかったので、これを最優先して探索終了
+					currentDesktopHwnd = hwnd
+					return 0 // stop enumeration
+				} else {
+					// 他のデスクトップで見つかった。探索は続けるが、最初の候補として保持
+					if otherDesktopHwnd == 0 {
+						otherDesktopHwnd = hwnd
+					}
+				}
+			} else { // COM call failed
+				// 他のデスクトップで見つかったものとして扱う
+				if otherDesktopHwnd == 0 {
+					otherDesktopHwnd = hwnd
+				}
+			}
+		} else { // vdm is nil
+			// 仮想デスクトップ管理が利用できない場合、最初に見つかったもので終了
+			currentDesktopHwnd = hwnd
 			return 0 // stop enumeration
 		}
+
 		return 1 // continue
 	})
 
 	procEnumWindows.Call(cb, 0)
-	return found
+
+	if currentDesktopHwnd != 0 {
+		return currentDesktopHwnd
+	}
+	return otherDesktopHwnd
+}
+
+func isWindowVisible(hwnd uintptr) bool {
+	ret, _, _ := procIsWindowVisible.Call(hwnd)
+	return ret != 0
 }
 
 // ウィンドウのタイトルを取得する
