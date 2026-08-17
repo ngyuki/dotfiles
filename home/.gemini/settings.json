@@ -31,7 +31,8 @@
     },
     "fileName": [
       "AGENTS.md",
-      "GEMINI.md"
+      "GEMINI.md",
+      "AGENTS.local.md"
     ]
   },
   "security": {
@@ -87,5 +88,21 @@
         ]
       }
     ]
+  },
+  "modelConfigs": {
+    "customAliases": {
+      "fast": {
+        "extends": "fast-ack-helper",
+        "modelConfig": {
+          "model": "gemini-3.7-flash"
+        }
+      },
+      "completion": {
+        "extends": "prompt-completion",
+        "modelConfig": {
+          "model": "gemini-3.7-flash"
+        }
+      }
+    }
   }
 }
