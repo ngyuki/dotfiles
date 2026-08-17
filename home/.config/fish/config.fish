@@ -66,17 +66,28 @@ if status --is-interactive
   end
 end
 
-# jethrokuan/fzf
-if set -q TMUX
-  set -g FZF_DEFAULT_OPTS "--ansi --color=dark --style=full --tmux center,98%,95%"
-else
-  set -g FZF_DEFAULT_OPTS "--ansi --color=dark --style=full"
+# fzf
+if type -q fzf
+  set -gx FZF_DEFAULT_OPTS '--ansi --color=dark --style=full --info=inline --bind ctrl-s:toggle-sort'
+
+  if set -q TMUX
+    # TMUX 環境変数を見るために .bash_profile では早すぎるので fish/config
+
+    # https://x.com/ngyuki/status/2091942886740987945
+    # --border=rounded は tmux 3.7 の Floating panes のバグのワークアラウンド
+    set -gx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS --popup center,98%,95% --border=rounded"
+  end
+
+  # jethrokuan/fzf
+  set -gx FZF_TMUX 0 # FZF_DEFAULT_OPTS の --tmux と競合する
+  set -gx FZF_COMPLETE 2
+  set -gx FZF_COMPLETE_OPTS '--bind=esc:print-query --no-reverse --select-1'
+  set -gx FZF_FIND_FILE_COMMAND 'command fd -L . $dir 2>/dev/null'
+  set -gx FZF_FIND_FILE_OPTS '--scheme=path'
+  set -gx FZF_OPEN_COMMAND $FZF_FIND_FILE_COMMAND
+  set -gx FZF_OPEN_OPTS $FZF_FIND_FILE_OPTS
+  set -gx FZF_REVERSE_ISEARCH_OPTS '-e --scheme=history'
 end
-set -g FZF_COMPLETE 2
-set -g FZF_COMPLETE_OPTS "--bind=esc:print-query --no-reverse --select-1"
-set -g FZF_FIND_FILE_COMMAND "command fd -L . \$dir 2>/dev/null"
-set -g FZF_TMUX 0
-# set -g FZF_TMUX_HEIGHT "80% -p 95%,90%"
 
 # zoxide
 if type zoxide >/dev/null 2>&1

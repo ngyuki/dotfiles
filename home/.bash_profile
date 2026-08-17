@@ -83,11 +83,6 @@ export LESS_TERMCAP_so=$(printf "\e[1;44;33m")
 export LESS_TERMCAP_ue=$(printf "\e[0m")
 export LESS_TERMCAP_us=$(printf "\e[1;32m")
 
-# fzf
-if type fzf >/dev/null 2>&1; then
-  export FZF_DEFAULT_OPTS='--ansi --inline-info --bind ctrl-s:toggle-sort'
-fi
-
 # vagrant
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS=1
 export VAGRANT_WSL_DISABLE_VAGRANT_HOME=1
