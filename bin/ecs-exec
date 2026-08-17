@@ -14,7 +14,7 @@ fish_complete_list() {
         | jq '.taskArns[] | split("/")[-1]' -r
       ))
 
-      aws ecs describe-tasks --cluster "$cluster" --tasks "${tasks[@]}" \
+      TZ=UTC aws ecs describe-tasks --cluster "$cluster" --tasks "${tasks[@]}" \
       | jq '
         .tasks[]
         | select(.lastStatus == "RUNNING")
@@ -23,7 +23,7 @@ fish_complete_list() {
         | (.taskArn | split("/")[-1]) as $task
         | (.createdAt | split(".")[0] ) as $createdAt
         | .containers[]
-        | ["\($cluster):\($task):\(.name)", "\($definition) createdAt:\($createdAt)"] | @tsv' -r
+        | ["\($cluster):\($task):\(.name)", "\($definition) age:\($createdAt + "Z" | now - fromdate | floor)s"] | @tsv' -r
     ) &
   done
   wait
