@@ -24,4 +24,6 @@ function fish_user_key_bindings
   bind \cx\ce edit_command_buffer
 
   bind \cq 'commandline -f repaint'
+
+  bind ctrl-space tmux_ai_complete
 end

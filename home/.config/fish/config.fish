@@ -153,3 +153,15 @@ end
 if type wtp >/dev/null 2>&1
   wtp shell-init fish | source
 end
+
+# tmux-ai-complete
+if type -q agy
+  set -gx TMUX_AI_COMPLETE_PROVIDER agy
+else if type -q codex
+  set -gx TMUX_AI_COMPLETE_PROVIDER codex
+else if type -q gemini
+  set -gx TMUX_AI_COMPLETE_PROVIDER gemini
+end
+
+# config.local.fish
+test -f ~/.config/fish/config.local.fish; and source ~/.config/fish/config.local.fish
