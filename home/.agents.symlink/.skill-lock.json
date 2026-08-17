@@ -8,7 +8,16 @@
       "skillPath": "skills/find-skills/SKILL.md",
       "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
       "installedAt": "2026-06-28T14:54:15.973Z",
-      "updatedAt": "2026-07-20T03:52:33.490Z"
+      "updatedAt": "2026-08-12T10:53:50Z"
+    },
+    "gh-stack": {
+      "source": "github/gh-stack",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/github/gh-stack.git",
+      "skillPath": "skills/gh-stack/SKILL.md",
+      "skillFolderHash": "c95c8b5b4dd850f3fef007b304428f5684f2fb87",
+      "installedAt": "2026-08-01T06:31:41Z",
+      "updatedAt": "2026-08-12T10:53:51Z"
     },
     "humanizer-ja": {
       "source": "gonta223/humanizer-ja",
@@ -24,27 +33,12 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/modem-dev/hunk.git",
       "skillPath": "skills/hunk-review/SKILL.md",
-      "skillFolderHash": "f955a7b7c2808b57cb72c5facd3fa9579af1ca1c",
+      "skillFolderHash": "dd9938367f3e6c6bce3a3873059106041cd7a005",
       "installedAt": "2026-07-20T03:53:55.778Z",
-      "updatedAt": "2026-07-20T03:53:55.778Z"
+      "updatedAt": "2026-08-12T10:53:51Z"
     }
   },
   "dismissed": {
     "findSkillsPrompt": true
-  },
-  "lastSelectedAgents": [
-    "amp",
-    "antigravity",
-    "antigravity-cli",
-    "cline",
-    "codex",
-    "cursor",
-    "deepagents",
-    "gemini-cli",
-    "github-copilot",
-    "kimi-code-cli",
-    "opencode",
-    "warp",
-    "zed"
-  ]
+  }
 }
