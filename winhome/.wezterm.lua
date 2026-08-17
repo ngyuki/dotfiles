@@ -72,6 +72,7 @@ config.keys = {
   { key = 'RightArrow', mods = 'CTRL|SHIFT', action = act.DisableDefaultAssignment  },
   { key = 'PageUp', mods = 'CTRL', action = act.DisableDefaultAssignment },
   { key = 'PageDown', mods = 'CTRL', action = act.DisableDefaultAssignment },
+  { key = 'w', mods = 'CTRL|SHIFT', action = act.DisableDefaultAssignment },
 
   -- Shift+Enter で LF を送る (claude code 用)
   { key = 'Enter', mods = 'SHIFT', action = act.SendString '\x0a', },
