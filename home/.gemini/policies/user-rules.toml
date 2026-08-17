@@ -21,6 +21,7 @@ commandPrefix = [
     "grep",
     "id",
     "ls",
+    "terraform validate",
     "toast",
 ]
 
