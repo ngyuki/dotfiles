@@ -18,6 +18,6 @@ function xssh
     set cmd xpanes --ssh $hosts $argv
   end
 
-  history_add $cmd
+  history append -- (string join ' ' -- (string escape -- $cmd))
   $cmd
 end
