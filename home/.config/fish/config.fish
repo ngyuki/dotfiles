@@ -24,7 +24,7 @@ function fish_title
   end
   set abs (__fish_pwd)
   if test "$abs" = "$HOME"
-    echo "~/"
+    echo "~"
     return
   end
   set base (path basename $abs)
