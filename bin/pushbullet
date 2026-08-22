@@ -2,13 +2,18 @@
 
 set -eu
 
-if [ -e "$HOME/.config/oreore/pushbullet.sh" ]; then
+if [ -z "${PUSHBULLET_ACCESS_TOKEN:-}" ] && command -v secret-tool >/dev/null 2>&1; then
+    PUSHBULLET_ACCESS_TOKEN=$(secret-tool lookup service pushbullet 2>/dev/null || true)
+fi
+
+if [ -z "${PUSHBULLET_ACCESS_TOKEN:-}" ] && [ -e "$HOME/.config/oreore/pushbullet.sh" ]; then
     source "$HOME/.config/oreore/pushbullet.sh"
 fi
 
-
 if [ -z "${PUSHBULLET_ACCESS_TOKEN:-}" ]; then
-    echo 'Please append to "$HOME/.config/oreore/pushbullet.sh"'
+    echo 'Please store PUSHBULLET_ACCESS_TOKEN in Secret Service or append it to "$HOME/.config/oreore/pushbullet.sh"'
+    echo
+    echo "    secret-tool store --label=Pushbullet service pushbullet"
     echo
     echo '    mkdir -pv "$HOME/.config/oreore"'
     echo '    echo export PUSHBULLET_ACCESS_TOKEN=... > "$HOME/.config/oreore/pushbullet.sh"'
