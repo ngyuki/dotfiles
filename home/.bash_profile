@@ -153,7 +153,7 @@ if [ -d "$HOME/.deno/bin" ]; then
 fi
 
 # ssh-agent
-eval "$(SHELL=/bin/bash keychain --eval --quiet --quick)"
+export SSH_AUTH_SOCK="/run/user/$(id -u)/ssh-agent.socket"
 
 # aws-vault
 export AWS_VAULT_BACKEND=pass
