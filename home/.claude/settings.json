@@ -50,10 +50,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -c >> ~/.claude/notification.log"
-          },
-          {
-            "type": "command",
             "command": "~/.claude/hooks/notification.sh"
           }
         ]
@@ -63,10 +59,6 @@
       {
         "matcher": "",
         "hooks": [
-          {
-            "type": "command",
-            "command": "jq -c >> ~/.claude/stop.log"
-          },
           {
             "type": "command",
             "command": "~/.claude/hooks/stop.sh"
