@@ -13,13 +13,13 @@ function fish_user_key_bindings
   # \cj や \cm をバインドすると xpanes の動作がおかしくなる
   # bind \cj __oreore_exec
 
-  bind -k ppage history-search-backward
-  bind -k npage history-search-forward
+  bind pageup history-search-backward
+  bind pagedown history-search-forward
 
   # bind \t complete
   bind \t __fzf_complete_myfork
 
-  bind -k btab complete-and-search
+  bind shift-tab complete-and-search
 
   bind \cx\ce edit_command_buffer
 
