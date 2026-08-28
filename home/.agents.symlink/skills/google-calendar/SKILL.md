@@ -9,6 +9,7 @@ description: gws で Google カレンダーにスケジュールを登録する�
 
 `gws calendar events insert` コマンドと `--json` オプションを使ってイベントを登録します。
 `--json` オプションには、後述する **JSON の構造** を参考にして、イベントの詳細を JSON 形式で渡してください。
+登録後は登録したイベントの url をユーザーに表示してください。
 
 ### 実行コマンドの基本形
 
@@ -42,7 +43,6 @@ gws calendar events insert --params '{"calendarId": "primary"}' --json '（こ�
 - **説明本文およびリンク**：ユーザーから指示された詳細な説明を記述する。タイトルそのものは重複して含めない。ユーザーから指示された関連リンクがある場合はその URL をそのまま含める
 - **メタデータ（説明の末尾に空行を挟んで記述）**：説明の末尾に以下のメタデータを必ず含める
   - **`Registered by`**：`gemini cli`
-  - **`Directory`**：コマンド実行時のカレントディレクトリ（ホームディレクトリからの相対パス）
 
 #### `description` の記述例
 
@@ -50,9 +50,7 @@ gws calendar events insert --params '{"calendarId": "primary"}' --json '（こ�
 ユーザーから指示された説明詳細。
 https://github.com/...
 
----
 Registered by: gemini cli
-Directory: （カレントディレクトリ）
 ```
 
 **注意点:**
