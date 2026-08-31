@@ -150,12 +150,4 @@ PROMPT_COMMAND="__bash_delay;$PROMPT_COMMAND";__bash_delay(){ __bash_delay(){ :;
   if hash aws 2>/dev/null; then
     complete -C aws_completer aws
   fi
-
-  # bash.d
-  local dotfiles fn
-  dotfiles="$(realpath -- "${BASH_SOURCE[0]}")"
-  dotfiles="$(realpath -- ${dotfiles%/*}/../)"
-  for fn in "$dotfiles"/bash.d/*.sh; do
-    source "$fn"
-  done
 }
