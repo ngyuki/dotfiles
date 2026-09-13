@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -eu
+
+tmux source ~/.tmux.conf
+~/.tmux/plugins/tpm/bin/update_plugins all
+~/.tmux/plugins/tpm/bin/clean_plugins
