@@ -26,6 +26,15 @@ commandPrefix = [
 ]
 
 [[rule]]
+toolName = "run_shell_command"
+decision = "allow"
+priority = 100
+modes = [ "default", "autoEdit", "yolo" ]
+commandPrefix = [
+    "gws calendar events insert",
+]
+
+[[rule]]
 toolName = "web_fetch"
 decision = "allow"
 priority = 100
