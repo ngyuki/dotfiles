@@ -42,14 +42,23 @@ gws calendar events insert --params '{"calendarId": "primary"}' --json '（こ�
 
 - **説明本文およびリンク**：ユーザーから指示された詳細な説明を記述する。タイトルそのものは重複して含めない。ユーザーから指示された関連リンクがある場合はその URL をそのまま含める
 - **メタデータ（説明の末尾に空行を挟んで記述）**：説明の末尾に以下のメタデータを必ず含める
-  - **`Registered by`**：`gemini cli`
+    - **`Registered by`**：`gemini cli`
 
 #### `description` の記述例
+
+**説明の内容がある場合**
 
 ```
 ユーザーから指示された説明詳細。
 https://github.com/...
 
+---
+Registered by: gemini cli
+```
+
+**説明の内容が無い場合**
+
+```
 Registered by: gemini cli
 ```
 
