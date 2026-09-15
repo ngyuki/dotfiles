@@ -1,0 +1,52 @@
+[terminal.shell]
+program = "wsl.exe"
+args = ["--cd", "~", "-d", "fedora", "--", "bash", "-l", "-i", "-c", "fish"]
+
+[selection]
+save_to_clipboard = true
+
+[font]
+size = 14.0
+
+[font.normal]
+family = "HackGen Console"
+
+[colors.primary]
+background = "#000000"
+foreground = "#B2B2B2"
+
+[colors.cursor]
+cursor = "#B2B2B2"
+text = "#000000"
+
+[colors.normal]
+black   = "#000000"
+red     = "#CC5555"
+green   = "#55CC55"
+yellow  = "#CDCD55"
+blue    = "#5455CB"
+magenta = "#CC55CC"
+cyan    = "#7ACACA"
+white   = "#CCCCCC"
+
+[colors.bright]
+black   = "#555555"
+red     = "#FF5555"
+green   = "#55FF55"
+yellow  = "#FFFF55"
+blue    = "#5555FF"
+magenta = "#FF55FF"
+cyan    = "#55FFFF"
+white   = "#FFFFFF"
+
+[keyboard]
+bindings = [
+  { key = "V", mods = "Control", action = "Paste" },
+  { key = "Plus", mods = "Control|Shift", action = "IncreaseFontSize" },
+  { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
+  { key = "0", mods = "Control", action = "ResetFontSize" },
+  { key = "Enter", mods = "Shift", chars = "\n" },
+  { key = "Enter", mods = "Control", chars = "\n" },
+  { key = "Home", mods = "Shift", action = "None" },
+  { key = "End", mods = "Shift", action = "None" }
+]
