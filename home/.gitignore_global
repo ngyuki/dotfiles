@@ -1,6 +1,9 @@
 .git/
 
 # my rules
+_local
+_local/
+.local
 .local/
 .locals/
 .trash/
@@ -48,17 +51,22 @@ _plan.md
 
 # ai coding
 AGENTS.md
-.agent
+.agents
+.agents/
 .github/copilot-instructions.md
 CLAUDE.md
 CLAUDE.local.md
 .claude
+.claude/
 .amazonq
+.amazonq/
 AmazonQ.md
 GEMINI.md
 .gemini
+.gemini/
 CODEX.md
 .kiro
+.kiro/
 
 # other tools
 _typos.toml
