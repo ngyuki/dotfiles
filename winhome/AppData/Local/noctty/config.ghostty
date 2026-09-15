@@ -1,0 +1,44 @@
+command = direct:wsl.exe -d fedora -- bash -l -i -c fish
+
+font-family = HackGen Console
+font-size = 14
+
+copy-on-select = clipboard
+clipboard-trim-trailing-spaces = true
+
+background = #000000
+foreground = #B2B2B2
+palette = 0=#000000
+palette = 1=#CC5555
+palette = 2=#55CC55
+palette = 3=#CDCD55
+palette = 4=#5455CB
+palette = 5=#CC55CC
+palette = 6=#7ACACA
+palette = 7=#CCCCCC
+palette = 8=#555555
+palette = 9=#FF5555
+palette = 10=#55FF55
+palette = 11=#FFFF55
+palette = 12=#5555FF
+palette = 13=#FF55FF
+palette = 14=#55FFFF
+palette = 15=#FFFFFF
+cursor-color = #B2B2B2
+cursor-text = #000000
+bold-color = bright
+
+# keybind = clear
+keybind = ctrl+shift+comma=reload_config
+keybind = shift+home=unbind
+keybind = shift+end=unbind
+keybind = ctrl+v=paste_from_clipboard
+keybind = ctrl+shift+plus=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+0=reset_font_size
+keybind = shift+enter=text:\n
+keybind = ctrl+enter=text:\n
+
+window-inherit-working-directory = false
+tab-inherit-working-directory = false
+split-inherit-working-directory = false
