@@ -47,6 +47,7 @@ end
 
 # alias
 if status --is-interactive
+  alias cal='cal -s'
   if type -fq exa
     export EXA_COLORS="reset"
     #alias ls='exa --color=auto --time-style=long-iso' # オプションが違いすぎてわかりにくい
