@@ -10,6 +10,7 @@
   },
   "ui": {
     "theme": "Default",
+    "autoThemeSwitching": false,
     "hideTips": true,
     "showShortcutsHint": false,
     "compactToolOutput": false,
