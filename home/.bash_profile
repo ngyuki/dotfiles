@@ -148,7 +148,8 @@ if [ -d "$HOME/.deno/bin" ]; then
 fi
 
 # ssh-agent
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+#export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
 
 # aws-vault
 export AWS_VAULT_BACKEND=pass
