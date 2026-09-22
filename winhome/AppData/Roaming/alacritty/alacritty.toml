@@ -1,3 +1,6 @@
+[general]
+live_config_reload = true
+
 [terminal.shell]
 program = "wsl.exe"
 args = ["--cd", "~", "-d", "fedora", "--", "bash", "-l", "-i", "-c", "fish"]
@@ -47,6 +50,4 @@ bindings = [
   { key = "0", mods = "Control", action = "ResetFontSize" },
   { key = "Enter", mods = "Shift", chars = "\n" },
   { key = "Enter", mods = "Control", chars = "\n" },
-  { key = "Home", mods = "Shift", action = "None" },
-  { key = "End", mods = "Shift", action = "None" }
 ]
