@@ -344,20 +344,36 @@ async function lookupGeminiApiKey() {
     if (!apiKey) {
         throw new Error("GEMINI_API_KEY environment variable is not set");
     }
-    const match = apiKey.match(/^keyring:([^=]+)=(.+)$/);
-    if (!match) {
-        return apiKey;
+    const match = apiKey.match(/^(\w+):(.+)$/);
+    if (match) {
+        const [, tool, value] = match;
+        if (tool === "keyring") {
+            const arr = value.trim().split(",");
+            const child = spawn("secret-tool", ["lookup", ...arr], {
+                stdio: ["ignore", "pipe", "inherit"],
+            });
+            const [code, stdout] = await Promise.all([
+                waitCloseChildProcess(child),
+                waitReadableStreamFinished(child.stdout),
+            ]);
+            if (code !== 0) {
+                throw new Error(`secret-tool lookup failed with status ${code}`);
+            }
+            return stdout.trim();
+        }
+        if (tool === "pass") {
+            const child = spawn("pass", ["show", value.trim()], {
+                stdio: ["ignore", "pipe", "inherit"],
+            });
+            const [code, stdout] = await Promise.all([
+                waitCloseChildProcess(child),
+                waitReadableStreamFinished(child.stdout),
+            ]);
+            if (code !== 0) {
+                throw new Error(`pass show failed with status ${code}`);
+            }
+            return stdout.trim();
+        }
     }
-    const [, attr, value] = match;
-    const child = spawn("secret-tool", ["lookup", attr, value], {
-        stdio: ["ignore", "pipe", "inherit"],
-    });
-    const [code, stdout] = await Promise.all([
-        waitCloseChildProcess(child),
-        waitReadableStreamFinished(child.stdout),
-    ]);
-    if (code !== 0) {
-        throw new Error(`secret-tool lookup failed with status ${code}`);
-    }
-    return stdout.trim();
+    return apiKey;
 }
