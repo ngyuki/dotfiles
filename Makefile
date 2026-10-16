@@ -1,8 +1,11 @@
 USERPROFILE := $(shell cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')
 USERPROFILE := $(shell wslpath -u -- "${USERPROFILE}")
 
+.PHONY: default
+default: ~/dotfiles dotsync winhome win-activate-process.exe
+
 .PHONY: all
-all: ~/dotfiles dotsync winhome win-activate-process.exe ansible
+all: default ansible
 
 .PHONY: ~/dotfiles
 ~/dotfiles:
