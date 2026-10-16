@@ -37,7 +37,7 @@ notify_powershell() {
   dir=${dir%/*}
   (
     cd -- "$dir"
-    powershell.exe -Sta -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File toast.ps1 -app "$app" -title "$title" -message "$message" -url "$url"
+    powershell.exe -Sta -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File toast.ps1 -app "$app" -title "$title" -message "$message" -url "$url" </dev/null
   )
 }
 
