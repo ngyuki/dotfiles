@@ -20,8 +20,16 @@ fi
     src="$PWD/${f#./}"
     dst="$HOME/${f#./}"
     dir="${dst%/*}"
-    mkdir -pv "$dir"
     dst="${dst%.symlink}"
-    ln -vsfn "$src"  "$dst"
+    # mkdir -pv "$dir"
+    # ln -vsfn "$src" "$dst"
+    if [ -h "$dst" ]; then
+      unlink "$dst"
+    fi
+    if [ -d "$src" ]; then
+      rsync -a "$src/" "$dst/"
+    else
+      rsync -a "$src" "$dst"
+    fi
   done
 ) | pcat
