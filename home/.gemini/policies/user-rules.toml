@@ -1,45 +1,71 @@
 [[rule]]
-toolName = "run_shell_command"
 decision = "allow"
 priority = 100
+toolName = "run_shell_command"
 commandPrefix = [
-    "code --wait",
-    "code -w",
-    "docker compose down",
-    "docker compose ps",
-    "docker compose run",
-    "gh issue view",
-    "gh pr diff",
-    "git branch --list",
-    "git branch --show-current",
-    "git diff",
-    "git fetch",
-    "git log",
-    "git rev-parse",
-    "git show",
-    "git status",
-    "grep",
-    "id",
-    "ls",
-    "terraform validate",
-    "toast",
+  "code --wait",
+  "code -w",
+  "crit",
+  "date",
+  "docker compose down",
+  "docker compose ps",
+  "gh issue view",
+  "gh pr diff",
+  "gh pr view",
+  "git branch --list",
+  "git branch --show-current",
+  "git diff",
+  "git fetch",
+  "git log",
+  "git ls-files",
+  "git rev-parse",
+  "git show",
+  "git status",
+  "grep",
+  "hunk",
+  "id",
+  "jq",
+  "ls",
+  "terraform fmt",
+  "terraform validate",
+  "toast",
 ]
 
 [[rule]]
-toolName = "run_shell_command"
 decision = "allow"
 priority = 100
+toolName = "run_shell_command"
 modes = [ "default", "autoEdit", "yolo" ]
 commandPrefix = [
-    "gws calendar events insert",
+  "gws calendar events insert",
 ]
 
 [[rule]]
-toolName = "web_fetch"
 decision = "allow"
 priority = 100
+toolName = "web_fetch"
 
 [[rule]]
-toolName = "activate_skill"
 decision = "allow"
 priority = 100
+toolName = "activate_skill"
+
+[[rule]]
+decision = "allow"
+priority = 100
+mcpName = "aws-knowledge-mcp-server"
+toolName = "*"
+
+[[rule]]
+decision = "allow"
+priority = 100
+mcpName = "context7"
+toolName = "*"
+
+[[rule]]
+decision = "deny"
+priority = 900
+toolName = "run_shell_command"
+commandPrefix = [
+  "sudo",
+]
