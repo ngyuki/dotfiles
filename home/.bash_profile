@@ -10,8 +10,7 @@ if [ -f ~/.bashrc ]; then
   . ~/.bashrc
 fi
 
-dotfiles="$(realpath -- "${BASH_SOURCE[0]}")"
-dotfiles="$(realpath -- ${dotfiles%/*}/../)"
+dotfiles="$(realpath -- ~/dotfiles)"
 
 # https://donottrack.sh/
 export DO_NOT_TRACK=1

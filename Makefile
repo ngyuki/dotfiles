@@ -1,5 +1,16 @@
 .PHONY: all
-all: win-activate-process.exe
+all: ~/dotfiles dotsync win-activate-process.exe setup-scripts
+
+.PHONY: ~/dotfiles
+~/dotfiles:
+	ln -sfnr . ~/dotfiles
+
+.PHONY: dotsync
+dotsync:
+	setup/dotsync.sh home/ ~/ -auto
+
+.PHONY: setup-scripts
+setup-scripts:
 	for fn in setup/[0-9]*.sh; do "$$fn"; done
 
 .PHONY: winhome

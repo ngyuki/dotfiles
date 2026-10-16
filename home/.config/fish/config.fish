@@ -6,7 +6,7 @@ set -U fish_features all
 # https://github.com/fish-shell/fish-shell/issues/789#issuecomment-207898381
 # set TERM cygwin
 
-set -l my_function_path (realpath -- (dirname -- (realpath -- (status -f)))/../../../fish/functions)
+set -l my_function_path (realpath -- ~/dotfiles/fish/functions)
 if not contains $my_function_path $fish_function_path
   set fish_function_path $my_function_path $fish_function_path
 end
