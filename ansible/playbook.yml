@@ -1,0 +1,39 @@
+---
+
+- hosts: localhost
+  connection: local
+  become: true
+  become_user: root
+  tasks:
+    - name: make system directories
+      file:
+        path: "/{{ item.path }}"
+        state: directory
+      loop: "{{ query('community.general.filetree', 'files/') | selectattr('state', 'equalto', 'directory') }}"
+      loop_control:
+        label: "{{ item.path }}"
+
+    - name: make system files
+      copy:
+        src: "{{ item.path }}"
+        dest: "/{{ item.path }}"
+      loop: "{{ query('community.general.filetree', 'files/') | selectattr('state', 'equalto', 'file') }}"
+      loop_control:
+        label: "{{ item.path }}"
+      notify:
+        - systemd-tmpfiles --create
+
+    - name: enable user systemd service
+      systemd:
+        name: systemd-tmpfiles-clean.timer
+        scope: user
+        enabled: true
+        state: started
+      loop:
+        - systemd-tmpfiles-clean.timer
+        - ssh-agent.socket
+
+  handlers:
+    - name: systemd-tmpfiles --create
+      command:
+        cmd: systemd-tmpfiles --create

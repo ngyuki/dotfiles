@@ -13,6 +13,10 @@ dotsync:
 setup-scripts:
 	for fn in setup/[0-9]*.sh; do "$$fn"; done
 
+.PHONY: ansible
+ansible:
+	ansible-playbook -i localhost, ansible/playbook.yml -D
+
 .PHONY: winhome
 winhome:
 	./setup/05-winhome.sh -auto
