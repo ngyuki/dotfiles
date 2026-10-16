@@ -35,6 +35,13 @@ function fish_title
   end
 end
 
+# プロンプト表示時に tmux をリフレッシュ
+function _tmux_refresh_status --on-event fish_prompt
+  if set -q TMUX
+    command tmux refresh-client -S
+  end
+end
+
 # mise
 if type mise >/dev/null 2>&1
   mise activate fish | source
