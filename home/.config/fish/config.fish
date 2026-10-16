@@ -81,13 +81,16 @@ if type -q fzf
   if set -q TMUX
     # TMUX 環境変数を見るために .bash_profile では早すぎるので fish/config
 
-    # https://x.com/ngyuki/status/2091942886740987945
-    # --border=rounded は tmux 3.7 の Floating panes のバグのワークアラウンド
-    set -gx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS --popup center,98%,95% --border=rounded"
+    # ペイン内（＝ポップアップではない）なら --popup を付ける
+    if set -q TMUX_PANE
+      # https://x.com/ngyuki/status/2091942886740987945
+      # --border=rounded は tmux 3.7 の Floating panes のバグのワークアラウンド
+      set -gx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS --popup center,98%,95% --border=rounded"
+    end
   end
 
   # jethrokuan/fzf
-  set -gx FZF_TMUX 0 # FZF_DEFAULT_OPTS の --tmux と競合する
+  set -gx FZF_TMUX 0 # FZF_DEFAULT_OPTS の --popup と競合する
   set -gx FZF_COMPLETE 2
   set -gx FZF_COMPLETE_OPTS '--bind=esc:print-query --no-reverse --select-1'
   set -gx FZF_FIND_FILE_COMMAND 'command fd -L . $dir 2>/dev/null'
