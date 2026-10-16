@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# セッション一覧をインデックス順で生成
+cmd_list() {
+  tmux list-sessions -F $'#{session_id}\t#{session_name}\t\e[90m#{session_windows} windows\e[0m#{?session_attached, \e[1;33m(attached)\e[0m,}' \
+  | sort -k1.2,1n
+}
+
+# ユーザーに確認したうえでセッションを終了
+cmd_kill() {
+  local session="${1:-}"
+  [ -z "$session" ] && return 0
+  if gum confirm "kill session: $session"; then
+    tmux kill-session -t "$session" \; refresh-client -S
+  fi
+}
+
+case "${1:-}" in
+  --list)
+    cmd_list
+    exit 0
+    ;;
+  --kill)
+    cmd_kill "${2:-}"
+    exit 0
+    ;;
+esac
+
+self=${BASH_SOURCE[0]}
+
+# セッション一覧をインデックス順で生成
+sessions="$(cmd_list)"
+
+# (attached) がある行番号を取得（見つからなければ空）
+pos=$(grep -n '(attached)' <<<"$sessions")
+pos=${pos%%:*}
+
+# fzf に渡し、その行にカーソルを合わせて起動
+<<<"$sessions" SHELL=/bin/bash \
+fzf --ansi --reverse --no-input --track -d $'\t' --tabstop=1 --with-nth=2.. --accept-nth=2 --id-nth=2 \
+      ${pos:+--bind "load:pos($pos)+unbind(load)"} \
+      --bind "x:execute(\"$self\" --kill {2})+reload(\"$self\" --list)" \
+      --preview-window follow,down:60% \
+      --preview 'tmux capture-pane -ep -t {2}' \
+  | xargs -r tmux switch-client -t
