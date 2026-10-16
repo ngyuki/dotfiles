@@ -1,5 +1,8 @@
+USERPROFILE := $(shell cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')
+USERPROFILE := $(shell wslpath -u -- "${USERPROFILE}")
+
 .PHONY: all
-all: ~/dotfiles dotsync win-activate-process.exe setup-scripts
+all: ~/dotfiles dotsync winhome win-activate-process.exe setup-scripts ansible
 
 .PHONY: ~/dotfiles
 ~/dotfiles:
@@ -19,7 +22,7 @@ ansible:
 
 .PHONY: winhome
 winhome:
-	./setup/05-winhome.sh -auto
+	setup/dotsync.sh winhome/ "${USERPROFILE}" -auto
 
 ${USERPROFILE}/bin/win-activate-process.exe:
 	make -C packages/go-win-activate-process install
