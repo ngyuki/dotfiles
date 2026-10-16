@@ -2,7 +2,7 @@ USERPROFILE := $(shell cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')
 USERPROFILE := $(shell wslpath -u -- "${USERPROFILE}")
 
 .PHONY: all
-all: ~/dotfiles dotsync winhome win-activate-process.exe setup-scripts ansible
+all: ~/dotfiles dotsync winhome win-activate-process.exe ansible
 
 .PHONY: ~/dotfiles
 ~/dotfiles:
@@ -11,10 +11,6 @@ all: ~/dotfiles dotsync winhome win-activate-process.exe setup-scripts ansible
 .PHONY: dotsync
 dotsync:
 	setup/dotsync.sh home/ ~/ -auto
-
-.PHONY: setup-scripts
-setup-scripts:
-	for fn in setup/[0-9]*.sh; do "$$fn"; done
 
 .PHONY: ansible
 ansible:
