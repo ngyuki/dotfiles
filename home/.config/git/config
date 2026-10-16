@@ -146,4 +146,4 @@
 # include
 
 [include]
-    path = configs/local.conf
+    path = config.local.conf
