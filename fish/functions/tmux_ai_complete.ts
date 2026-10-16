@@ -280,7 +280,7 @@ function buildAICommand(provider: Exclude<Provider, "gemini-api">, prompt: strin
             ],
         };
     } else if (provider === "agy") {
-        const model = env.TMUX_AI_COMPLETE_AGY_MODEL?.trim() || "gemini-3.7-flash-low";
+        const model = env.TMUX_AI_COMPLETE_AGY_MODEL?.trim() || "gemini-3.8-flash-low";
         return {
             command: "agy",
             stdin: "",
