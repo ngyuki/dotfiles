@@ -1,0 +1,53 @@
+prefix_rule(
+    decision="allow",
+    pattern=[[
+        "actionlint",
+        "govulncheck",
+        "staticcheck",
+        "toast",
+    ]],
+)
+prefix_rule(
+    decision="allow",
+    pattern=[
+        "terraform", [
+            "fmt",
+            "validate",
+        ]
+    ],
+)
+prefix_rule(
+    decision="allow",
+    pattern=[
+        "docker", [
+            "info",
+            "ps",
+        ]
+    ],
+)
+prefix_rule(
+    decision="allow",
+    pattern=[
+        "git", [
+            "diff",
+            "status",
+        ]
+    ],
+)
+prefix_rule(
+    decision="allow",
+    pattern=[
+        "gws", [
+            "schema",
+        ]
+    ],
+)
+prefix_rule(
+    decision="allow",
+    pattern=[
+        "go", [
+            "fmt",
+            "vet",
+        ]
+    ],
+)
