@@ -146,7 +146,7 @@ starship init fish | source
 
 # carapace
 set -gx CARAPACE_BRIDGES "zsh,fish,bash,inshellisense"
-set -gx CARAPACE_EXCLUDES "pass"
+set -gx CARAPACE_EXCLUDES "pass,wt"
 carapace _carapace | source
 
 # ecs-exec
