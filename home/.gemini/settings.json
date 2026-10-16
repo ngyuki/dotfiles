@@ -70,7 +70,13 @@
     "BeforeTool": [
       {
         "matcher": "exit_plan_mode",
-        "hooks": [{ "command": "crit plan-hook", "timeout": 345600000, "type": "command" }]
+        "hooks": [
+          {
+            "command": "crit plan-hook",
+            "timeout": 345600000,
+            "type": "command"
+          }
+        ]
       }
     ],
     "AfterTool": [],
