@@ -18,3 +18,5 @@ notifications = false
 
 [features]
 memories = true
+# https://gigazine.net/news/20261015-codex-cli-background-daemon/
+daemon_auto_start = false
