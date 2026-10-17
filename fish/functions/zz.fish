@@ -1,7 +1,7 @@
 function zz
   set -l result (
     command zoxide query --list -- $argv |
-    FZF_DEFAULT_OPTS=$_ZO_FZF_OPTS command fzf --expect=enter,alt-enter
+    FZF_DEFAULT_OPTS=$_ZO_FZF_OPTS command fzf --expect=enter,alt-enter --preview 'ls -alF --color=always {}'
   )
   set -l rc $status
   test $status -eq 0; or return $status
