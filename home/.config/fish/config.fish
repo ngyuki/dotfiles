@@ -76,7 +76,7 @@ end
 
 # fzf
 if type -q fzf
-  set -gx FZF_DEFAULT_OPTS '--ansi --color=dark --style=full --info=inline --bind ctrl-s:toggle-sort'
+  set -gx FZF_DEFAULT_OPTS '--ansi --color=dark --style=full --info=inline --bind ctrl-s:toggle-sort --preview-window "right,50%,<50(down,50%)"'
 
   if set -q TMUX
     # TMUX 環境変数を見るために .bash_profile では早すぎるので fish/config
