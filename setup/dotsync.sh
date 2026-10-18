@@ -15,7 +15,9 @@ args=(
   -ignore 'Name .dotsync'
   -backupcurr 'Name *'
   -backuploc central
-  -merge 'Name * -> git merge-file -p CURRENT1 CURRENTARCH CURRENT2 > NEW'
+  #-merge 'Name * -> git merge-file -p CURRENT1 CURRENTARCH CURRENT2 > NEW'
+  #-merge 'Name * -> diff3 -m CURRENT1 CURRENTARCH CURRENT2 > NEW'
+  -merge 'Name * -> touch NEW && code --wait --merge CURRENT1 CURRENT2 CURRENTARCH NEW'
 )
 for x in "${paths[@]}"; do
   args+=( -path "$x" )
