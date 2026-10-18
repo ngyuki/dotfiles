@@ -53,7 +53,9 @@ bind generic <Ctrl-O> +open "%(file)"
 
 # reword,split
 bind main <Ctrl-R> >git history reword %(commit)
+bind diff <Ctrl-R> >git history reword %(commit)
 bind main <Ctrl-S> >git history split %(commit)
+bind diff <Ctrl-S> >git history split %(commit)
 
 # edit
 bind main <Ctrl-E> <git-rebase-one edit %(commit)
