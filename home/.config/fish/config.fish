@@ -11,166 +11,169 @@ if not contains $my_function_path $fish_function_path
   set fish_function_path $my_function_path $fish_function_path
 end
 
-# `Welcome to fish, the friendly interactive shell` みたいなメッセージを表示しない
-function fish_greeting
-end
-
-# ターミナルのタイトル
-# https://fishshell.com/docs/current/cmds/fish_title.html
-function fish_title
-  if set -q argv[1]
-    string split -f 1 " " $argv[1]
-    return
-  end
-  set abs (__fish_pwd)
-  if test "$abs" = "$HOME"
-    echo "~"
-    return
-  end
-  set base (path basename $abs)
-  if [ (string length -- $base) -lt (string length -- $abs) ]
-    echo $base
-  else
-    echo $abs
-  end
-end
-
-# プロンプト表示時に tmux をリフレッシュ
-function _tmux_refresh_status --on-event fish_prompt
-  if set -q TMUX
-    command tmux refresh-client -S
-  end
-end
-
-# mise
-if type mise >/dev/null 2>&1
-  mise activate fish | source
-end
-
-# direnv
-if type direnv >/dev/null 2>&1
-  eval (direnv hook fish)
-end
-
-# alias
 if status --is-interactive
-  alias cal='cal -s'
-  if type -fq exa
-    export EXA_COLORS="reset"
-    #alias ls='exa --color=auto --time-style=long-iso' # オプションが違いすぎてわかりにくい
-    #alias ls='ls --color=auto' # fish 組み込みで十分
-    #alias la='ls -a'
-    #alias ll='ls -alF'
-  end
-  if type -fq bat
-    #alias cat='bat --paging=never' # でかいファイルでおもすぎるので無効
-    #alias less='bat --paging=always' # オプションが違いすぎてわかりにくい
-  end
-  # if type -fq rg
-  #   alias grep='rg' # 明示的に呼べばよいと思う
-  # end
-  if type -fq codex
-    alias codex='codex -p local'
-  end
-end
 
-# fzf
-if type -q fzf
-  set -gx FZF_DEFAULT_OPTS '--ansi --color=dark --style=full --info=inline --bind ctrl-s:toggle-sort --preview-window "right,50%,<50(down,50%)"'
+  # `Welcome to fish, the friendly interactive shell` みたいなメッセージを表示しない
+  function fish_greeting
+  end
 
-  if set -q TMUX
-    # TMUX 環境変数を見るために .bash_profile では早すぎるので fish/config
-
-    # ペイン内（＝ポップアップではない）なら --popup を付ける
-    if set -q TMUX_PANE
-      # https://x.com/ngyuki/status/2091942886740987945
-      # --border=rounded は tmux 3.7 の Floating panes のバグのワークアラウンド
-      set -gx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS --popup center,98%,95% --border=rounded"
+  # ターミナルのタイトル
+  # https://fishshell.com/docs/current/cmds/fish_title.html
+  function fish_title
+    if set -q argv[1]
+      string split -f 1 " " $argv[1]
+      return
+    end
+    set abs (__fish_pwd)
+    if test "$abs" = "$HOME"
+      echo "~"
+      return
+    end
+    set base (path basename $abs)
+    if [ (string length -- $base) -lt (string length -- $abs) ]
+      echo $base
+    else
+      echo $abs
     end
   end
 
-  # jethrokuan/fzf
-  set -gx FZF_TMUX 0 # FZF_DEFAULT_OPTS の --popup と競合する
-  set -gx FZF_COMPLETE 2
-  set -gx FZF_COMPLETE_OPTS '--bind=esc:print-query --no-reverse --select-1'
-  set -gx FZF_FIND_FILE_COMMAND 'command fd -L . $dir 2>/dev/null'
-  set -gx FZF_FIND_FILE_OPTS '--scheme=path'
-  set -gx FZF_OPEN_COMMAND $FZF_FIND_FILE_COMMAND
-  set -gx FZF_OPEN_OPTS $FZF_FIND_FILE_OPTS
-  set -gx FZF_REVERSE_ISEARCH_OPTS '-e --scheme=history'
-end
-
-# zoxide
-if type zoxide >/dev/null 2>&1
-  export _ZO_FZF_OPTS="$FZF_DEFAULT_OPTS --info=inline --scheme=path --keep-right --no-sort --preview 'ls -alF --color=always {2..}'"
-  zoxide init fish | source
-end
-
-# gpg
-if status --is-interactive
-    set -gx GPG_TTY (tty)
-end
-
-# aws complete ... https://dev.classmethod.jp/articles/fish-shell-aws-cli-complete/
-# carapace を使うのでコメントアウト
-# complete -c aws -f -a '(
-#     begin
-#         set -lx COMP_SHELL fish
-#         set -lx COMP_LINE (commandline)
-#         aws_completer
-#     end
-# )'
-
-# pass otp
-complete -c pass -f -n '__fish_pass_needs_command' -a otp
-complete -c pass -f -n '__fish_pass_uses_command otp' -a "(__fish_pass_print_entries)"
-
-if status --is-interactive
-    # tmux の pane_path にカレントディレクトリを反映させる
-    function __oreore_pwd_hook --on-variable PWD
-        printf \e]7\;%s\e\\ $PWD
+  # プロンプト表示時に tmux をリフレッシュ
+  function _tmux_refresh_status --on-event fish_prompt
+    if set -q TMUX
+      command tmux refresh-client -S
     end
-    __oreore_pwd_hook
-end
+  end
 
-# 失敗したコマンドを履歴に残さないやつ
-# プロンプト表示時や exit 時にものすごいもっさりするので削除
-# fisher remove meaningful-ooo/sponge
+  # mise
+  if type mise >/dev/null 2>&1
+    mise activate fish | source
+  end
 
-# プロンプト表示を非表示にするやつ
-# /tmp にファイルがまき散らされるので削除
-# fisher remove acomagu/fish-async-prompt
+  # direnv
+  if type direnv >/dev/null 2>&1
+    eval (direnv hook fish)
+  end
 
-# starship
-starship init fish | source
+  # alias
+  if status --is-interactive
+    alias cal='cal -s'
+    if type -fq exa
+      export EXA_COLORS="reset"
+      #alias ls='exa --color=auto --time-style=long-iso' # オプションが違いすぎてわかりにくい
+      #alias ls='ls --color=auto' # fish 組み込みで十分
+      #alias la='ls -a'
+      #alias ll='ls -alF'
+    end
+    if type -fq bat
+      #alias cat='bat --paging=never' # でかいファイルでおもすぎるので無効
+      #alias less='bat --paging=always' # オプションが違いすぎてわかりにくい
+    end
+    # if type -fq rg
+    #   alias grep='rg' # 明示的に呼べばよいと思う
+    # end
+    if type -fq codex
+      alias codex='codex -p local'
+    end
+  end
 
-# carapace
-set -gx CARAPACE_BRIDGES "zsh,fish,bash,inshellisense"
-set -gx CARAPACE_EXCLUDES "pass,wt"
-carapace _carapace | source
+  # fzf
+  if type -q fzf
+    set -gx FZF_DEFAULT_OPTS '--ansi --color=dark --style=full --info=inline --bind ctrl-s:toggle-sort --preview-window "right,50%,<50(down,50%)"'
 
-# ecs-exec
-ecs-exec --fish-complete | source
+    if set -q TMUX
+      # TMUX 環境変数を見るために .bash_profile では早すぎるので fish/config
 
-# gtrash
-if type -fq gtrash
-  alias trash='gtrash'
-  alias rm='gtrash put'
-  gtrash completion fish | source
-end
+      # ペイン内（＝ポップアップではない）なら --popup を付ける
+      if set -q TMUX_PANE
+        # https://x.com/ngyuki/status/2091942886740987945
+        # --border=rounded は tmux 3.7 の Floating panes のバグのワークアラウンド
+        set -gx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS --popup center,98%,95% --border=rounded"
+      end
+    end
 
-# wtp
-if type wtp >/dev/null 2>&1
-  wtp shell-init fish | source
-end
+    # jethrokuan/fzf
+    set -gx FZF_TMUX 0 # FZF_DEFAULT_OPTS の --popup と競合する
+    set -gx FZF_COMPLETE 2
+    set -gx FZF_COMPLETE_OPTS '--bind=esc:print-query --no-reverse --select-1'
+    set -gx FZF_FIND_FILE_COMMAND 'command fd -L . $dir 2>/dev/null'
+    set -gx FZF_FIND_FILE_OPTS '--scheme=path'
+    set -gx FZF_OPEN_COMMAND $FZF_FIND_FILE_COMMAND
+    set -gx FZF_OPEN_OPTS $FZF_FIND_FILE_OPTS
+    set -gx FZF_REVERSE_ISEARCH_OPTS '-e --scheme=history'
+  end
 
-# tmux-ai-complete
-if type -q agy
-  set -gx TMUX_AI_COMPLETE_PROVIDER agy
-else if type -q codex
-  set -gx TMUX_AI_COMPLETE_PROVIDER codex
-else if type -q gemini
-  set -gx TMUX_AI_COMPLETE_PROVIDER gemini
+  # zoxide
+  if type zoxide >/dev/null 2>&1
+    export _ZO_FZF_OPTS="$FZF_DEFAULT_OPTS --info=inline --scheme=path --keep-right --no-sort --preview 'ls -alF --color=always {2..}'"
+    zoxide init fish | source
+  end
+
+  # gpg
+  if status --is-interactive
+      set -gx GPG_TTY (tty)
+  end
+
+  # aws complete ... https://dev.classmethod.jp/articles/fish-shell-aws-cli-complete/
+  # carapace を使うのでコメントアウト
+  # complete -c aws -f -a '(
+  #     begin
+  #         set -lx COMP_SHELL fish
+  #         set -lx COMP_LINE (commandline)
+  #         aws_completer
+  #     end
+  # )'
+
+  # pass otp
+  complete -c pass -f -n '__fish_pass_needs_command' -a otp
+  complete -c pass -f -n '__fish_pass_uses_command otp' -a "(__fish_pass_print_entries)"
+
+  if status --is-interactive
+      # tmux の pane_path にカレントディレクトリを反映させる
+      function __oreore_pwd_hook --on-variable PWD
+          printf \e]7\;%s\e\\ $PWD
+      end
+      __oreore_pwd_hook
+  end
+
+  # 失敗したコマンドを履歴に残さないやつ
+  # プロンプト表示時や exit 時にものすごいもっさりするので削除
+  # fisher remove meaningful-ooo/sponge
+
+  # プロンプト表示を非表示にするやつ
+  # /tmp にファイルがまき散らされるので削除
+  # fisher remove acomagu/fish-async-prompt
+
+  # starship
+  starship init fish | source
+
+  # carapace
+  set -gx CARAPACE_BRIDGES "zsh,fish,bash,inshellisense"
+  set -gx CARAPACE_EXCLUDES "pass,wt"
+  carapace _carapace | source
+
+  # ecs-exec
+  ecs-exec --fish-complete | source
+
+  # gtrash
+  if type -fq gtrash
+    alias trash='gtrash'
+    alias rm='gtrash put'
+    gtrash completion fish | source
+  end
+
+  # wtp
+  if type wtp >/dev/null 2>&1
+    wtp shell-init fish | source
+  end
+
+  # tmux-ai-complete
+  if type -q agy
+    set -gx TMUX_AI_COMPLETE_PROVIDER agy
+  else if type -q codex
+    set -gx TMUX_AI_COMPLETE_PROVIDER codex
+  else if type -q gemini
+    set -gx TMUX_AI_COMPLETE_PROVIDER gemini
+  end
 end
 
 # config.local.fish
