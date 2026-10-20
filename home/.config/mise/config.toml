@@ -25,6 +25,7 @@ ecspresso = "latest"
 gcloud = "latest"
 gh = "latest"
 "github:ngyuki/gmail-filter-sync" = { version = "latest", minimum_release_age = "0s" }
+"github:yusukebe/ax" = "latest"
 go-jsonnet = "latest"
 "go:golang.org/x/vuln/cmd/govulncheck" = "latest"
 gron = "latest"
