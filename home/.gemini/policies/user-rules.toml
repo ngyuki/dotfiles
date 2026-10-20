@@ -5,6 +5,7 @@ toolName = "run_shell_command"
 commandPrefix = [
   "code --wait",
   "code -w",
+  "col",
   "crit",
   "date",
   "docker compose down",
@@ -22,13 +23,17 @@ commandPrefix = [
   "git show",
   "git status",
   "grep",
+  "head",
   "hunk",
   "id",
   "jq",
   "ls",
+  "man",
   "terraform fmt",
   "terraform validate",
   "toast",
+  "true",
+  "which",
 ]
 
 [[rule]]
@@ -49,6 +54,16 @@ toolName = "web_fetch"
 decision = "allow"
 priority = 100
 toolName = "activate_skill"
+
+[[rule]]
+decision = "allow"
+priority = 100
+toolName = "read_background_output"
+
+[[rule]]
+decision = "allow"
+priority = 100
+toolName = "list_background_processes"
 
 [[rule]]
 decision = "allow"
