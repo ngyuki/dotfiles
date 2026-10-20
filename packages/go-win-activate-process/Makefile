@@ -9,6 +9,7 @@ ${target}.exe: main.go
 	GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags "${ldflags}" -o $@ .
 
 install: ${wslhome}/bin/${target}.exe
+	"${wslhome}/bin/${target}.exe" -register-protocol
 
 ${wslhome}/bin/${target}.exe: ${target}.exe
 	install -m755 -D -s $< $@

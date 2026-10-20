@@ -32,6 +32,54 @@ else
   message="$(cat -)"
 fi
 
+get_tmux_focus_url() {
+  local pane="${TMUX_PANE:-}"
+  if [ -z "$pane" ]; then
+    local pid=$$
+    while [ -n "$pid" ] && [ "$pid" -gt 1 ]; do
+      if [ -r "/proc/$pid/environ" ]; then
+        pane=$(tr '\0' '\n' < "/proc/$pid/environ" 2>/dev/null | grep -m1 '^TMUX_PANE=' | cut -d= -f2- || true)
+        [ -n "$pane" ] && break
+      fi
+      pid=$(awk '{print $4}' "/proc/$pid/stat" 2>/dev/null || true)
+    done
+  fi
+
+  [ -z "$pane" ] && return 0
+
+  local target
+  target=$(tmux display-message -p -t "$pane" '#{?client_name,client=#{client_name};,}#{session_name}:#{window_id}.#{pane_id}' 2>/dev/null || true)
+  [ -z "$target" ] && return 0
+
+  local distro="${WSL_DISTRO_NAME:-fedora}"
+  local win_title="WSL:fedora"
+  local tmux_arg="distro=${distro};${target}"
+
+  urlencode() {
+    local string="$1"
+    local strlen=${#string}
+    local encoded=""
+    local pos c o
+    for (( pos=0 ; pos<strlen ; pos++ )); do
+      c=${string:$pos:1}
+      case "$c" in
+        [-_.~a-zA-Z0-9] ) o="${c}" ;;
+        * ) printf -v o '%%%02X' "'$c" ;;
+      esac
+      encoded+="${o}"
+    done
+    echo "${encoded}"
+  }
+
+  local query="title=$(urlencode "$win_title")&tmux=$(urlencode "$tmux_arg")"
+
+  echo "wsl-toast://activate?${query}"
+}
+
+if [ -z "$url" ]; then
+  url="$(get_tmux_focus_url)"
+fi
+
 notify_powershell() {
   dir=${BASH_SOURCE[0]}
   dir=${dir%/*}
@@ -42,6 +90,10 @@ notify_powershell() {
 }
 
 notify_osc() {
+  if [ -n "$url" ]; then
+    return 0
+  fi
+
   if [ $TMUX ]; then
     eval "$(tmux show-environment -gs TERM_PROGRAM 2>/dev/null)"
     if [ "$TERM_PROGRAM" == "WezTerm" ]; then
@@ -58,7 +110,7 @@ notify_osc() {
 
 notify_svc() {
   if [ -S "$XDG_RUNTIME_DIR/wsl-toast.sock" ]; then
-    jq -n --arg app "$app" --arg title "$title" --arg message "$message" '{app:$app,title:$title,message:$message}' -c \
+    jq -n --arg app "$app" --arg title "$title" --arg message "$message" --arg url "$url" '{app:$app,title:$title,message:$message,url:$url}' -c \
     | nc -U "$XDG_RUNTIME_DIR/wsl-toast.sock"
     exit 0
   fi
